@@ -1,0 +1,43 @@
+.page {
+    height: 950px;
+    background-image: url(../../../../assets/recursos/imagenes/general/login/fondo.jpg);
+    background-size: cover;
+}
+
+.card {
+    width: 20vw;
+    height: 500px;
+}
+
+.input-group {
+    margin-top: 10%;
+}
+
+.input-group label {
+    position: absolute;
+    top: 50%;
+    left: 1%;
+    transform: translateY(-50%);
+    font-size: 1em;
+    color: black;
+    font-weight: 500;
+    pointer-events: none;
+    transition: .5s;
+}
+
+.input-group span img {
+    width: 20px;
+    height: 20px;
+}
+
+.input-group input:focus~label,
+.input-group input:valid~label {
+    top: -5px;
+    background: white;
+    box-shadow: none;
+}
+
+.input-group input:focus~span,
+.input-group input:valid~span {
+    top: -5px;
+}

@@ -1,0 +1,117 @@
+#ulLi {
+    text-decoration: none;
+    list-style: none;
+    position: absolute;
+    left: 0;
+}
+
+#li1 {
+    margin-top: 15%;
+    margin-bottom: 5%;
+    text-decoration: none;
+}
+
+#myFooter {
+    background-color: #1e2227;
+    height: 550px;
+}
+
+.verticalLine {
+    height: 300px;
+    border-right: 1px solid white;
+    position: absolute;
+    left: -10%;
+}
+
+.vr {
+    margin-top: 5%;
+    border-right: 1px solid white;
+    height: 200px;
+}
+
+.img-footer {
+    width: 20px;
+}
+
+@media screen and (max-width:900px) and (min-width:601px) {
+    .img-footer {
+        width: 10px;
+    }
+    #ulLi {
+        position: absolute;
+        left: 0;
+    }
+    #ulLi a {
+        font-size: 10px;
+    }
+    #myFooter {
+        height: 500px;
+    }
+    #ulLi a::after {
+        content: "\a";
+        white-space: pre;
+    }
+    #myFooter p {
+        font-size: 10px;
+        color: white;
+    }
+    #img-footer {
+        position: absolute;
+        left: 0px;
+    }
+    #img-footer .el3 a {
+        position: absolute;
+        left: 0px;
+    }
+    #img-footer .el4 a {
+        position: absolute;
+        left: 0px;
+    }
+}
+
+@media screen and (max-width:600px) {
+    .img-footer {
+        width: 10px;
+    }
+    ul {
+        padding-left: 0rem;
+    }
+    #ulLi {
+        text-decoration: none;
+        list-style: none;
+        position: absolute;
+        left: 0;
+    }
+    #ulLi a {
+        font-size: 10px;
+    }
+    #ulLi a::after {
+        content: "\a";
+        white-space: pre;
+    }
+    #myFooter p {
+        font-size: 10px;
+        color: white;
+    }
+    .vr {
+        height: auto;
+    }
+    #img-footer1 {
+        position: absolute;
+        left: 0px;
+    }
+    #img-footer {
+        position: absolute;
+        left: 0px;
+    }
+    .contactanos {
+        position: relative;
+        left: 0;
+    }
+    #direccion,
+    #contacto {
+        position: relative;
+        left: -18px;
+        bottom: 10px;
+    }
+}

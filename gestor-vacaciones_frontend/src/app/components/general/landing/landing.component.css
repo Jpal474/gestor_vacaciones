@@ -1,0 +1,26 @@
+.carousel-item img {
+    width: 600px;
+    height: 400px;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-color: green;
+}
+
+.carousel-indicators button {
+    background-color: black;
+}
+
+#info {
+    background-color: #8dd3f5;
+}
+
+#trabajo {
+    background-color: #70A0AF;
+}
+
+.img-pagos {
+    width: 150px;
+    height: 150px;
+}

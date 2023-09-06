@@ -1,0 +1,14 @@
+.home {
+    height: 100vh;
+    background-image: url(../../../../assets/recursos/imagenes/general/login/fondo-app.jpg);
+}
+
+.card {
+    background-color: #27a082;
+    color: white;
+}
+
+.col img {
+    width: 100px;
+    height: 100px;
+}
