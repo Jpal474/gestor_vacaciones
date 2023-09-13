@@ -1,0 +1,23 @@
+.card {
+    height: auto;
+    width: 80vw;
+}
+
+.input-group label {
+    position: absolute;
+    top: 50%;
+    left: 1%;
+    transform: translateY(-50%);
+    font-size: 1em;
+    color: black;
+    font-weight: 500;
+    pointer-events: none;
+    transition: .5s;
+}
+
+.input-group input:focus~label,
+.input-group input:valid~label {
+    top: -5px;
+    background: white;
+    box-shadow: none;
+}

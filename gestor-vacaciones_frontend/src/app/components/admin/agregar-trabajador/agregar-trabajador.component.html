@@ -1,0 +1,43 @@
+<app-navbar></app-navbar>
+<h1 class="text-center mt-5"> Agregar Trabajador</h1>
+
+<div class="container">
+    <div class="card mt-5">
+        <div class="card-body">
+            <h5 class="card-title text-center">Datos del Trabajador</h5>
+            <br>
+            <form>
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="text" id="id" class="form-control shadow-none" formControlName="id">
+
+                        <label>Nombre<span>*</span></label>
+                    </div>
+                    <div class="input-group mt-4">
+                        <input type="text" id="id" class="form-control shadow-none" formControlName="id">
+
+                        <label>Apellidos<span>*</span></label>
+                    </div>
+                    <div class="input-group mt-4">
+                        <input type="text" class="form-control" aria-label="Text input with segmented dropdown button">
+                        <select class="form-select" aria-label="Default select example" formControlName="genero">
+                        <option selected disabled>-Elija Un Género-</option>
+                        <option value="FEMENINO">FEMENINO</option>
+                        <option value="MASCULINO">MASCULINO</option>
+                        <option value="MASCULINO">OTRO</option>
+                      </select>
+                        <label>Género<span>*</span></label>
+                    </div>
+                    <small class="text-danger"> El campo no puede estar vacio</small>
+                    <div class="input-group mt-4">
+                        <input type="text" id="id" class="form-control shadow-none" formControlName="id">
+
+                        <label>Fecha Contratacion<span>*</span></label>
+                    </div>
+                    <small class="text-danger"> idNoValido </small>
+
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>

@@ -14,7 +14,8 @@ const routes: Routes = [
   {path:'landing', component: LandingComponent,},
   {path:'admin', component:AdminComponent, children:ADMIN_ROUTES},
   {path:'super', component:SuperadminComponent, children:SUPERADMIN_ROUTES},
-  {path:'trabajador', component:TrabajadorComponent, children:TRABAJADOR_ROUTES}
+  {path:'trabajador', component:TrabajadorComponent, children:TRABAJADOR_ROUTES},
+  {path:'**', pathMatch:'full', redirectTo:'landing'},
 
 ];
 
