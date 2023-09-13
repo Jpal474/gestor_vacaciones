@@ -4,18 +4,19 @@ import { Empleado } from 'src/empleado/empleado.entity';
 
 import { Repository } from 'typeorm';
 import { CreateSuperDto } from './dto/create-superad.dto';
+import { Ceo } from 'src/ceo/ceo.entity';
 
 @Injectable()
 export class SuperadService {
   constructor(
-    @InjectRepository(Empleado)
-    private empleadoRepository: Repository<Empleado>,
+    @InjectRepository(Ceo)
+    private ceoRepository: Repository<Ceo>,
   ) {}
 
-  async createSuper(createSuperAdminDto: CreateSuperDto): Promise<Empleado> {
+  async createSuper(createSuperAdminDto: CreateSuperDto): Promise<Ceo> {
     try {
-      const superad = this.empleadoRepository.create(createSuperAdminDto);
-      this.empleadoRepository.save(superad);
+      const superad = this.ceoRepository.create(createSuperAdminDto);
+      this.ceoRepository.save(superad);
       return superad;
     } catch (error) {
       throw new Error(error);

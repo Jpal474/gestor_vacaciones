@@ -7,6 +7,7 @@ import { Roles } from 'src/roles/roles.entity';
 import { Solicitud } from 'src/solicitud/solicitud.entity';
 import { SaldoVacacional } from 'src/saldo-vacacional/saldo-vacacional.entity';
 import { Empleado } from 'src/empleado/empleado.entity';
+import { Ceo } from 'src/ceo/ceo.entity';
 
 @Entity()
 export class Usuario {
@@ -22,14 +23,6 @@ export class Usuario {
   @ApiProperty()
   correo: string;
 
-  // @Column()
-  // @ApiProperty()
-  // genero: UsuarioGenero;
-  
-  // @Column()
-  // @ApiProperty()
-  // fecha_contratacion: string;
-
   @Column()
   @ApiProperty()
   contraseña: string;
@@ -42,5 +35,10 @@ export class Usuario {
   @OneToOne(() => Empleado, (empleado) => empleado.usuario)
   @ApiProperty({ type: () => Empleado, isArray: false })
   empleado: Empleado;
+
+  @OneToOne(() => Ceo, (ceo) => ceo.usuario)
+  @ApiProperty({type: () => Ceo})
+  @Exclude({toPlainOnly:true})
+  ceo: Ceo;
 
 }

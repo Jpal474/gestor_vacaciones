@@ -14,6 +14,7 @@ import { SaldoVacacionalModule } from './saldo-vacacional/saldo-vacacional.modul
 import { TrabajadorModule } from './trabajador/trabajador.module';
 import { EmpleadoModule } from './empleado/empleado.module';
 import { AuthModule } from './auth/auth.module';
+import { CeoModule } from './ceo/ceo.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { AuthModule } from './auth/auth.module';
     TrabajadorModule,
     EmpleadoModule,
     AuthModule,
+    CeoModule,
   ],
   controllers: [AppController],
   providers: [AppService],
