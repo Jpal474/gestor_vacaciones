@@ -1,12 +1,10 @@
 /* eslint-disable prettier/prettier */
-
-import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
+import { Departamento } from 'src/departamento/departamento.entity';
 import { EmpleadoGenero } from 'src/empleado/empleado-models/empleado-genero.enum';
-import { Roles } from 'src/roles/roles.entity';
-import { Solicitud } from 'src/solicitud/solicitud.entity';
-import { UsuarioGenero } from 'src/usuario/usuario-models/usuario-genero-enum';
+import { Usuario } from 'src/usuario/usuario.entity';
 
-export class UpdateAdministradorDto {
+export class CreateAdminDto {
   @IsString()
   @IsNotEmpty()
   nombre: string;
@@ -23,4 +21,9 @@ export class UpdateAdministradorDto {
   @IsNotEmpty()
   fecha_contratacion: string;
 
+  @IsNotEmpty()
+  usuario: Usuario;
+
+  @IsNotEmpty()
+  departamento: Departamento;
 }

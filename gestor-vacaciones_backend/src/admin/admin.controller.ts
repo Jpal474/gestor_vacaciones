@@ -1,18 +1,36 @@
-import { Body, Controller, Delete, Get, Param, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { AdminService } from './admin.service';
 import { Usuario } from 'src/usuario/usuario.entity';
 import { UpdateAdministradorDto } from './dto/update-admin.dto';
+import { CreateAdminDto } from './dto/create-admin.dto';
+import { Empleado } from 'src/empleado/empleado.entity';
 
 @Controller('admin')
 export class AdminController {
   constructor(private adminService: AdminService) {}
   @Get()
-  getAdministradores(): Promise<Usuario[]> {
-    return this.adminService.getAdministradores(2);
+  getAdministradores(): Promise<Empleado[]> {
+    return this.adminService.getAdministradores('Administrador');
+  }
+
+  @Post()
+  crearAdministrador(
+    @Body() createAdminDto: CreateAdminDto,
+  ): Promise<Empleado> {
+    console.log(createAdminDto);
+    return this.adminService.createAdministrador(createAdminDto);
   }
 
   @Get('/:id')
-  getAdministradorById(@Param('id') id: string): Promise<Usuario> {
+  getAdministradorById(@Param('id') id: string): Promise<Empleado> {
     return this.adminService.getAdministradorById(id);
   }
 
@@ -20,7 +38,7 @@ export class AdminController {
   updateAdministrador(
     @Param('id') id: string,
     @Body() updateAdministradorDto: UpdateAdministradorDto,
-  ): Promise<Usuario> {
+  ): Promise<Empleado> {
     return this.adminService.updateAdministrador(id, updateAdministradorDto);
   }
 

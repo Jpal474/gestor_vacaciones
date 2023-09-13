@@ -1,12 +1,11 @@
 import { Module } from '@nestjs/common';
 import { AdminController } from './admin.controller';
 import { AdminService } from './admin.service';
-import { UsuarioModule } from 'src/usuario/usuario.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Usuario } from 'src/usuario/usuario.entity';
+import { Empleado } from 'src/empleado/empleado.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Usuario])],
+  imports: [TypeOrmModule.forFeature([Empleado])],
   controllers: [AdminController],
   providers: [AdminService],
 })

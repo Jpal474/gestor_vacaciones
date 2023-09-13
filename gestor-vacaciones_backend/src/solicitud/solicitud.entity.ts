@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 
 import { ApiProperty } from "@nestjs/swagger"
+import { Empleado } from "src/empleado/empleado.entity"
 import { Usuario } from "src/usuario/usuario.entity"
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm"
 
@@ -26,9 +27,21 @@ export class Solicitud {
     @ApiProperty()
     fecha_creacion: string
 
-    @ManyToOne(() => Usuario, (usuario) => usuario.solicitud)
+    @Column({nullable:true, default:'', type: 'text'})
+    @ApiProperty()
+    justificacion: string
+
+    @Column({nullable:true, default:''})
+    @ApiProperty()
+    aprobada_por: string;
+
+    @Column({nullable:true, default:''})
+    @ApiProperty()
+    denegada_por: string;
+
+    @ManyToOne(() => Empleado, (empleado) => empleado.solicitud)
     @JoinColumn()
-    @ApiProperty({type: () => Usuario})
-    usuario: Usuario 
+    @ApiProperty({type: () => Empleado})
+    empleado: Empleado 
 
 }

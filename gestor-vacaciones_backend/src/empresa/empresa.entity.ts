@@ -1,7 +1,8 @@
 /* eslint-disable prettier/prettier */
 
 import { ApiProperty } from '@nestjs/swagger';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Departamento } from 'src/departamento/departamento.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Empresa {
@@ -24,5 +25,9 @@ export class Empresa {
   @Column()
   @ApiProperty()
   correo: string;
+
+  @OneToMany(() => Departamento, (departamento) => departamento.empresa)
+  @ApiProperty({type: () =>  Departamento, isArray:true})
+  departamento: Departamento []
 
 }

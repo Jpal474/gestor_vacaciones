@@ -1,18 +1,17 @@
 /* eslint-disable prettier/prettier */
-
-import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
 import { EmpleadoGenero } from 'src/empleado/empleado-models/empleado-genero.enum';
-import { Roles } from 'src/roles/roles.entity';
-import { Solicitud } from 'src/solicitud/solicitud.entity';
-import { UsuarioGenero } from 'src/usuario/usuario-models/usuario-genero-enum';
 
-export class UpdateAdministradorDto {
+export class UpdateTrabajadorDto {
+
   @IsString()
   @IsNotEmpty()
   nombre: string;
 
   @IsString()
   @IsNotEmpty()
+  @ApiProperty({nullable:false})
   apellidos: string;
 
   @IsEnum(EmpleadoGenero)
@@ -22,5 +21,4 @@ export class UpdateAdministradorDto {
   @IsString()
   @IsNotEmpty()
   fecha_contratacion: string;
-
 }
