@@ -1,10 +1,17 @@
 import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { DepartamentoService } from './departamento.service';
-import { ApiBody, ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { CreateDepartamentoDto } from './dto/create-departamento.dto';
 import { Departamento } from './departamento.entity';
 
 @Controller('departamento')
+@ApiTags('Departamentos')
 export class DepartamentoController {
   constructor(private departamentosService: DepartamentoService) {}
 

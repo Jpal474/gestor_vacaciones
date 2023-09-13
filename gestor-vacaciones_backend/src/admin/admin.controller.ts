@@ -12,8 +12,10 @@ import { Usuario } from 'src/usuario/usuario.entity';
 import { UpdateAdministradorDto } from './dto/update-admin.dto';
 import { CreateAdminDto } from './dto/create-admin.dto';
 import { Empleado } from 'src/empleado/empleado.entity';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('admin')
+@ApiTags('Admins')
 export class AdminController {
   constructor(private adminService: AdminService) {}
   @Get()

@@ -4,7 +4,7 @@ import { IsNotEmpty, IsString } from 'class-validator';
 export class AuthCredentialDto {
   @IsNotEmpty()
   @IsString()
-  nombre_usuario: string;
+  correo: string;
 
   @IsNotEmpty()
   @IsString()

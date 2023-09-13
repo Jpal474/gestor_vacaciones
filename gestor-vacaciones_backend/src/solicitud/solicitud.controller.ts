@@ -11,11 +11,19 @@ import {
 import { Solicitud } from './solicitud.entity';
 import { CreateSolicitudDto } from './dto/create-solicitud.dto';
 import { SolicitudService } from './solicitud.service';
-import { ApiBody, ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { UpdateSolicitudDto } from './dto/update-solicitud.dto';
 import { AprobarSolicitudDto } from './dto/aprobar-solicitud.dto';
+import { DenegarSolicitudDto } from './dto/denegar-solicitud.dto';
 
 @Controller('solicitud')
+@ApiTags('Solicitud')
 export class SolicitudController {
   constructor(private solicitudService: SolicitudService) {}
 
@@ -79,6 +87,31 @@ export class SolicitudController {
   ): Promise<boolean> {
     return this.solicitudService.aceptarSolicitud(id, aprobarSolicitudDto);
   }
+
+  @Put('/denegar/:id')
+  @ApiOperation({ summary: 'Denegar Solicitud' })
+  @ApiBody({
+    description: 'Nombre de usuario de la persona quién rechazó la solicitud',
+    type: String,
+  })
+  @ApiParam({
+    name: 'ID',
+    description: 'ID de la Solicitud a Rechazar',
+  })
+  @ApiResponse({
+    status: 200,
+    description:
+      'Regresa True Si la Solicitud Ha Sido Rechazada de Forma Éxitosa',
+    isArray: false,
+    type: Boolean,
+  })
+  denegarSolicitud(
+    @Param('id') id: number,
+    @Body() denegarSolicitudDto: DenegarSolicitudDto,
+  ): Promise<boolean> {
+    return this.solicitudService.denegarSolicitud(id, denegarSolicitudDto);
+  }
+
   @Patch('/:id')
   @ApiOperation({ summary: 'Editar Solicitud' })
   @ApiBody({

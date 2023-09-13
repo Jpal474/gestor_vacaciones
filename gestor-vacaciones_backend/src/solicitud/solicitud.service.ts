@@ -9,6 +9,7 @@ import { Repository } from 'typeorm';
 import { CreateSolicitudDto } from './dto/create-solicitud.dto';
 import { UpdateSolicitudDto } from './dto/update-solicitud.dto';
 import { AprobarSolicitudDto } from './dto/aprobar-solicitud.dto';
+import { DenegarSolicitudDto } from './dto/denegar-solicitud.dto';
 
 @Injectable()
 export class SolicitudService {
@@ -119,10 +120,16 @@ export class SolicitudService {
     }
   }
 
-  async denegarSolicitud(id: number, estado: string): Promise<boolean> {
+  async denegarSolicitud(
+    id: number,
+    denegarSolicitudDto: DenegarSolicitudDto,
+  ): Promise<boolean> {
     try {
       const solicitud = await this.getSolicitudById(id);
       solicitud.estado = 'RECHAZADO';
+      solicitud.aprobada_por = '';
+      solicitud.denegada_por = denegarSolicitudDto.nombre;
+      this.solicitudRepository.save(solicitud);
       return true;
     } catch (error) {
       throw new Error(error);

@@ -1,26 +1,27 @@
 /* eslint-disable prettier/prettier */
 
-import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
 import { EmpleadoGenero } from 'src/empleado/empleado-models/empleado-genero.enum';
-import { Roles } from 'src/roles/roles.entity';
-import { Solicitud } from 'src/solicitud/solicitud.entity';
-import { UsuarioGenero } from 'src/usuario/usuario-models/usuario-genero-enum';
-
 export class UpdateAdministradorDto {
   @IsString()
   @IsNotEmpty()
+  @ApiProperty()
   nombre: string;
 
   @IsString()
   @IsNotEmpty()
+  @ApiProperty()
   apellidos: string;
 
   @IsEnum(EmpleadoGenero)
   @IsNotEmpty()
+  @ApiProperty()
   genero: EmpleadoGenero;
 
   @IsString()
   @IsNotEmpty()
+  @ApiProperty()
   fecha_contratacion: string;
 
 }

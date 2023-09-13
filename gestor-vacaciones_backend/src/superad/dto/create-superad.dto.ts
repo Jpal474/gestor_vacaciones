@@ -5,7 +5,7 @@ import { Departamento } from 'src/departamento/departamento.entity';
 import { EmpleadoGenero } from 'src/empleado/empleado-models/empleado-genero.enum';
 import { Usuario } from 'src/usuario/usuario.entity';
 
-export class CreateAdminDto {
+export class CreateSuperDto {
   @IsString()
   @IsNotEmpty()
   @ApiProperty()
@@ -21,16 +21,7 @@ export class CreateAdminDto {
   @ApiProperty()
   genero: EmpleadoGenero;
 
-  @IsString()
-  @IsNotEmpty()
-  @ApiProperty()
-  fecha_contratacion: string;
-
   @IsNotEmpty()
   @ApiProperty()
   usuario: Usuario;
-
-  @IsNotEmpty()
-  @ApiProperty()
-  departamento: Departamento;
 }

@@ -2,7 +2,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { SaldoVacacional } from 'src/saldo-vacacional/saldo-vacacional.entity';
 import { Solicitud } from 'src/solicitud/solicitud.entity';
-import { UsuarioGenero } from 'src/usuario/usuario-models/usuario-genero-enum';
 import { Usuario } from 'src/usuario/usuario.entity';
 import {
   Column,
@@ -37,7 +36,7 @@ export class Empleado {
 
   @Column()
   @ApiProperty()
-  fecha_contratacion: string;
+  fecha_contratacion?: string;
 
   @OneToOne(() => Usuario, (usuario) => usuario.empleado)
   @JoinColumn()
@@ -48,7 +47,7 @@ export class Empleado {
   @ManyToOne(() => Departamento, (departamento) => departamento.empleado)
   @Exclude({toPlainOnly:true})
   @ApiProperty({ type: () => Departamento, isArray:false})
-  departamento: Departamento;
+  departamento?: Departamento;
 
   @OneToMany(() => Solicitud, (solicitud) => solicitud.empleado, {
     nullable: true,
