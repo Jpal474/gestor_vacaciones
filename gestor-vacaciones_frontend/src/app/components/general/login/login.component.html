@@ -1,27 +1,27 @@
 <div class="page d-flex justify-content-center">
-    <form autocomplete="off">
-        <div class="card text mb-3" style="margin-top: 20vh;">
-            <div class="card-header text-center">Inicio de Sesion</div>
-            <div class="card-body">
-                <div class="input-group">
-                    <input type="email" class="form-control shadow-none" aria-label="Dollar amount (with dot and two decimal places)" formControlName="correo">
-
-                    <label> <span><img src="../../../../assets/recursos/imagenes/general/login/ICONOS LOG IN/correo.svg" width="20px" height="20px"></span> Correo Electrónico </label>
-                </div>
-                <div class="input-group">
-                    <input type="password" class="form-control shadow-none" aria-label="Dollar amount (with dot and two decimal places)" formControlName="contraseña">
-
-                    <label> <span><img src="../../../../../assets/recursos/imagenes/general/login/ICONOS LOG IN/contrasena.svg" width="20px" height="20px"></span> Contraseña </label>
-                </div>
-                <div class="d-grid gap-2">
-                    <button class="btn btn-primary mt-4" type="submit">INICIAR SESIÓN</button>
-                </div>
-                ¿No tienes cuenta?, <a href="#">Registrate</a>
-            </div>
-
-        </div>
-
-    </form>
+    <div class="login-container">
+        <form action="" class="form-login">
+            <ul class="login-nav">
+                <li class="login-nav__item active">
+                    <a href="#">Sign In</a>
+                </li>
+                <li class="login-nav__item">
+                    <a href="#">Sign Up</a>
+                </li>
+            </ul>
+            <label for="login-input-user" class="login__label">
+                Correo
+            </label>
+            <input id="login-input-user" class="login__input" type="text" />
+            <label for="login-input-password" class="login__label">
+                Contraseña
+            </label>
+            <input id="login-input-password" class="login__input" type="password" />
+            <br>
+            <button class="login__submit" disabled>Sign in</button>
+        </form>
+        <a href="#" class="login__forgot">Forgot Password?</a>
+    </div>
 
 
 </div>

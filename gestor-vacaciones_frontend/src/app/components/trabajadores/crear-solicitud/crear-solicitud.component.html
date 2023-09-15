@@ -1,0 +1,33 @@
+<app-navbar></app-navbar>
+<h1 class="text-center text-white mt-5"> Crear Solicitud </h1>
+
+<div class="container ms-5">
+    <div class="card mt-5">
+        <div class="card-body">
+            <h5 class="card-title text-center">Datos de la Solicitud</h5>
+            <br>
+            <form>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="input-box ms-5">
+                            <input type="date" id="id" class="form-control shadow-none" formControlName="id">
+
+                            <label>Fecha Inicio<span>*</span></label>
+                        </div>
+                        <div class="input-box ms-5">
+                            <input type="date" id="id" class="form-control shadow-none" formControlName="id">
+
+                            <label>Fecha Fin<span>*</span></label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-floating">
+                            <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px"></textarea>
+                            <label for="floatingTextarea2">Justificacion</label>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary mt-5">Submit</button>
+            </form>
+        </div>
+    </div>
