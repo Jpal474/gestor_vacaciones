@@ -12,5 +12,5 @@ export class CreateDepartamentoDto {
 
     @IsNotEmpty()
     @ApiProperty()
-    empresa:Empresa;
+    empresa?:Empresa;
 }

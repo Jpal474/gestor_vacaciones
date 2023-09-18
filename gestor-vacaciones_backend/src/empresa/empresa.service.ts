@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+/* eslint-disable prettier/prettier */
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Empresa } from './empresa.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -22,6 +27,20 @@ export class EmpresaService {
           'Error: Datos Invalidos Para El Registro de la Empresa',
         );
       }
+    }
+  }
+
+  async getEmpresa(id: number): Promise<Empresa> {
+    try {
+      const found = this.empresaRepository.findOneBy({ id: id });
+      if (!found) {
+        throw new NotFoundException(
+          `Empresa Para El ID ${id} No Ha Sido Encontrada`,
+        );
+      }
+      return found;
+    } catch (error) {
+      throw new Error(error);
     }
   }
 }
