@@ -6,8 +6,10 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import {
+  ApiBearerAuth,
   ApiBody,
   ApiOperation,
   ApiParam,
@@ -20,9 +22,12 @@ import { Empleado } from 'src/empleado/empleado.entity';
 import { CreateTrabajadorDto } from './dto/create-trabajador.dto';
 import { UpdateDateColumn } from 'typeorm';
 import { UpdateTrabajadorDto } from './dto/update-trabajador.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('trabajador')
 @ApiTags('Trabajadores')
+@ApiBearerAuth()
+@UseGuards(AuthGuard('jwt'))
 export class TrabajadorController {
   constructor(private trabajadorService: TrabajadorService) {}
 

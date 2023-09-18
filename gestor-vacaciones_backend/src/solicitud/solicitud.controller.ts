@@ -7,11 +7,13 @@ import {
   Patch,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { Solicitud } from './solicitud.entity';
 import { CreateSolicitudDto } from './dto/create-solicitud.dto';
 import { SolicitudService } from './solicitud.service';
 import {
+  ApiBearerAuth,
   ApiBody,
   ApiOperation,
   ApiParam,
@@ -21,9 +23,12 @@ import {
 import { UpdateSolicitudDto } from './dto/update-solicitud.dto';
 import { AprobarSolicitudDto } from './dto/aprobar-solicitud.dto';
 import { DenegarSolicitudDto } from './dto/denegar-solicitud.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('solicitud')
 @ApiTags('Solicitud')
+@ApiBearerAuth()
+@UseGuards(AuthGuard('jwt'))
 export class SolicitudController {
   constructor(private solicitudService: SolicitudService) {}
 

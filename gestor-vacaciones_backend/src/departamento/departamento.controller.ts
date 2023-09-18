@@ -1,6 +1,15 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { DepartamentoService } from './departamento.service';
 import {
+  ApiBearerAuth,
   ApiBody,
   ApiOperation,
   ApiParam,
@@ -9,9 +18,12 @@ import {
 } from '@nestjs/swagger';
 import { CreateDepartamentoDto } from './dto/create-departamento.dto';
 import { Departamento } from './departamento.entity';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('departamento')
 @ApiTags('Departamentos')
+@ApiBearerAuth()
+@UseGuards(AuthGuard('jwt'))
 export class DepartamentoController {
   constructor(private departamentosService: DepartamentoService) {}
 

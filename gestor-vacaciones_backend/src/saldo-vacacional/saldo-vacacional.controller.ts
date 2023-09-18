@@ -1,12 +1,29 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
 import { SaldoVacacionalService } from './saldo-vacacional.service';
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { SaldoVacacional } from './saldo-vacacional.entity';
 import { CreateSaldoVacacionalDto } from './dto/create-saldovacacional.dto';
 import { UpdateSaldoVacacionalDto } from './dto/update-saldovacacional.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('saldo-vacacional')
 @ApiTags('Saldo Vacacional')
+@ApiBearerAuth()
+@UseGuards(AuthGuard('jwt'))
 export class SaldoVacacionalController {
   constructor(private saldoService: SaldoVacacionalService) {}
 
