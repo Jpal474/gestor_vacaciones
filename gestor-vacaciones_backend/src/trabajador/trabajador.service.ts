@@ -17,8 +17,9 @@ export class TrabajadorService {
     try {
       return await this.empleadoRepository
         .createQueryBuilder('empleado')
-        .innerJoinAndSelect('empleado.usuario', 'usuario')
-        .innerJoinAndSelect('usuario.rol', 'rol')
+        .leftJoinAndSelect('empleado.usuario', 'usuario')
+        .leftJoinAndSelect('usuario.rol', 'rol')
+        .leftJoinAndSelect('empleado.departamento', 'departamento') // Add this line
         .where('rol.nombre = :nombre', { nombre })
         .getMany();
     } catch (error) {

@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Departamento } from 'src/app/interfaces/departamento.interface';
+import { SuperadService } from 'src/app/services/superad.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -6,7 +8,14 @@ import Swal from 'sweetalert2';
   templateUrl: './departamentos.component.html',
   styleUrls: ['./departamentos.component.css']
 })
-export class DepartamentosComponent {
+export class DepartamentosComponent implements OnInit {
+  departamentos: Departamento[] = [];
+
+  constructor(private superadService: SuperadService) {}
+
+  ngOnInit(): void {
+    this.getDepartamentos();
+  }
 
   async guardarDepartamento() {
     const specialCharactersRegex = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
@@ -19,4 +28,20 @@ export class DepartamentosComponent {
     console.log('antes de if para departamento y localstorage');
   }
 
+
+  getDepartamentos(){
+    this.superadService.getDepartamentos()
+    .subscribe({
+      next: (res:Departamento[])=> {
+        this.departamentos=res        
+      },
+      error: (e)=> {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: e,
+        })
+      }
+    })
+  }
 }

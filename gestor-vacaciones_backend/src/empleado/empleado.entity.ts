@@ -40,12 +40,10 @@ export class Empleado {
 
   @OneToOne(() => Usuario, (usuario) => usuario.empleado)
   @JoinColumn()
-  @Exclude({toPlainOnly:true})
   @ApiProperty({ type: () => Usuario, isArray: false })
   usuario: Usuario;
  
   @ManyToOne(() => Departamento, (departamento) => departamento.empleado)
-  @Exclude({toPlainOnly:true})
   @ApiProperty({ type: () => Departamento, isArray:false})
   departamento?: Departamento;
 

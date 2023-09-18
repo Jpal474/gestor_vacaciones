@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -26,10 +27,12 @@ export class AuthService {
       relations: ['rol'],
       where: { correo: correo },
     });
+    console.log(user);
     const id = user.id;
     const rol = user.rol.nombre;
+    const nombre = user.nombre_usuario;
     if (user && (await bcrypt.compare(contraseña, user.contraseña))) {
-      const payload: JwtPayload = { id, correo, rol };
+      const payload: JwtPayload = { id, correo, rol, nombre };
       const accessToken: string = await this.jwtService.sign(payload);
       return { accessToken };
     } else {

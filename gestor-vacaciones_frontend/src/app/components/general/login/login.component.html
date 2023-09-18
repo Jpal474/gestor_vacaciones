@@ -1,6 +1,6 @@
 <div class="page d-flex justify-content-center">
     <div class="login-container">
-        <form action="" class="form-login">
+        <form autocomplete="off" [formGroup]="login_formulario" class="form-login">
             <ul class="login-nav">
                 <li class="login-nav__item active">
                     <a href="#">Sign In</a>
@@ -12,13 +12,15 @@
             <label for="login-input-user" class="login__label">
                 Correo
             </label>
-            <input id="login-input-user" class="login__input" type="text" />
+            <input id="login-input-user" class="login__input" type="text" formControlName="correo" [class.is-invalid]="correoNoValido" />
+            <small *ngIf="correoNoValido" class="text-danger"> {{correoNoValido}} </small>
             <label for="login-input-password" class="login__label">
                 Contraseña
             </label>
-            <input id="login-input-password" class="login__input" type="password" />
+            <input id="login-input-password" class="login__input" type="password" formControlName="contraseña" [class.is-invalid]="contraseniaNoValida" />
+            <small *ngIf="contraseniaNoValida" class="text-danger"> {{contraseniaNoValida}} </small>
             <br>
-            <button class="login__submit" disabled>Sign in</button>
+            <button class="login__submit" (click)="login()">INICIAR SESION</button>
         </form>
         <a href="#" class="login__forgot">Forgot Password?</a>
     </div>

@@ -9,7 +9,8 @@ import { SuperadminModule } from './components/superadmin/superadmin.module';
 import { AdminModule } from './components/admin/admin/admin.module';
 import { TrabajadoresModule } from './components/trabajadores/trabajadores.module';
 import { CalendarioComponent } from './components/admin/calendario/calendario.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { TokenInterceptorService } from './interceptors/token.interceptor.service';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,11 @@ import { HttpClientModule } from '@angular/common/http';
     TrabajadoresModule,
     HttpClientModule,
   ],
-  providers: [],
+  providers: [{
+    provide: HTTP_INTERCEPTORS,
+    useClass: TokenInterceptorService,
+    multi: true,
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
