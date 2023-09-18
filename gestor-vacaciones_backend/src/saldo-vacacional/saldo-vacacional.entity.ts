@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { ApiProperty } from '@nestjs/swagger';
-import { Usuario } from 'src/usuario/usuario.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Empleado } from 'src/empleado/empleado.entity';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class SaldoVacacional {
@@ -21,7 +21,8 @@ export class SaldoVacacional {
   @ApiProperty()
   dias_tomados: number;
 
-  @ManyToOne(() => Usuario, (usuario) => usuario.saldo_vacacional)
-  @ApiProperty({type: () => Usuario})
-  usuario:Usuario;
+  @ManyToOne(() => Empleado, (empleado) => empleado.saldo_vacacional)
+  @JoinColumn()
+  @ApiProperty({type: () => Empleado})
+  empleado:Empleado;
 }

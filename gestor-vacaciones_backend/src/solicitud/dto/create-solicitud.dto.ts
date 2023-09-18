@@ -3,6 +3,7 @@ import {ApiProperty } from '@nestjs/swagger';
 import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { EstadoSolicitud } from '../solicitud-models/solicitud-estado-enum';
 import { Usuario } from 'src/usuario/usuario.entity';
+import { Empleado } from 'src/empleado/empleado.entity';
 
 export class CreateSolicitudDto {
   @IsString()
@@ -17,15 +18,19 @@ export class CreateSolicitudDto {
 
   @IsString()
   @IsNotEmpty()
-  @IsEnum({ EstadoSolicitud })
+  @IsEnum(EstadoSolicitud)
   @ApiProperty()
   estado: EstadoSolicitud;
 
   @IsOptional()
-  @IsNotEmpty()
   @ApiProperty()
   fecha_creacion: string;
 
   @IsNotEmpty()
-  usuario:Usuario
+  @IsString()
+  @ApiProperty()
+  justificacion: string;
+
+  @IsNotEmpty()
+  empleado:Empleado;
 }

@@ -1,11 +1,13 @@
 /* eslint-disable prettier/prettier */
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { UsuarioGenero } from './usuario-models/usuario-genero-enum';
 import { Roles } from 'src/roles/roles.entity';
 import { Solicitud } from 'src/solicitud/solicitud.entity';
 import { SaldoVacacional } from 'src/saldo-vacacional/saldo-vacacional.entity';
+import { Empleado } from 'src/empleado/empleado.entity';
+import { Ceo } from 'src/ceo/ceo.entity';
 
 @Entity()
 export class Usuario {
@@ -15,35 +17,28 @@ export class Usuario {
 
   @Column()
   @ApiProperty()
-  nombre: string;
+  nombre_usuario: string;
 
   @Column()
   @ApiProperty()
-  apellidos: string;
-
-  @Column()
-  @ApiProperty()
-  genero: UsuarioGenero;
-  
-  @Column()
-  @ApiProperty()
-  fecha_contratacion: string;
+  correo: string;
 
   @Column()
   @ApiProperty()
   contraseña: string;
 
   @ManyToOne(() => Roles, (rol) => rol.usuario)
-  @Exclude({toPlainOnly:true})
   @ApiProperty({type: () => Roles})
+  @Exclude({toPlainOnly:true})
   rol: Roles;
 
-  @OneToMany(() => Solicitud, (solicitud) => solicitud.usuario, {nullable:true})
-  @JoinColumn()
-  @ApiProperty({type: () => Solicitud, isArray:true})
-  solicitud?:Solicitud[];
+  @OneToOne(() => Empleado, (empleado) => empleado.usuario)
+  @ApiProperty({ type: () => Empleado, isArray: false })
+  empleado: Empleado;
 
-  @OneToMany(() => SaldoVacacional, (saldo_vacacional) => saldo_vacacional.usuario, {nullable:true})
-  @ApiProperty({type: () => SaldoVacacional, isArray:true})
-  saldo_vacacional?:SaldoVacacional[]
+  @OneToOne(() => Ceo, (ceo) => ceo.usuario)
+  @ApiProperty({type: () => Ceo})
+  @Exclude({toPlainOnly:true})
+  ceo: Ceo;
+
 }

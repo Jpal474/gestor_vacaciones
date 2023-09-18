@@ -1,38 +1,33 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Usuario } from 'src/usuario/usuario.entity';
 import { Repository } from 'typeorm';
 import { UpdateAdministradorDto } from './dto/update-admin.dto';
 import * as bcrypt from 'bcryptjs';
+import { CreateAdminDto } from './dto/create-admin.dto';
+import { Empleado } from 'src/empleado/empleado.entity';
 
 @Injectable()
 export class AdminService {
   constructor(
-    @InjectRepository(Usuario)
-    private userRepository: Repository<Usuario>,
+    @InjectRepository(Empleado) //inyecto el repositorio para poder hacer uso de este
+    private empleadoRepository: Repository<Empleado>,
   ) {}
-  async getAdministradores(id: number): Promise<Usuario[]> {
+  async getAdministradores(nombre: string): Promise<Empleado[]> {
     try {
-      const administradores = this.userRepository.find({
-        relations: ['rol'],
-        where: {
-          rol: { id: id },
-        },
-      });
-      if (!administradores) {
-        throw new NotFoundException(
-          `Departamentos para el Supermercado "${id}" no han sido encontrados`,
-        );
-      }
-      return administradores;
+      return await this.empleadoRepository
+        .createQueryBuilder('empleado')
+        .innerJoinAndSelect('empleado.usuario', 'usuario')
+        .innerJoinAndSelect('usuario.rol', 'rol')
+        .where('rol.nombre = :nombre', { nombre })
+        .getMany();
     } catch (error) {
       console.log(error);
     }
   }
 
-  async getAdministradorById(id: string): Promise<Usuario> {
+  async getAdministradorById(id: string): Promise<Empleado> {
     try {
-      const administrador = await this.userRepository.findOneBy({ id: id });
+      const administrador = await this.empleadoRepository.findOneBy({ id: id });
       if (!administrador) {
         throw new NotFoundException(
           `Encargado con el ID "${id}" no ha sido encontrado`,
@@ -44,30 +39,35 @@ export class AdminService {
     }
   }
 
+  async createAdministrador(createAdminDto: CreateAdminDto): Promise<Empleado> {
+    try {
+      const admin = this.empleadoRepository.create(createAdminDto);
+      this.empleadoRepository.save(createAdminDto);
+      return admin;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   async updateAdministrador(
     id: string,
     updateAdministradorDto: UpdateAdministradorDto,
-  ): Promise<Usuario> {
-    let admin = await this.getAdministradorById(id);
-    if (updateAdministradorDto.contraseña) {
-      const salt = await bcrypt.genSalt();
-      const hashedPassword = await bcrypt.hash(
-        updateAdministradorDto.contraseña,
-        salt,
-      );
-      updateAdministradorDto.contraseña = hashedPassword;
-      const { confirmar_contraseña, ...nuevoDto } = updateAdministradorDto;
-      admin = nuevoDto;
-    } else {
-      updateAdministradorDto.contraseña = admin.contraseña;
-      admin = updateAdministradorDto;
+  ): Promise<Empleado> {
+    try {
+      const admin = await this.getAdministradorById(id);
+      admin.nombre = updateAdministradorDto.nombre;
+      admin.apellidos = updateAdministradorDto.apellidos;
+      admin.genero = updateAdministradorDto.genero;
+      admin.fecha_contratacion = updateAdministradorDto.fecha_contratacion;
+      await this.empleadoRepository.save(admin);
+      return admin;
+    } catch (error) {
+      throw new Error(error);
     }
-    await this.userRepository.save(admin);
-    return admin;
   }
 
   async deleteAdministrador(id: string): Promise<boolean> {
-    const result = await this.userRepository.delete(id);
+    const result = await this.empleadoRepository.delete(id);
     if (result.affected === 0) {
       throw new NotFoundException(
         `Administrador con el id: "${id}" no ha sido encontrado`,
