@@ -16,7 +16,6 @@ import { Eventos } from 'src/app/interfaces/eventos.interface';
 })
 export class CalendarioComponent implements OnInit{
   dias: DiasFeriados[]=[]
-  
   calendarOptions: CalendarOptions = {
     initialView: 'dayGridMonth',
     plugins: [dayGridPlugin, timeGridPlugin, interactionGridPlugin],

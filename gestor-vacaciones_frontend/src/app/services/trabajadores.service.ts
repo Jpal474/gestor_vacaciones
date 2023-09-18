@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { DiasFeriados } from '../interfaces/dias_feriados.interface';
 
 
 @Injectable({
@@ -12,7 +13,7 @@ export class TrabajadoresService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getDiasFeriados(): Observable<any>{
+  getDiasFeriados(): Observable<DiasFeriados[]>{
     console.log('entra');
     
     const date = new Date();

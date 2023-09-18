@@ -4,6 +4,8 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionGridPlugin from '@fullcalendar/interaction';
 import esLocale from '@fullcalendar/core/locales/es';
+import { DiasFeriados } from 'src/app/interfaces/dias_feriados.interface';
+import { AdminService } from 'src/app/services/admin.service';
 
 
 @Component({
@@ -12,6 +14,7 @@ import esLocale from '@fullcalendar/core/locales/es';
   styleUrls: ['./calendario.component.css']
 })
 export class CalendarioComponent {
+  dias: DiasFeriados[]=[]
   calendarOptions: CalendarOptions = {
     initialView: 'dayGridMonth',
     plugins: [dayGridPlugin, timeGridPlugin, interactionGridPlugin],
@@ -22,17 +25,43 @@ export class CalendarioComponent {
       right: 'dayGridMonth,timeGridWeek,timeGridDay'
     },
 
-    events: [
-      { title: 'event 1', date: '2023-09-14'},
-      { title: 'event 2', date: '2023-09-14'}
-      
-    ],
+    events: [],
     eventClick: function(info) {
       alert('Event: ' + info.event.title);
       alert('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
       alert('View: ' + info.view.type);
     }
   };
+
+  constructor(private adminService: AdminService) {}
+
+  ngOnInit(): void {
+    this.adminService.getDiasFeriados().
+    subscribe({
+      next: (res: DiasFeriados[]) => {
+        if(res){
+          this.dias = res
+          console.log(this.dias);
+          const events = this.dias.map( event => ({title: event.name, date: event.date.toString().split(' ')[0]}));
+          // this.dias.forEach(element => {
+          //   const date = '2023-01-01'
+          //   const dateTimeString = element.date;
+          //   const datetime = new Date(dateTimeString);
+          //   const dateString = datetime.toISOString().split('T')[0];
+          //   console.log(dateString);
+            
+          // });
+          events.push()
+          // events = [ ...events, ...[{title: '', date: ''}]]
+          this.calendarOptions = {
+            events: events
+          }
+          
+        }
+      }
+    })
+    
+  }
 
 
 }
