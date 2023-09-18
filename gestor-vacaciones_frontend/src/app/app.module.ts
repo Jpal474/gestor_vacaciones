@@ -9,6 +9,7 @@ import { SuperadminModule } from './components/superadmin/superadmin.module';
 import { AdminModule } from './components/admin/admin/admin.module';
 import { TrabajadoresModule } from './components/trabajadores/trabajadores.module';
 import { CalendarioComponent } from './components/admin/calendario/calendario.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { CalendarioComponent } from './components/admin/calendario/calendario.co
     GeneralModule,
     SuperadminModule,
     AdminModule,
-    TrabajadoresModule
+    TrabajadoresModule,
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
