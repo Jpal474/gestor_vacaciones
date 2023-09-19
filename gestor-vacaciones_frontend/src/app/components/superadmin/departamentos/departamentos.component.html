@@ -20,7 +20,7 @@
                             <th scope="row" style="background-color: #00aec1;
                             color: white;">{{departamento.nombre}}</th>
                             <td>
-                                <a type="button" class="td btn button text-white">Eliminar</a>
+                                <a type="button" class="td btn button text-white" (click)="borrarDepartamento(departamento.id)">Eliminar</a>
                             </td>
                         </tr>
                     </tbody>

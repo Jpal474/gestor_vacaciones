@@ -39,9 +39,9 @@ export class LoginComponent {
         this.passwordInvalid = '';
         const tokenCodificado = btoa(JSON.stringify(login.accessToken))
         localStorage.setItem('token', tokenCodificado);
-        const empleado: Usuario = this.authService.decodeUserFromToken(login.accessToken);
-        console.log(empleado);
-        localStorage.setItem('usuario', btoa(JSON.stringify(empleado.nombre_usuario)));
+        const empleado = this.authService.decodeUserFromToken(login.accessToken);
+        console.log('empleado',empleado);
+        localStorage.setItem('usuario', btoa(JSON.stringify(empleado.nombre)));
         localStorage.setItem('id', btoa(JSON.stringify(empleado.id)));
         localStorage.setItem('tipo', btoa(JSON.stringify(empleado.rol)));
         localStorage.setItem('correo', btoa(JSON.stringify(empleado.correo)));
@@ -54,8 +54,10 @@ export class LoginComponent {
         else if(empleado.rol === 'Trabajador'){
           this.router.navigate(['/trabajador/home'])
         }
+        console.log('bienvenido', empleado.nombre);
+        
         Swal.fire({
-          title: `Bienvenido(a) ${empleado.nombre_usuario}`,
+          title: `Bienvenido(a) ${empleado.nombre}`,
           showClass: {
             popup: 'animate__animated animate__fadeInDown'
           },

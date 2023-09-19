@@ -4,6 +4,7 @@ import { DiasFeriados } from '../interfaces/dias_feriados.interface';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Empleado } from '../interfaces/empleados.interface';
 import { Departamento } from '../interfaces/departamento.interface';
+import { Empresa } from '../interfaces/empresa.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -37,7 +38,15 @@ export class SuperadService {
     return this.httpClient.get<Departamento[]>(`${this.BASE_URL}/departamento`)
   }
 
+  getEmpresa(): Observable<Empresa>{
+    return this.httpClient.get<Empresa>(`${this.BASE_URL}/empresa`)
+  }
+
   createDepartamento(departamento: Departamento): Observable<Departamento>{
     return this.httpClient.post<Departamento>(`${this.BASE_URL}/departamento`, departamento)
+  }
+
+  deleteDepartamento(id: number): Observable<boolean>{
+    return this.httpClient.delete<boolean>(`${this.BASE_URL}/departamento/${id}`)
   }
 }
