@@ -44,6 +44,18 @@ export class SolicitudController {
     return this.solicitudService.getSolicitudesTrabajadores();
   }
 
+  @Get('contar_solicitudes')
+  @ApiOperation({ summary: 'Contar Solicitudes Pendientes' })
+  @ApiResponse({
+    status: 200,
+    description: 'Regresa el Número de Solicitudes Pendientes',
+    isArray: false,
+    type: Number,
+  })
+  contarSolicitudes(): Promise<number> {
+    return this.solicitudService.countPendingSolicitudes();
+  }
+
   @Get('/:id')
   @ApiOperation({ summary: 'Obtener Solicitud a partir de su ID' })
   @ApiParam({ name: 'id', description: 'ID de la Solicitud' })
@@ -57,6 +69,7 @@ export class SolicitudController {
   gettrabajadoresByDepartamento(@Param('id') id: number): Promise<Solicitud> {
     return this.solicitudService.getSolicitudById(id);
   }
+
 
   @Post()
   @ApiOperation({ summary: 'Crear Solicitud' })

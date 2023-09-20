@@ -19,7 +19,7 @@ export class SolicitudService {
   ) {}
 
   async getSolicitudById(id: number): Promise<Solicitud> {
-    try {
+    try {      
       const found = await this.solicitudRepository.findOneBy({ id: id });
       if (!found) {
         throw new NotFoundException(`Solicitud No Econtrada Para el ID: ${id}`);
@@ -101,6 +101,19 @@ export class SolicitudService {
           'Error: Datos Invalidos Para La Solicitud',
         );
       }
+    }
+  }
+
+  async countPendingSolicitudes(): Promise<number> {
+    try {     
+      const number = await this.solicitudRepository.count({
+        where: {
+          estado: 'PENDIENTE',
+        },
+      });
+      return number;
+    } catch (error) {
+      throw new Error(error);
     }
   }
 
