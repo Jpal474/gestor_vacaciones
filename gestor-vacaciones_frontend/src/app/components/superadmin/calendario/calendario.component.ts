@@ -6,6 +6,7 @@ import interactionGridPlugin from '@fullcalendar/interaction';
 import esLocale from '@fullcalendar/core/locales/es';
 import { SuperadService } from 'src/app/services/superad.service';
 import { DiasFeriados } from 'src/app/interfaces/dias_feriados.interface';
+import { FestivosService } from 'src/app/services/festivos.service';
 @Component({
   selector: 'app-calendario',
   templateUrl: './calendario.component.html',
@@ -31,10 +32,12 @@ export class CalendarioComponent {
     }
   };
 
-  constructor(private superadService: SuperadService) {}
+  constructor(
+    private superadService: SuperadService,
+    private festivosService: FestivosService) {}
 
   ngOnInit(): void {
-    this.superadService.getDiasFeriados().
+    this.festivosService.getDiasFeriados().
     subscribe({
       next: (res: DiasFeriados[]) => {
         if(res){

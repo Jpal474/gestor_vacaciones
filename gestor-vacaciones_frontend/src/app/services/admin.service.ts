@@ -7,16 +7,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class AdminService {
-  FESTIVOS_URL= 'https://api.generadordni.es/v2/holidays/holidays?country=MX&year=2023'
 
   constructor(private httpClient: HttpClient) { }
-
-  getDiasFeriados(): Observable<DiasFeriados[]>{
-    console.log('entra');
-    
-    const date = new Date();
-    const year = date.getFullYear();
-    return this.httpClient.get<any>(this.FESTIVOS_URL);
-  }
  
 }

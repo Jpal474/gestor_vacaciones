@@ -33,7 +33,7 @@ export class SolicitudService {
   async getSolicitudesAdministradores(): Promise<Solicitud[]> {
     const solicitudes = await this.solicitudRepository
       .createQueryBuilder('solicitud')
-      .innerJoin('solicitud.empleado', 'empleado')
+      .innerJoinAndSelect('solicitud.empleado', 'empleado')
       .innerJoin('empleado.usuario', 'usuario')
       .innerJoin('usuario.rol', 'rol', 'rol.nombre = :rolNombre', {
         rolNombre: 'Administrador',

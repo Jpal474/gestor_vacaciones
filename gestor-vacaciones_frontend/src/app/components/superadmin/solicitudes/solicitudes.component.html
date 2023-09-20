@@ -18,16 +18,16 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <th scope="row" style="background-color: #00aec1; color: white;">trabajador.id</th>
-                        <td style="background-color: #00aec1; color: white;">trabajador.departamento?.nombre | uppercase</td>
-                        <td style="background-color: #00aec1; color: white;">trabajador.nombre</td>
-                        <td style="background-color: #00aec1; color: white;">trabajador.apellidos</td>
-                        <td style="background-color: #00aec1; color: white;">trabajador.dias_laborales</td>
-                        <td style="background-color: #00aec1; color: white;">trabajador.telefono</td>
-                        <td style="background-color: #00aec1; color: white;">trabajador.telefono</td>
+                    <tr *ngFor="let solicitud of solicitudes">
+                        <th scope="row" style="background-color: #00aec1; color: white;">{{solicitud.id}}</th>
+                        <td style="background-color: #00aec1; color: white;">{{solicitud.fecha_inicio}}</td>
+                        <td style="background-color: #00aec1; color: white;">{{solicitud.fecha_fin}}</td>
+                        <td style="background-color: #00aec1; color: white;">{{solicitud.empleado.nombre}} {{solicitud.empleado.apellidos}}</td>
+                        <td [ngStyle]="{'background-color': solicitud.estado === 'ACEPTADO' ? 'green' : (solicitud.estado === 'RECHAZADO' ? 'red' : 'yellow')}" style="color: white;">{{solicitud.estado}}</td>
+                        <td style="background-color: #00aec1; color: white;">{{solicitud.aprobada_por}}</td>
+                        <td style="background-color: #00aec1; color: white;">{{solicitud.denegada_por}}</td>
                         <td style="background-color: #00aec1; color: white;">
-                            <a type="button" class="btn button text-white ms-4">Ver</a>
+                            <a type="button" class="btn button text-white ms-4" [routerLink]="['/super/solicitud',solicitud.id]">Ver</a>
                         </td>
                     </tr>
                     <tr>

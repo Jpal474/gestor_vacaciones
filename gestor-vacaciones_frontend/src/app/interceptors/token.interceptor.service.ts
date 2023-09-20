@@ -13,8 +13,7 @@ export class TokenInterceptorService implements HttpInterceptor {
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    console.log('interceptor');
-    
+    if(!request.url.includes('https://api.generadordni.es/v2/holidays/holidays?')){
     const token = localStorage.getItem('token');
     if (token) {
         const decodedToken = JSON.parse(atob(token))
@@ -24,6 +23,7 @@ export class TokenInterceptorService implements HttpInterceptor {
         },
       });
     }
+  }
     console.log('interceptor 2');
     
     return next.handle(request).pipe(

@@ -5,6 +5,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Empleado } from '../interfaces/empleados.interface';
 import { Departamento } from '../interfaces/departamento.interface';
 import { Empresa } from '../interfaces/empresa.interface';
+import { Usuario } from '../interfaces/usuario.interface';
+import { Solicitud } from '../interfaces/solicitud.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -17,14 +19,6 @@ export class SuperadService {
   });
 
   constructor(private httpClient: HttpClient) { }
-
-  getDiasFeriados(): Observable<DiasFeriados[]>{
-    console.log('entra');
-    
-    const date = new Date();
-    const year = date.getFullYear();
-    return this.httpClient.get<any>(this.FESTIVOS_URL);
-  }
 
   getAdministradores():Observable<Empleado[]>{
     return this.httpClient.get<Empleado[]>(`${this.BASE_URL}/admin`)
@@ -42,11 +36,33 @@ export class SuperadService {
     return this.httpClient.get<Empresa>(`${this.BASE_URL}/empresa`)
   }
 
+  getDepartamentoById(id: number): Observable<Departamento>{
+    return this.httpClient.get<Departamento>(`${this.BASE_URL}/departamento/${id}`)
+  }
+
   createDepartamento(departamento: Departamento): Observable<Departamento>{
     return this.httpClient.post<Departamento>(`${this.BASE_URL}/departamento`, departamento)
   }
 
   deleteDepartamento(id: number): Observable<boolean>{
     return this.httpClient.delete<boolean>(`${this.BASE_URL}/departamento/${id}`)
+  }
+
+  createUsuario(usuario: Usuario): Observable<Usuario>{
+    return this.httpClient.post<Usuario>(`${this.BASE_URL}/usuario`, usuario);
+  }
+
+  createAdministrador(administrador: Empleado): Observable<Empleado>{
+    return this.httpClient.post<Empleado>(`${this.BASE_URL}/admin`, administrador)
+  }
+  createTrabajador(trabajador: Empleado): Observable<Empleado>{
+    return this.httpClient.post<Empleado>(`${this.BASE_URL}/trabajador`, trabajador)
+  }
+
+  getSolicitudesAdmins(): Observable<Solicitud[]>{
+    return this.httpClient.get<Solicitud[]>(`${this.BASE_URL}/solicitud`);
+  }
+  getSolicitudesTrabajadores(): Observable<Solicitud[]>{
+    return this.httpClient.get<Solicitud[]>(`${this.BASE_URL}/solicitud/trabajadores`);
   }
 }

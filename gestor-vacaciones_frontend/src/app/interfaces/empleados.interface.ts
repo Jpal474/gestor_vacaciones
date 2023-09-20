@@ -2,6 +2,7 @@ import { Departamento } from "./departamento.interface";
 import { Usuario } from "./usuario.interface";
 
 export interface Empleado{
+    id?:string;
     nombre: string,
     apellidos: string,
     genero: EmpleadoGenero;

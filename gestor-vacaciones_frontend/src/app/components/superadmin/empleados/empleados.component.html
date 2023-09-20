@@ -27,7 +27,7 @@
                         <td>{{empleado.genero}}</td>
                         <td>{{empleado.usuario.nombre_usuario}}</td>
                         <td>
-                            <a type="button" class="btn button text-white ms-4">Editar</a>
+                            <a type="button" class="btn button text-white ms-4" [routerLink]="['/super/editar_empleado',empleado.id]">Editar</a>
                             <a type="button" class="btn button-red text-white ms-4">Eliminar</a>
                         </td>
                     </tr>

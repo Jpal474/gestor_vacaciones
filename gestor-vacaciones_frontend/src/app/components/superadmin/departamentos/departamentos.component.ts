@@ -93,10 +93,9 @@ export class DepartamentosComponent implements OnInit {
     })
   }
 
-  borrarDepartamento(id: string | undefined){
+  borrarDepartamento(id: number | undefined){
     if(id){
-   const departamento_id = parseInt(id);
-   this.superadService.deleteDepartamento(departamento_id)
+   this.superadService.deleteDepartamento(id)
    .subscribe({
     next: (res: Boolean)=>{
       if(res){

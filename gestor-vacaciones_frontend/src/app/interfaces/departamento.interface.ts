@@ -1,7 +1,7 @@
 import { Empresa } from "./empresa.interface";
 
 export interface Departamento{
-    id?:string,
+    id?:number,
     nombre: string,
     empresa?: Empresa
 }

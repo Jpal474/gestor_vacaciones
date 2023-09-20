@@ -12,6 +12,7 @@ import { EmpleadosComponent } from './empleados/empleados.component';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { AgregarEmpleadoComponent } from './agregar-empleado/agregar-empleado.component';
 import { EditarEmpleadoComponent } from './editar-empleado/editar-empleado.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -31,6 +32,7 @@ import { EditarEmpleadoComponent } from './editar-empleado/editar-empleado.compo
   imports: [
     CommonModule,
     RouterModule,
+    ReactiveFormsModule,
     FullCalendarModule,
   ]
 })
