@@ -79,4 +79,14 @@ export class UsuarioService {
       throw new Error(error);
     }
   }
+
+  async deleteUsuario(id: string): Promise<boolean> {
+    const result = await this.usuarioRepository.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException(
+        `No se ha encontrado usuario para el ID ${id}`,
+      );
+    }
+    return true;
+  }
 }

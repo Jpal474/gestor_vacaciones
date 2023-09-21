@@ -19,12 +19,15 @@ export class SolicitudService {
   ) {}
 
   async getSolicitudById(id: number): Promise<Solicitud> {
-    try {      
-      const found = await this.solicitudRepository.findOneBy({ id: id });
+    try {
+      const found = await this.solicitudRepository.find({
+        relations: ['empleado'],
+        where: { id: id },
+      });
       if (!found) {
         throw new NotFoundException(`Solicitud No Econtrada Para el ID: ${id}`);
       }
-      return found;
+      return found[0];
     } catch (error) {
       throw new Error(error);
     }
@@ -105,13 +108,25 @@ export class SolicitudService {
   }
 
   async countPendingSolicitudes(): Promise<number> {
-    try {     
+    try {
       const number = await this.solicitudRepository.count({
         where: {
           estado: 'PENDIENTE',
         },
       });
       return number;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  async getSolicitudesAprobadas(): Promise<Solicitud[]> {
+    try {
+      const found = await this.solicitudRepository.find({
+        relations: ['empleado'],
+        where: { estado: 'ACEPTADO' },
+      });
+      return found;
     } catch (error) {
       throw new Error(error);
     }

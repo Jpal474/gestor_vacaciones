@@ -23,7 +23,7 @@
                         <td style="background-color: #00aec1; color: white;">{{solicitud.fecha_inicio}}</td>
                         <td style="background-color: #00aec1; color: white;">{{solicitud.fecha_fin}}</td>
                         <td style="background-color: #00aec1; color: white;">{{solicitud.empleado.nombre}} {{solicitud.empleado.apellidos}}</td>
-                        <td [ngStyle]="{'background-color': solicitud.estado === 'ACEPTADO' ? 'green' : (solicitud.estado === 'RECHAZADO' ? 'red' : 'yellow')}" style="color: white;">{{solicitud.estado}}</td>
+                        <td [ngStyle]="{'background-color': solicitud.estado === 'ACEPTADO' ? 'green' : (solicitud.estado === 'RECHAZADO' ? 'red' : 'yellow'), 'color': solicitud.estado === 'ACEPTADO' ? 'white' : (solicitud.estado === 'RECHAZADO' ? 'white' : 'black')}">{{solicitud.estado}}</td>
                         <td style="background-color: #00aec1; color: white;">{{solicitud.aprobada_por}}</td>
                         <td style="background-color: #00aec1; color: white;">{{solicitud.denegada_por}}</td>
                         <td style="background-color: #00aec1; color: white;">

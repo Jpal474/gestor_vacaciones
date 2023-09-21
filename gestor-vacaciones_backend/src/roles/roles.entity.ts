@@ -16,7 +16,6 @@ export class Roles {
     nombre: string
 
     @OneToMany(() => Usuario, (usuario) => usuario.rol)
-    @Exclude({toPlainOnly:true})
     @ApiProperty({ type: () => Usuario, isArray:true})
     usuario?:Usuario[]
 

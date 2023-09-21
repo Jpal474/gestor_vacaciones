@@ -56,6 +56,18 @@ export class SolicitudController {
     return this.solicitudService.countPendingSolicitudes();
   }
 
+  @Get('aprobadas')
+  @ApiOperation({ summary: 'Obtiene todas las solicitudes Aprobadas' })
+  @ApiResponse({
+    status: 200,
+    description: 'Regresa una lista con las solicitudes aprobadas',
+    isArray: true,
+    type: Solicitud,
+  })
+  getSolicitudesAprobadas(): Promise<Solicitud[]> {
+    return this.solicitudService.getSolicitudesAprobadas();
+  }
+
   @Get('/:id')
   @ApiOperation({ summary: 'Obtener Solicitud a partir de su ID' })
   @ApiParam({ name: 'id', description: 'ID de la Solicitud' })
@@ -69,7 +81,6 @@ export class SolicitudController {
   gettrabajadoresByDepartamento(@Param('id') id: number): Promise<Solicitud> {
     return this.solicitudService.getSolicitudById(id);
   }
-
 
   @Post()
   @ApiOperation({ summary: 'Crear Solicitud' })

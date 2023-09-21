@@ -50,31 +50,6 @@
                       </select>
                         <small class="text-danger" *ngIf="generoNoValido"> {{generoNoValido}} </small>
                     </div>
-                    <div class="row">
-                        <div class="input-box ms-5">
-                            <span class="icon"></span>
-                            <input type="text" required name="nombre" disabled>
-                            <label>Departamento</label>
-                        </div>
-                        <select class="form-select" aria-label="Default select example" formControlName="departamento" [class.is-invalid]="departamentoNoValido">
-                        <option selected disabled>-Elija Un Departamento-</option>
-                        <option *ngFor="let departamento of departamentos" value={{departamento.id}}>{{departamento.nombre}}</option>
-                      </select>
-                        <small class="text-danger" *ngIf="departamentoNoValido"> {{departamentoNoValido}} </small>
-                    </div>
-                    <div class="row">
-                        <div class="input-box ms-5">
-                            <span class="icon"></span>
-                            <input type="text" required name="nombre" disabled>
-                            <label>Rol</label>
-                        </div>
-                        <select class="form-select" aria-label="Default select example" formControlName="rol" [class.is-invalid]="rolNoValido">
-                        <option  disabled>-Elija Un Rol-</option>
-                        <option value=2 selected>Administrador</option>
-                        <option value=3>Trabajador</option>
-                      </select>
-                        <small class="text-danger" *ngIf="rolNoValido"> {{rolNoValido}} </small>
-                    </div>
                     <div class="input-box ms-5">
                         <input type="date" id="id" class="form-control shadow-none" formControlName="fecha_contratacion" [class.is-invalid]="fechaNoValida">
 
@@ -84,20 +59,20 @@
                     <div class="row">
                         <div class="input-box ms-5">
                             <span class="icon"></span>
-                            <input type="password" formControlName="contraseña" [class.is-invalid]="contraseniaNoValido" required>
+                            <input type="password" formControlName="contraseña" [class.is-invalid]="contraseniaNoValido">
                             <label>Contraseña</label>
                             <small class="text-danger" *ngIf="contraseniaNoValido"> El campo no puede estar vacío </small>
                         </div>
                         <div class="input-box ms-5">
                             <span class="icon"></span>
-                            <input type="password" formControlName="confirmar_contraseña" [class.is-invalid]="confirmarContraseniaNoValida" required>
+                            <input type="password" formControlName="confirmar_contraseña" [class.is-invalid]="confirmarContraseniaNoValida">
                             <label>Confirmar Contraseña</label>
                             <small class="text-danger" *ngIf="confirmarContraseniaNoValida"> Las contraseñas deben coincidir </small>
                         </div>
                     </div>
 
                 </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-primary" (click)="actualizarEmpleado()">Submit</button>
             </form>
         </div>
     </div>

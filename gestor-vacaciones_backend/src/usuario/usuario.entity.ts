@@ -29,7 +29,6 @@ export class Usuario {
 
   @ManyToOne(() => Roles, (rol) => rol.usuario)
   @ApiProperty({type: () => Roles})
-  @Exclude({toPlainOnly:true})
   rol: Roles;
 
   @OneToOne(() => Empleado, (empleado) => empleado.usuario)

@@ -7,6 +7,8 @@ import esLocale from '@fullcalendar/core/locales/es';
 import { SuperadService } from 'src/app/services/superad.service';
 import { DiasFeriados } from 'src/app/interfaces/dias_feriados.interface';
 import { FestivosService } from 'src/app/services/festivos.service';
+import { Solicitud } from 'src/app/interfaces/solicitud.interface';
+import * as moment from 'moment';
 @Component({
   selector: 'app-calendario',
   templateUrl: './calendario.component.html',
@@ -37,28 +39,36 @@ export class CalendarioComponent {
     private festivosService: FestivosService) {}
 
   ngOnInit(): void {
+    let events:any;
     this.festivosService.getDiasFeriados().
     subscribe({
       next: (res: DiasFeriados[]) => {
         if(res){
           this.dias = res
           console.log(this.dias);
-          const events = this.dias.map( event => ({title: event.name, date: event.date.toString().split(' ')[0]}));
-          // this.dias.forEach(element => {
-          //   const date = '2023-01-01'
-          //   const dateTimeString = element.date;
-          //   const datetime = new Date(dateTimeString);
-          //   const dateString = datetime.toISOString().split('T')[0];
-          //   console.log(dateString);
+          events = this.dias.map( event => ({title: event.name, date: event.date.toString().split(' ')[0]}));
+          
+        }
+      },
+      error: (err) => {
+
+      },
+      complete: () => {
+        this.superadService.getSolicitudesAprobadas()
+        .subscribe({
+          next: (res: Solicitud[])=> {
+           events = [
+            ...events,
+           ...res.map( event => ({title: `Vacaciones ${event.empleado.nombre}`, start: moment(event.fecha_inicio, 'DD/MM/YYYY').format('YYYY-MM-DD'), end: moment( event.fecha_fin, 'DD/MM/YYYYY').format('YYYY-MM-DD'), backgroundColor:'#378006'})),
+            ]; 
+            console.log(events);
             
-          // });
-          events.push()
-          // events = [ ...events, ...[{title: '', date: ''}]]
           this.calendarOptions = {
             events: events
           }
-          
-        }
+
+          }
+        })
       }
     })
     
