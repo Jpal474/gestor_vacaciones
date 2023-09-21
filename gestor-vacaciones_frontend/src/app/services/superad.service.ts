@@ -14,7 +14,6 @@ import { RechazarSolicitud } from '../interfaces/rechazar_solicitud.interface';
   providedIn: 'root'
 })
 export class SuperadService {
-  FESTIVOS_URL= 'https://api.generadordni.es/v2/holidays/holidays?country=MX&year=2023'
   BASE_URL:string='http://localhost:3000'
   headers= new HttpHeaders({
     Authorization: `Bearer ${localStorage.getItem('token')}`,

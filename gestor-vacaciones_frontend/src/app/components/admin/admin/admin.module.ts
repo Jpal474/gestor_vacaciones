@@ -12,6 +12,7 @@ import { VerSolicitudComponent } from '../ver-solicitud/ver-solicitud.component'
 import { CalendarioComponent } from '../calendario/calendario.component';
 import { FullCalendarModule } from '@fullcalendar/angular'; // for FullCalendar!
 import { RouterModule, provideRouter } from '@angular/router';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -32,6 +33,7 @@ import { RouterModule, provideRouter } from '@angular/router';
     CommonModule,
     FullCalendarModule,
     RouterModule,
+    ReactiveFormsModule,
   ]
 })
 export class AdminModule { }

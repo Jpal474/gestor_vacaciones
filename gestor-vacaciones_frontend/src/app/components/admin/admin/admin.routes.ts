@@ -14,7 +14,7 @@ export const ADMIN_ROUTES: Routes = [
     { path: 'home', component:HomeComponent},
     {path: 'departamentos', component: DepartamentosComponent},
     {path: 'trabajadores', component: TrabajadoresComponent},
-    {path: 'registrar_trabajador', component: AgregarTrabajadorComponent},
+    {path: 'agregar_trabajador', component: AgregarTrabajadorComponent},
     {path: 'editar_trabajador', component: EditarTrabajadorComponent},
     {path: 'solicitudes', component: SolicitudesComponent},
     {path: 'solicitud', component: VerSolicitudComponent},

@@ -16,11 +16,11 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="tr">
+                        <tr class="tr" *ngFor="let departamento of departamentos">
                             <th scope="row" style="background-color: #00aec1;
-                            color: white;">nombre departamento</th>
+                            color: white;">{{departamento.nombre}}</th>
                             <td>
-                                <a type="button" class="btn button text-white td">Eliminar</a>
+                                <a type="button" class="btn button text-white td" (click)="borrarDepartamento(departamento.id)">Eliminar</a>
                             </td>
                         </tr>
                     </tbody>
