@@ -29,4 +29,21 @@ export class EmpleadoService {
       throw new Error(error);
     }
   }
+
+  async getEmpleadoByUserId(id: string): Promise<Empleado> {
+    try {
+      const found = await this.empleadoRepository.find({
+        relations: ['usuario'],
+        where: {
+          usuario: { id: id },
+        },
+      });      
+      if (!found) {
+        throw new NotFoundException(`No se ha encontrado al empleado`);
+      }
+      return found[0];
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
 }

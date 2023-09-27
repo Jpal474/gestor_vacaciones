@@ -7,6 +7,9 @@ import { EditarTrabajadorComponent } from '../editar-trabajador/editar-trabajado
 import { SolicitudesComponent } from '../solicitudes/solicitudes.component';
 import { VerSolicitudComponent } from '../ver-solicitud/ver-solicitud.component';
 import { CalendarioComponent } from '../calendario/calendario.component';
+import { MisSolicitudesComponent } from '../mis-solicitudes/mis-solicitudes.component';
+import { CrearSolicitudComponent } from '../crear-solicitud/crear-solicitud.component';
+import { EditarSolicitudComponent } from '../editar-solicitud/editar-solicitud.component';
 
 
 
@@ -15,9 +18,12 @@ export const ADMIN_ROUTES: Routes = [
     {path: 'departamentos', component: DepartamentosComponent},
     {path: 'trabajadores', component: TrabajadoresComponent},
     {path: 'agregar_trabajador', component: AgregarTrabajadorComponent},
-    {path: 'editar_trabajador', component: EditarTrabajadorComponent},
+    {path: 'editar_trabajador/:id', component: EditarTrabajadorComponent},
     {path: 'solicitudes', component: SolicitudesComponent},
     {path: 'solicitud', component: VerSolicitudComponent},
+    {path: 'mis_solicitudes', component: MisSolicitudesComponent},
+    {path: 'crear_solicitud', component: CrearSolicitudComponent},
+    {path: 'editar_solicitud/:id', component: EditarSolicitudComponent},
     {path: 'calendario', component: CalendarioComponent},
     {path:'**', pathMatch:'full', redirectTo:'pagenotfound'},
     //{ path: 'path/:routeParam', component: MyComponent },

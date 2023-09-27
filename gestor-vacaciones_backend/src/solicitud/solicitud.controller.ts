@@ -82,6 +82,21 @@ export class SolicitudController {
     return this.solicitudService.getSolicitudById(id);
   }
 
+  @Get('empleados/:id')
+  @ApiOperation({
+    summary: 'Obtener todas las solicitudes de un empleado en específico',
+  })
+  @ApiParam({ name: 'id', description: 'ID del Empleado' })
+  @ApiResponse({
+    status: 200,
+    description:
+      'Regresa un array con las solicitudes pertenecientes al usuario del cual se ha mandado el ID',
+    isArray: true,
+    type: Solicitud,
+  })
+  getSolicitudesEmpleados(@Param('id') id: string): Promise<Solicitud[]> {
+    return this.solicitudService.getSolicitudesByEmpleado(id);
+  }
   @Post()
   @ApiOperation({ summary: 'Crear Solicitud' })
   @ApiBody({
@@ -141,7 +156,7 @@ export class SolicitudController {
     return this.solicitudService.denegarSolicitud(id, denegarSolicitudDto);
   }
 
-  @Patch('/:id')
+  @Put('/:id')
   @ApiOperation({ summary: 'Editar Solicitud' })
   @ApiBody({
     description: 'Datos Actualizados de la Solicitud',

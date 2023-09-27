@@ -11,6 +11,7 @@ import { CalendarioComponent } from './calendario/calendario.component';
 import { CuentaComponent } from './cuenta/cuenta.component';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { VerSolicitudComponent } from './ver-solicitud/ver-solicitud.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -30,6 +31,7 @@ import { VerSolicitudComponent } from './ver-solicitud/ver-solicitud.component';
     CommonModule,
     RouterModule,
     FullCalendarModule,
+    ReactiveFormsModule,
   ]
 })
 export class TrabajadoresModule { }

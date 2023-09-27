@@ -3,10 +3,10 @@
 
     <img id="profile-image" src="https://avatars3.githubusercontent.com/u/26097311?v=4&s=400" />
 
-    <h1>Marius Niveri</h1>
+    <h1>{{solicitud.empleado.nombre}}</h1>
 
     <div id="info-box">
-        <p style="color: #d8d8d8;">Desarrollo de Software</p>
+        <p style="color: #d8d8d8;">{{solicitud.empleado.departamento}}</p>
     </div>
     <div class="card" style="background-color: #f8f9fa;">
         <div class="card-body">
@@ -15,30 +15,26 @@
 
                 <ul>
                     <li>
-                        <p>Octubre 2023</p>
+                        <p style="float: left;">{{fechas.mes}} {{fechas.anio}}</p>
                     </li>
 
-                    <li class="ms-2">
-                        <p class="social-media-icon" style="color: white;">21</p>
+                    <li class="ms-2" *ngFor="let dia of dias; let i=index">
+                        <p class="social-media-icon" style="color: white;">{{dia}}</p>
                     </li>
-                    <li class="ms-1">
-                        <p class="social-media-icon" style="color: white;">21</p>
-                    </li>
-                    <li class="ms-1">
-                        <p class="social-media-icon" style="color: white;">21</p>
-                    </li>
-                    <li class="ms-1">
-                        <p class="social-media-icon" style="color: white;">21</p>
-                    </li>
+                    <div *ngIf="band">
+                        <li>
+                            <p style="float: left;">{{fechas.mes2}} {{fechas.anio2}}</p>
+                        </li>
+                        <li class="ms-2" *ngFor="let dia2 of dias2">
+                            <p class="social-media-icon" style="color: white;">{{dia2}}</p>
+                        </li>
+                    </div>
 
 
                 </ul>
 
                 <h6 class="card-title text-center" style="color: #818ea2;">Justificacion</h6>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed feugiat tellus et mi pulvinar, at aliquet justo dictum. Ut varius dignissim magna, vel sodales erat lacinia id. Donec condimentum vulputate arcu in varius. Suspendisse tempor
-                    vehicula dignissim. Vestibulum ut velit porttitor est pretium dapibus a eu nulla. Mauris tincidunt condimentum elementum. Quisque id vulputate dolor. Donec sed turpis imperdiet, iaculis mauris eu, bibendum metus. Mauris imperdiet blandit
-                    felis, id venenatis diam accumsan vel. Aenean aliquet augue et hendrerit euismod. Etiam sagittis imperdiet odio, eu faucibus orci. In vestibulum nisl vel tortor egestas ultrices. Curabitur elementum, mi nec tempor laoreet, magna arcu
-                    dignissim diam, vel pharetra odio mi nec purus. </p>
+                <p>{{solicitud.justificacion}}</p>
                 <br>
                 <div class="card warning" style="background-color: #ffc107; font-weight:bold ;">
                     <div class="card-body">

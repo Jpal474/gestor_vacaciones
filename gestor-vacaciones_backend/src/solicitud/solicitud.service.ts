@@ -49,7 +49,7 @@ export class SolicitudService {
   async getSolicitudesTrabajadores(): Promise<Solicitud[]> {
     const solicitudes = await this.solicitudRepository
       .createQueryBuilder('solicitud')
-      .innerJoin('solicitud.empleado', 'empleado')
+      .innerJoinAndSelect('solicitud.empleado', 'empleado')
       .innerJoin('empleado.usuario', 'usuario')
       .innerJoin('usuario.rol', 'rol', 'rol.nombre = :rolName', {
         rolName: 'Trabajador',
@@ -79,8 +79,8 @@ export class SolicitudService {
       const solicitud = await this.solicitudRepository.create(
         createSolicitudDto,
       );
-      await this.solicitudRepository.save(solicitud);
-      return solicitud;
+      const solicitud_creada = await this.solicitudRepository.save(solicitud);
+      return solicitud_creada;
     } catch (error) {
       console.log(error);
     }
@@ -126,6 +126,25 @@ export class SolicitudService {
         relations: ['empleado'],
         where: { estado: 'ACEPTADO' },
       });
+      return found;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  async getSolicitudesByEmpleado(id: string): Promise<Solicitud[]> {
+    try {
+      const found = await this.solicitudRepository.find({
+        relations: ['empleado'],
+        where: {
+          empleado: { id: id },
+        },
+      });
+      if (!found) {
+        throw new NotFoundException(
+          `No se han encontrado solicitudes para este empleado`,
+        );
+      }
       return found;
     } catch (error) {
       throw new Error(error);

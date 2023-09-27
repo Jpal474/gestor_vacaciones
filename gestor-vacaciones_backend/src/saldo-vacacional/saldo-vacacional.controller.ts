@@ -12,6 +12,7 @@ import {
   ApiBearerAuth,
   ApiBody,
   ApiOperation,
+  ApiParam,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -62,7 +63,7 @@ export class SaldoVacacionalController {
     return this.saldoService.createSaldoVacacional(createSaldoVacacionalDto);
   }
 
-  @Put('/:id')
+  @Put('/:id/:anio')
   @ApiOperation({
     summary: 'Actualiza los Datos del Saldo Vacacional',
   })
@@ -76,10 +77,19 @@ export class SaldoVacacionalController {
     description: 'Datos Para el Saldo a ser Actualizados',
     type: SaldoVacacional,
   })
+  @ApiParam({
+    name: 'ID',
+    description: 'ID del Empleado',
+  })
+  @ApiParam({
+    name: 'AÑO',
+    description: 'Año del saldo a buscar',
+  })
   updateSaldoDto(
-    @Param('/:id') id: number,
+    @Param('id') id: string,
+    @Param('anio') anio: number,
     @Body() updateSaldoDto: UpdateSaldoVacacionalDto,
   ): Promise<SaldoVacacional> {
-    return this.saldoService.updateSaldoVacacional(id, updateSaldoDto);
+    return this.saldoService.updateSaldoVacacional(id, anio, updateSaldoDto);
   }
 }

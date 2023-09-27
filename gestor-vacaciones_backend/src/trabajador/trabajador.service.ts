@@ -46,8 +46,9 @@ export class TrabajadorService {
   ): Promise<Empleado> {
     try {
       const trabajador = this.empleadoRepository.create(createTrabajadorDto);
-      this.empleadoRepository.save(trabajador);
-      return trabajador;
+      const trabajador_creado = await this.empleadoRepository.save(trabajador);
+      console.log(trabajador_creado);
+      return trabajador_creado;
     } catch (error) {
       console.log(error);
     }

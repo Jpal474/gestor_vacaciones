@@ -43,8 +43,8 @@ export class AdminService {
   async createAdministrador(createAdminDto: CreateAdminDto): Promise<Empleado> {
     try {
       const admin = this.empleadoRepository.create(createAdminDto);
-      this.empleadoRepository.save(createAdminDto);
-      return admin;
+      const admin_creado = this.empleadoRepository.save(admin);
+      return admin_creado;
     } catch (error) {
       console.log(error);
     }

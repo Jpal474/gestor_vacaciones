@@ -6,7 +6,9 @@ import { Empleado, EmpleadoGenero } from 'src/app/interfaces/empleados.interface
 import { Usuario } from 'src/app/interfaces/usuario.interface';
 import { SuperadService } from 'src/app/services/superad.service';
 import Swal from 'sweetalert2';
-
+import * as moment from 'moment';
+import { SaldoActualizado } from 'src/app/interfaces/actualizar_saldo-vacacional.interface';
+import { SaldoVacacional } from 'src/app/interfaces/saldo_vacacional.interface';
 @Component({
   selector: 'app-editar-empleado',
   templateUrl: './editar-empleado.component.html',
@@ -18,6 +20,7 @@ export class EditarEmpleadoComponent {
   rol = '';
   id_usuario ='';
   id_empleado = '';
+  aux_fecha = '';
   empleado_formulario!: FormGroup;
   departamentos: Departamento[]= [];
   usuario: Usuario={
@@ -42,6 +45,11 @@ export class EditarEmpleadoComponent {
       nombre: ''
     }
   }
+  saldo_vacacional: SaldoActualizado={
+    dias_disponibles: 0,
+    dias_tomados: 0,
+  }
+
 
   constructor(
     private fb: FormBuilder,
@@ -80,6 +88,7 @@ this.empleado_formulario= this.fb.group({
           this.usuario.id= res.usuario.id;
           this.pass = res.usuario.contraseña!;
           this.rol = res.usuario.rol?.nombre!;
+          this.aux_fecha = res.fecha_contratacion;
           console.log(this.usuario.contraseña);
           
           this.empleado_formulario.patchValue({
@@ -109,9 +118,7 @@ this.empleado_formulario= this.fb.group({
     })
   }
 
-  actualizarEmpleado(){
-    console.log('entra al metodo');
-    
+  actualizarEmpleado(){    
     if (!this.empleado_formulario.invalid) {
       if(this.empleado_formulario.value['contraseña'].length > 0 && this.empleado_formulario.value['contraseña'].trim() === ''){
         Swal.fire({
@@ -140,11 +147,23 @@ this.empleado_formulario= this.fb.group({
                this.superadService.updateAdministrador(this.empleado, this.id_empleado!)
                .subscribe({
                 next: (res: Empleado)=> {
-                  console.log('exito administrador');
-                  
+                  if(res && this.aux_fecha !== this.empleado_formulario.value['fecha_contratacion']){
+                    this.actualizarSaldoVacacional();
+                  }
+                  else if (res){
+                    Swal.fire({
+                      icon: 'success',
+                      title: 'Éxito',
+                      text: 'El Administrador ha sido guardado con éxito',
+                    })
+                  } 
                 },
                 error(err) {
-                  console.log('error',err);
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: err,
+                  }) 
                   
                 },
                })
@@ -153,7 +172,16 @@ this.empleado_formulario= this.fb.group({
                 this.superadService.updateTrabajador(this.empleado, this.id_empleado!)
                 .subscribe({
                   next: (res: Empleado)=> {
-                    console.log('exito trabajador');
+                    if(res && this.aux_fecha !== this.empleado_formulario.value['fecha_contratacion']){
+                      this.actualizarSaldoVacacional();
+                    }
+                    else if (res){
+                      Swal.fire({
+                        icon: 'success',
+                        title: 'Éxito',
+                        text: 'El Administrador ha sido guardado con éxito',
+                      })
+                    }
                     
                   },
                   error(err) {
@@ -171,8 +199,65 @@ this.empleado_formulario= this.fb.group({
            
       }
       else{
+        this.empleado.usuario.nombre_usuario = this.empleado_formulario.value['nombre_usuario'];
+        this.empleado.usuario.correo = this.empleado_formulario.value['correo'];
+        this.empleado.usuario.contraseña = this.empleado_formulario.value['contraseña'];
+        this.superadService.updateUsuario(this.empleado.usuario, this.id_usuario!)
+        .subscribe({
+          next: (res: Usuario)=> {
+            if(this.rol === 'Administrador'){
+              this.superadService.updateAdministrador(this.empleado, this.id_empleado!)
+              .subscribe({
+               next: (res: Empleado)=> {
+                 if(res && this.aux_fecha !== this.empleado_formulario.value['fecha_contratacion']){
+                   this.actualizarSaldoVacacional();
+                 }
+                 else if (res){
+                   Swal.fire({
+                     icon: 'success',
+                     title: 'Éxito',
+                     text: 'El Administrador ha sido guardado con éxito',
+                   })
+                 } 
+               },
+               error(err) {
+                 Swal.fire({
+                   icon: 'error',
+                   title: 'Error',
+                   text: err,
+                 }) 
+                 
+               },
+              })
+             }
+             else{
+               this.superadService.updateTrabajador(this.empleado, this.id_empleado!)
+               .subscribe({
+                 next: (res: Empleado)=> {
+                   if(res && this.aux_fecha !== this.empleado_formulario.value['fecha_contratacion']){
+                     this.actualizarSaldoVacacional();
+                   }
+                   else if (res){
+                     Swal.fire({
+                       icon: 'success',
+                       title: 'Éxito',
+                       text: 'El Trabajador ha sido guardado con éxito',
+                     })
+                   }
+                   
+                 },
+                 error(err) {
+                   console.log('error',err);
+                   
+                 },
+               })
+             }
+
+          }
+        })
+
         this.empleado = this.empleado_formulario.value;
-        console.log(this.empleado);
+        
         
       }
       
@@ -185,6 +270,84 @@ this.empleado_formulario= this.fb.group({
     }
     
   }
+
+async actualizarSaldoVacacional(){
+  const año = new Date().getFullYear();
+  const fechaFormateada = new Date().toISOString().split('T')[0];
+  console.log(fechaFormateada, 'formateada');
+  const actual = moment(fechaFormateada, 'YYYY/MM/DD');
+  console.log('fecha_c', this.empleado.fecha_contratacion);
+  const fecha_contratacion = moment(this.empleado.fecha_contratacion, 'YYYY/MM/DD');
+  const diferencia = actual.diff(fecha_contratacion, 'years');
+  console.log('actual', actual);
+  console.log('fecha_contratacion', fecha_contratacion);
+  console.log('diferencia', diferencia);
+  if (diferencia > 0) {
+    const { value: dias_tomados } = await Swal.fire({//ingresa el nombre del departamento
+      title: 'Ingrese Los Dias Vacacionales Tomados Por Su Trabajador',
+      input: 'text',
+      inputLabel: 'En caso de no tener, deje en blanco el espacio',
+      inputPlaceholder: 'Ingrese Nombre del Departamento',
+    });   
+
+    if(dias_tomados && parseInt(dias_tomados)>0){
+      this.saldo_vacacional.dias_tomados = parseInt(dias_tomados);    
+  }else if (dias_tomados && parseInt(dias_tomados) === 0){
+    this.saldo_vacacional.dias_tomados = 0;
+  }
+    
+    if (diferencia === 1) { 
+      this.saldo_vacacional.dias_disponibles = 12-dias_tomados;
+    } else if (diferencia === 2) {
+      this.saldo_vacacional.dias_disponibles = 14-dias_tomados;
+
+    } else if (diferencia === 3) {
+      this.saldo_vacacional.dias_disponibles = 16-dias_tomados;
+
+    } else if (diferencia === 4) {
+      this.saldo_vacacional.dias_disponibles = 18-dias_tomados;
+    } else if (diferencia === 5) {
+      this.saldo_vacacional.dias_disponibles = 20-dias_tomados;
+    } else if (diferencia >= 6 || diferencia <= 10) {
+      this.saldo_vacacional.dias_disponibles = 22-dias_tomados;
+    } else if (diferencia >= 11 || diferencia <= 15) {
+      this.saldo_vacacional.dias_disponibles = 24-dias_tomados;
+    } else if (diferencia >= 16 || diferencia <= 20) {
+      this.saldo_vacacional.dias_disponibles = 26-dias_tomados;
+    } else if (diferencia >= 21 || diferencia <= 25) {
+      this.saldo_vacacional.dias_disponibles = 28-dias_tomados;
+    } else if (diferencia >= 26 || diferencia <= 30) {
+      this.saldo_vacacional.dias_disponibles = 30-dias_tomados;
+    } else if (diferencia >= 31 || diferencia <= 35) {
+      this.saldo_vacacional.dias_disponibles = 32-dias_tomados;
+    }
+
+  console.log('saldo vacacional',this.saldo_vacacional);
+  }
+
+  if(this.empleado.id){
+this.superadService.updateSaldoVacacional(this.empleado.id!,año, this.saldo_vacacional)
+.subscribe({
+  next: (res: SaldoVacacional)=> {
+    if(res){
+    Swal.fire({
+      icon: 'success',
+      title: 'Éxito',
+      text: 'Los Datos Han Sido Actualizados de Forma Éxitosa',
+    })
+  } 
+  },
+  error: (err)=> {
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: err,
+    }) 
+  }
+})
+}
+}
+
 
   notOnlyWhitespace(control: AbstractControl) {
     if (control.value !== null && control.value.trim() === '') {

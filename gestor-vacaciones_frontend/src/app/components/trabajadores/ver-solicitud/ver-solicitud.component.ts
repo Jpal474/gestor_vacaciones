@@ -1,10 +1,190 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { EmpleadoGenero } from 'src/app/interfaces/empleados.interface';
+import { Solicitud, SolicitudEstado } from 'src/app/interfaces/solicitud.interface';
+import { TrabajadoresService } from 'src/app/services/trabajadores.service';
+import * as moment from 'moment';
+import { RechazarSolicitud } from 'src/app/interfaces/rechazar_solicitud.interface';
+import { AprobarSolicitud } from 'src/app/interfaces/aprobar_solicitud.interface';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-ver-solicitud',
   templateUrl: './ver-solicitud.component.html',
   styleUrls: ['./ver-solicitud.component.css']
 })
-export class VerSolicitudComponent {
+export class VerSolicitudComponent implements OnInit {
+  dias: Number[] = [];
+  dias2: Number[]=[];
+  band: boolean=false;
+  band_anio: boolean = false;
+  fechas={
+    mes: '',
+    mes2:'',
+    anio: '',
+    anio2:'',
+  }
+  nombre_rechazar:RechazarSolicitud = {
+    nombre: '',
+  }
+  nombre_aceptar: AprobarSolicitud={
+    nombre: '',
+  }
+  solicitud: Solicitud = {
+    id: 0,
+    fecha_inicio: '',
+    fecha_fin: '',
+    fecha_creacion: '',
+    estado: SolicitudEstado.PENDIENTE,
+    justificacion: '',
+    aprobada_por: '',
+    denegada_por: '',
+    empleado: {
+      id: '',
+      nombre: '',
+      apellidos: '',
+      genero: EmpleadoGenero.OTRO,
+      fecha_contratacion: '',
+      usuario: {
+        nombre_usuario: '',
+        correo: '',
+      },
+      departamento: {
+        id: 0,
+        nombre: '',
+      },
+    },
+  }
+  constructor(
+    private trabajadorService: TrabajadoresService,
+    private activadedRoute: ActivatedRoute
+    ) {}
 
+  ngOnInit(): void {
+    const params = this.activadedRoute.snapshot.params;
+    if (params) {
+      this.trabajadorService.getSolicitudById(params['id']).subscribe({
+        next: (res: Solicitud) => {
+          this.solicitud = res;
+          console.log(this.solicitud);
+          this.getDias(this.solicitud.fecha_inicio, this.solicitud.fecha_fin);
+        },
+      });
+    }
+  }
+
+  getDias(fecha_inicio: string, fecha_fin: string) {
+    const fechaInicio = moment(fecha_inicio, 'YYYY-MM-DD');
+    const fechaFinal = moment(fecha_fin, 'YYYY-MM-DD');
+    const anio = fechaInicio.year();
+    const anio2 = fechaFinal.year();
+    
+    
+    let fecha_actual = fechaInicio.clone();
+    let i= 0;
+    while (fecha_actual.isSameOrBefore(fechaFinal, 'day')) {      
+      // Verificar si el día actual no es sábado (6) ni domingo (0)
+      console.log(i);
+      if (fecha_actual.day() !== 6 && fecha_actual.day() !== 0) {
+        
+        if(i<0){
+        this.dias.push(fecha_actual.date());
+        console.log('entra al while');
+        }
+      else{
+        if(fecha_actual.date() == 1){
+          this.dias2.push(fecha_actual.date())
+          this.band = true;
+        }
+        else if (!this.band) {
+            this.dias.push(fecha_actual.date())
+        }
+        else{
+          this.dias2.push(fecha_actual.date())
+        }
+      }
+      }
+      i+=1;
+      // Avanzar al siguiente día
+      console.log('salida de while');
+      
+      fecha_actual.add(1, 'day');
+    }
+    i=0;
+    if(anio < anio2){ //si anio2 es mayor a anio, significa que habrá 2 nios
+      this.band_anio= true;
+      console.log(fechaInicio);
+      console.log(fechaFinal);
+      console.log('------');
+    
+       this.fechas.anio = anio.toString();
+       this.fechas.anio2 = anio2.toString();
+       const DATEMOMENT = moment(fechaInicio, 'YYYY-MM-DD').format('MMMM')
+       const DATEMOMENT2 = moment(fechaFinal, 'YYYY-MM-DD').format('MMMM');
+       this.fechas.mes = this.traducirMes(DATEMOMENT);
+       this.fechas.mes2 = this.traducirMes(DATEMOMENT2);
+    }
+    else if (this.band){
+      this.fechas.anio = anio.toString()
+      const DATEMOMENT = moment(fechaInicio, 'YYYY-MM-DD').format('MMMM')
+      this.fechas.mes = this.traducirMes(DATEMOMENT);
+      const DATEMOMENT2 = moment(fechaInicio, 'YYYY-MM-DD').format('MMMM')
+      this.fechas.mes2 = this.traducirMes(DATEMOMENT2);
+    }
+    else{
+      this.fechas.anio = anio.toString();
+      const DATEMOMENT = moment(fechaInicio, 'YYYY-MM-DD').format('MMMM')
+      this.fechas.mes = this.traducirMes(DATEMOMENT);
+    }
+    console.log(this.fechas);
+    console.log(this.dias);
+    console.log(this.dias2);  
+  }
+
+  traducirMes(mes: string): string{
+    let mes_español='';
+   switch(mes){
+     case 'January': 
+     mes_español = 'Enero';
+     break;
+     case 'February': 
+     mes_español = 'Febrero';
+     break;
+     case 'March':
+       mes_español = 'Marzo';
+       break;
+     case 'April':
+       mes_español = 'Abril';
+       break;
+     case 'May':
+       mes_español = 'Mayo';
+       break;
+      case 'June':
+       mes_español = 'Junio';
+       break;
+      case 'July':
+       mes_español = 'Julio';
+       break;
+       case 'August':
+         mes_español = 'Agosto';
+         break;
+       case 'September':
+         mes_español = 'Septiembre';
+         break;
+       case 'October':
+         mes_español = 'Octubre';
+         break;
+       case 'November':
+         mes_español = 'Noviembre';
+         break;
+       case 'December':
+         mes_español = 'Diciembre' ;
+         break;
+       default:
+         console.log('Opcion No Reconocida');
+         break;
+         
+   }
+   return mes_español
+ }
 }

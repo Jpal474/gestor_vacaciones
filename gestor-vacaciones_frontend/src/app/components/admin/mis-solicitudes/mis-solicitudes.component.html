@@ -1,0 +1,40 @@
+<app-navbar></app-navbar>
+<h1 class="text-center text-white mt-5"> Solicitudes </h1>
+<div class="d-grid gap-2 col-6 mx-auto justify-content-md-end">
+    <a class="btn btn-success text-white" [routerLink]="['/encargado/registrar-trabajador']">CREAR SOLICITUD</a>
+</div>
+<div class="row justify-content-center mt-5">
+    <div class="col">
+        <div class="container table-responsive mt-5">
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th class="th" scope="col">#</th>
+                        <th class="th" scope="col">Fecha Inicio</th>
+                        <th class="th" scope="col">Fecha Fin</th>
+                        <th class="th" scope="col">Estado</th>
+                        <th class="th" scope="col">Aprobada Por</th>
+                        <th class="th" scope="col">Denegada Por</th>
+                        <th class="th" scope="col">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let solicitud of solicitudes">
+                        <th scope="row" style="background-color: #00aec1; color: white;">{{solicitud.id}}</th>
+                        <td style="background-color: #00aec1; color: white;">{{solicitud.fecha_inicio}}</td>
+                        <td style="background-color: #00aec1; color: white;">{{solicitud.fecha_fin}}</td>
+                        <td [ngStyle]="{'background-color': solicitud.estado === 'ACEPTADO' ? 'green' : (solicitud.estado === 'RECHAZADO' ? 'red' : 'yellow'), 'color': solicitud.estado === 'ACEPTADO' ? 'white' : (solicitud.estado === 'RECHAZADO' ? 'white' : 'black')}">{{solicitud.estado}}</td>
+                        <td style="background-color: #00aec1; color: white;">{{solicitud.aprobada_por}}</td>
+                        <td style="background-color: #00aec1; color: white;">{{solicitud.denegada_por}}</td>
+                        <td style="background-color: #00aec1; color: white;">
+                            <a type="button" class="btn button text-white ms-4" [routerLink]="['/trabajador/solicitud', solicitud.id]">Ver</a>
+                            <a type="button" class="btn button text-white ms-4" *ngIf="solicitud.estado === 'PENDIENTE'" [routerLink]="['/trabajador/editar_solicitud', solicitud.id]">Editar</a>
+
+                        </td>
+                    </tr>
+                    <tr>
+            </table>
+        </div>
+    </div>
+</div>

@@ -9,6 +9,8 @@ import { Usuario } from '../interfaces/usuario.interface';
 import { Solicitud } from '../interfaces/solicitud.interface';
 import { AprobarSolicitud } from '../interfaces/aprobar_solicitud.interface';
 import { RechazarSolicitud } from '../interfaces/rechazar_solicitud.interface';
+import { SaldoVacacional } from '../interfaces/saldo_vacacional.interface';
+import { SaldoActualizado } from '../interfaces/actualizar_saldo-vacacional.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -53,6 +55,10 @@ export class SuperadService {
     return this.httpClient.get<Solicitud[]>(`${this.BASE_URL}/solicitud/aprobadas`)
   }
 
+  getNumeroSolicitudesAprobadas(): Observable<Number>{
+    return this.httpClient.get<Number>(`${this.BASE_URL}/solicitud/contar_solicitudes`)
+  }
+
   createDepartamento(departamento: Departamento): Observable<Departamento>{
     return this.httpClient.post<Departamento>(`${this.BASE_URL}/departamento`, departamento)
   }
@@ -72,9 +78,11 @@ export class SuperadService {
     return this.httpClient.post<Empleado>(`${this.BASE_URL}/trabajador`, trabajador)
   }
 
+  createSaldoVacacional(saldo_vacacional: SaldoVacacional): Observable<SaldoVacacional>{
+    return this.httpClient.post<SaldoVacacional>(`${this.BASE_URL}/saldo-vacacional`, saldo_vacacional)
+  }
+
   updateUsuario(usuario: Usuario, id:string): Observable<Usuario>{
-    console.log('id usuario', id);
-    
     return this.httpClient.put<Usuario>(`${this.BASE_URL}/usuario/${id}`, usuario);
   }
 
@@ -84,6 +92,10 @@ export class SuperadService {
 
   updateTrabajador(trabajador: Empleado, id:string): Observable<Empleado>{
     return this.httpClient.put<Empleado>(`${this.BASE_URL}/trabajador/${id}`, trabajador);
+  }
+
+  updateSaldoVacacional(id: string, anio: number, saldoActualizado: SaldoActualizado): Observable<SaldoVacacional>{
+    return this.httpClient.put<SaldoVacacional>(`${this.BASE_URL}/saldo-vacacional/${id}/${anio}`, saldoActualizado)
   }
 
   getSolicitudesAdmins(): Observable<Solicitud[]>{

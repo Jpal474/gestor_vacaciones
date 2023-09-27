@@ -11,7 +11,7 @@ import { TrabajadoresModule } from './components/trabajadores/trabajadores.modul
 import { CalendarioComponent } from './components/admin/calendario/calendario.component';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { TokenInterceptorService } from './interceptors/token.interceptor.service';
-
+import { EditarSolicitudComponent } from './components/admin/editar-solicitud/editar-solicitud.component';
 @NgModule({
   declarations: [
     AppComponent,

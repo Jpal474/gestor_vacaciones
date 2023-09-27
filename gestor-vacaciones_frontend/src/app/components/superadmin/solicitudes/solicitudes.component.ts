@@ -25,8 +25,11 @@ export class SolicitudesComponent implements OnInit {
         this.superadService.getSolicitudesTrabajadores()
         .subscribe({
           next: (res: Solicitud[])=> {
-            this.solicitudes.concat(res);
-            console.log(this.solicitudes);
+            this.solicitudes = [
+              ...this.solicitudes,
+              ...res
+            ]
+            console.log(res);
             
           },
           error: (err)=> {

@@ -51,6 +51,8 @@ export class SaldoVacacionalService {
       const saldo = await this.saldoVacacionalRepository.create(
         createSaldoVacacionalDto,
       );
+      console.log(saldo);
+      
       this.saldoVacacionalRepository.save(saldo);
       return saldo;
     } catch (error) {
@@ -59,11 +61,12 @@ export class SaldoVacacionalService {
   }
 
   async updateSaldoVacacional(
-    id: number,
+    id: string,
+    anio: number,
     updateSaldoVacacionalDto: UpdateSaldoVacacionalDto,
   ): Promise<SaldoVacacional> {
     try {
-      const saldo = await this.getSaldoById(id);
+      const saldo = await this.getSaldoByEmpleado(id, anio);
       saldo.dias_disponibles = updateSaldoVacacionalDto.dias_disponibles;
       saldo.dias_tomados = updateSaldoVacacionalDto.dias_tomados;
       this.saldoVacacionalRepository.save(saldo);

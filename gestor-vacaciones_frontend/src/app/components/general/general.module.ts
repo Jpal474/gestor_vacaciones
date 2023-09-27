@@ -6,6 +6,7 @@ import { HeaderComponent } from './shared/header/header.component';
 import { FooterComponent } from './shared/footer/footer.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
 
 
 
@@ -15,6 +16,7 @@ import { RouterModule } from '@angular/router';
     LoginComponent,
     HeaderComponent,
     FooterComponent,
+    PagenotfoundComponent,
   ],
   imports: [
     CommonModule,

@@ -3,9 +3,11 @@ import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/fo
 import { Router } from '@angular/router';
 import { Departamento } from 'src/app/interfaces/departamento.interface';
 import { Empleado, EmpleadoGenero } from 'src/app/interfaces/empleados.interface';
+import { SaldoVacacional } from 'src/app/interfaces/saldo_vacacional.interface';
 import { Usuario } from 'src/app/interfaces/usuario.interface';
 import { AdminService } from 'src/app/services/admin.service';
 import Swal from 'sweetalert2';
+import * as moment from 'moment'; 
 
 @Component({
   selector: 'app-agregar-trabajador',
@@ -35,6 +37,18 @@ export class AgregarTrabajadorComponent {
     departamento: {
       id: 0,
       nombre: ''
+    }
+  }
+  saldo_vacacional: SaldoVacacional = {
+    año: 0,
+    dias_disponibles: 0,
+    dias_tomados: 0,
+    empleado:  {
+      id:'',
+      nombre: '',
+      apellidos:'',
+      genero: EmpleadoGenero.OTRO,
+      fecha_contratacion: '',
     }
   }
 
@@ -105,22 +119,36 @@ getDepartamentos(){
                       this.adminService.createTrabajador(this.trabajador)
                       .subscribe({
                         next: (res: Empleado)=> {
-                          console.log(res);  
+                          if(res){
+                            this.saldo_vacacional.empleado.id = res.id!;
+                            this.createSaldoVacacional();
+                          }
                         },
                         error(err) {
-                          console.log(err);
+                          Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: err,
+                          }) 
                           
                         },
                       })
                   },
                   error(err) {                
-                    console.log(err);  
+                    Swal.fire({
+                      icon: 'error',
+                      title: 'Error',
+                      text: err,
+                    })   
                   },
                 })//cierre subscribe de obtener departamento 
               },
               error(err) {
-                console.log('--usuario--');
-                console.log(err);      
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Error',
+                  text: err,
+                })      
               },
              })
         }
@@ -135,6 +163,98 @@ getDepartamentos(){
         }
     }
     
+
+    async createSaldoVacacional() {
+      const fechaActual = new Date();
+      const fechaFormateada = fechaActual.toISOString().split('T')[0]; 
+      console.log(fechaFormateada, 'formateada');
+      const actual = moment(fechaFormateada, 'YYYY/MM/DD');
+      console.log('fecha_c', this.trabajador.fecha_contratacion);
+      const fecha_contratacion = moment(this.trabajador.fecha_contratacion, 'YYYY/MM/DD');
+      const diferencia = actual.diff(fecha_contratacion, 'years');
+      console.log('actual', actual);
+      console.log('fecha_contratacion', fecha_contratacion);
+      console.log('diferencia', diferencia);
+      
+      
+      
+      if (diferencia > 0) {
+        const { value: dias_tomados } = await Swal.fire({//ingresa el nombre del departamento
+          title: 'Ingrese Los Dias Vacacionales Tomados Por Su Trabajador',
+          input: 'text',
+          inputLabel: 'En caso de no tener, deje en blanco el espacio',
+          inputPlaceholder: 'Ingrese Nombre del Departamento',
+        });        
+  
+        this.saldo_vacacional.empleado.nombre = this.trabajador.nombre;
+        this.saldo_vacacional.empleado.apellidos = this.trabajador.apellidos;
+        this.saldo_vacacional.empleado.genero = this.trabajador.genero;
+        this.saldo_vacacional.empleado.fecha_contratacion = this.trabajador.fecha_contratacion; 
+        console.log(this.saldo_vacacional.empleado);
+        
+        this.saldo_vacacional.año = actual.year();
+        
+      if(dias_tomados && parseInt(dias_tomados)>0){
+        this.saldo_vacacional.dias_tomados = parseInt(dias_tomados);    
+    }else if (!(dias_tomados) || parseInt(dias_tomados) === 0){
+      this.saldo_vacacional.dias_tomados = 0;
+    }
+    console.log(dias_tomados, 'dias_tomados');
+    
+      
+      if (diferencia === 1) { 
+        this.saldo_vacacional.dias_disponibles = 12-this.saldo_vacacional.dias_tomados;
+      } else if (diferencia === 2) {
+        this.saldo_vacacional.dias_disponibles = 14-this.saldo_vacacional.dias_tomados;
+  
+      } else if (diferencia === 3) {
+        this.saldo_vacacional.dias_disponibles = 16-this.saldo_vacacional.dias_tomados;
+  
+      } else if (diferencia === 4) {
+        this.saldo_vacacional.dias_disponibles = 18-this.saldo_vacacional.dias_tomados;
+      } else if (diferencia === 5) {
+        this.saldo_vacacional.dias_disponibles = 20-this.saldo_vacacional.dias_tomados;
+      } else if (diferencia >= 6 || diferencia <= 10) {
+        this.saldo_vacacional.dias_disponibles = 22-this.saldo_vacacional.dias_tomados;
+      } else if (diferencia >= 11 || diferencia <= 15) {
+        this.saldo_vacacional.dias_disponibles = 24-this.saldo_vacacional.dias_tomados;
+      } else if (diferencia >= 16 || diferencia <= 20) {
+        this.saldo_vacacional.dias_disponibles = 26-this.saldo_vacacional.dias_tomados;
+      } else if (diferencia >= 21 || diferencia <= 25) {
+        this.saldo_vacacional.dias_disponibles = 28-this.saldo_vacacional.dias_tomados;
+      } else if (diferencia >= 26 || diferencia <= 30) {
+        this.saldo_vacacional.dias_disponibles = 30-this.saldo_vacacional.dias_tomados;
+      } else if (diferencia >= 31 || diferencia <= 35) {
+        this.saldo_vacacional.dias_disponibles = 32-this.saldo_vacacional.dias_tomados;
+      }
+      console.log('saldo vacacional',this.saldo_vacacional);
+      
+         
+      this.adminService.createSaldoVacacional(this.saldo_vacacional)
+      .subscribe({
+        next: (res: SaldoVacacional)=> {
+          if(res){
+          Swal.fire({
+            icon: 'success',
+            title: 'Éxito',
+            text: 'El Empleado ha sido guardado con éxito',
+          });
+          setTimeout(() =>{
+            this.router.navigate([`/admin/trabajadores`]);
+         }, 2000);
+        }
+        },
+        error: (err)=> {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: err,
+          })
+        }
+      })
+      }
+    }
+     
 
   notOnlyWhitespace(control: AbstractControl) {
     if (control.value !== null && control.value.trim() === '') {

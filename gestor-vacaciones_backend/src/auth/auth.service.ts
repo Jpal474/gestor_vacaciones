@@ -20,18 +20,17 @@ export class AuthService {
   async signIn(
     authCredentialsDto: AuthCredentialDto,
   ): Promise<{ accessToken: string }> {
-    console.log('entra login');
     const { correo, contraseña } = authCredentialsDto;
-    console.log(correo);
     const user = await this.usuarioRepository.findOne({
       relations: ['rol'],
       where: { correo: correo },
     });
-    console.log(user);
     const id = user.id;
     const rol = user.rol.nombre;
     const nombre = user.nombre_usuario;
     if (user && (await bcrypt.compare(contraseña, user.contraseña))) {
+      console.log('entra access token');
+      
       const payload: JwtPayload = { id, correo, rol, nombre };
       const accessToken: string = await this.jwtService.sign(payload);
       return { accessToken };

@@ -46,7 +46,7 @@ export class EmpleadosComponent implements OnInit {
           Swal.fire({
             icon: 'success',
             title: 'Éxito',
-            text: 'El Administrador ha sido guardado con éxito',
+            text: 'El Administrador ha sido borrado con éxito',
           }) 
         },
         error: (err)=> {

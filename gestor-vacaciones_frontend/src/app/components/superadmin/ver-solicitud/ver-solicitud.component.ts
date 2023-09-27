@@ -70,14 +70,20 @@ export class VerSolicitudComponent {
           this.solicitud = res;
           console.log(this.solicitud);
           this.getDias(this.solicitud.fecha_inicio, this.solicitud.fecha_fin);
+          console.log('despues de dias');
+          
         },
       });
     }
   }
 
-  getDias(fecha_inicio: string, fecha_fin: string) {
-    const fechaInicio = moment(fecha_inicio, 'DD/MM/YYYY/');
-    const fechaFinal = moment(fecha_fin, 'DD/MM/YYYY');
+  getDias(fecha_inicio: string, fecha_fin: string) { 
+    console.log('---------');
+       
+    const fechaInicio = moment(fecha_inicio, 'YYYY-MM-DD');
+    const fechaFinal = moment(fecha_fin, 'YYYY-MM-DD');
+    console.log(fechaInicio, 'inicio');
+    console.log(fechaFinal, 'final');
     const anio = fechaInicio.year();
     const anio2 = fechaFinal.year();
     
@@ -123,10 +129,13 @@ export class VerSolicitudComponent {
        this.fechas.anio2 = anio2.toString();
        const DATEMOMENT = moment(fechaInicio, 'YYYY-MM-DD').format('MMMM')
        const DATEMOMENT2 = moment(fechaFinal, 'YYYY-MM-DD').format('MMMM');
+       console.log('traducir mes');
+       
        this.fechas.mes = this.traducirMes(DATEMOMENT);
        this.fechas.mes2 = this.traducirMes(DATEMOMENT2);
     }
     else if (this.band){
+      console.log('traducir mes2');
       this.fechas.anio = anio.toString()
       const DATEMOMENT = moment(fechaInicio, 'YYYY-MM-DD').format('MMMM')
       this.fechas.mes = this.traducirMes(DATEMOMENT);
@@ -134,12 +143,13 @@ export class VerSolicitudComponent {
       this.fechas.mes2 = this.traducirMes(DATEMOMENT2);
     }
     else{
+      console.log('traducir mes3');
       this.fechas.anio = anio.toString();
       const DATEMOMENT = moment(fechaInicio, 'YYYY-MM-DD').format('MMMM')
       this.fechas.mes = this.traducirMes(DATEMOMENT);
     }
-    console.log(this.fechas);
-    console.log(this.dias);
+    console.log(this.fechas, 'fechas');
+    console.log(this.dias, 'dias');
     console.log(this.dias2);
     
     

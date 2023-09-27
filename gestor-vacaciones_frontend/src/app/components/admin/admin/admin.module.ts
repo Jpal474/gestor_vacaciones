@@ -13,6 +13,9 @@ import { CalendarioComponent } from '../calendario/calendario.component';
 import { FullCalendarModule } from '@fullcalendar/angular'; // for FullCalendar!
 import { RouterModule, provideRouter } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MisSolicitudesComponent } from '../mis-solicitudes/mis-solicitudes.component';
+import { CrearSolicitudComponent } from '../crear-solicitud/crear-solicitud.component';
+import { EditarSolicitudComponent } from '../editar-solicitud/editar-solicitud.component';
 
 
 
@@ -28,6 +31,9 @@ import { ReactiveFormsModule } from '@angular/forms';
     SolicitudesComponent,
     VerSolicitudComponent,
     CalendarioComponent,
+    MisSolicitudesComponent,
+    CrearSolicitudComponent,
+    EditarSolicitudComponent,
   ],
   imports: [
     CommonModule,
