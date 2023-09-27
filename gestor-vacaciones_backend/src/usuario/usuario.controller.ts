@@ -15,6 +15,12 @@ import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 @Controller('usuario')
 export class UsuarioController {
   constructor(private usuarioService: UsuarioService) {}
+
+  @Get('correos/:opcion')
+  getMailByRol(@Param('opcion') opcion: number): Promise<string[]> {
+    return this.usuarioService.findCorreosByRolId(opcion);
+  }
+
   @Post()
   crearUsuario(@Body() createUsuarioDto: CreateUsuarioDto): Promise<Usuario> {
     return this.usuarioService.createEncargado(createUsuarioDto);

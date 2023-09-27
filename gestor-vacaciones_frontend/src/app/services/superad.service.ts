@@ -67,6 +67,16 @@ export class SuperadService {
     return this.httpClient.delete<boolean>(`${this.BASE_URL}/departamento/${id}`)
   }
 
+  enviarMailRechazada(): Observable<boolean>{
+    let destinatario = 'lovad28459@apxby.com'
+    return this.httpClient.post<boolean>(`${this.BASE_URL}/admin/email/rechazar/${destinatario}`, {})
+  }
+
+  enviarMailAprobada(): Observable<boolean>{
+    let destinatario = 'lovad28459@apxby.com'
+    return this.httpClient.post<boolean>(`${this.BASE_URL}/admin/email/aprobar/${destinatario}`, {})
+  }
+
   createUsuario(usuario: Usuario): Observable<Usuario>{
     return this.httpClient.post<Usuario>(`${this.BASE_URL}/usuario`, usuario);
   }

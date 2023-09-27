@@ -20,7 +20,7 @@ export const ADMIN_ROUTES: Routes = [
     {path: 'agregar_trabajador', component: AgregarTrabajadorComponent},
     {path: 'editar_trabajador/:id', component: EditarTrabajadorComponent},
     {path: 'solicitudes', component: SolicitudesComponent},
-    {path: 'solicitud', component: VerSolicitudComponent},
+    {path: 'solicitud/:id', component: VerSolicitudComponent},
     {path: 'mis_solicitudes', component: MisSolicitudesComponent},
     {path: 'crear_solicitud', component: CrearSolicitudComponent},
     {path: 'editar_solicitud/:id', component: EditarSolicitudComponent},

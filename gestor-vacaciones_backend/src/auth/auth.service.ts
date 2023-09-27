@@ -20,6 +20,10 @@ export class AuthService {
   async signIn(
     authCredentialsDto: AuthCredentialDto,
   ): Promise<{ accessToken: string }> {
+    console.log('usuario mail', process.env.USER_MAIL);
+    console.log('pass mail', process.env.PASS_MAIL);
+
+    
     const { correo, contraseña } = authCredentialsDto;
     const user = await this.usuarioRepository.findOne({
       relations: ['rol'],

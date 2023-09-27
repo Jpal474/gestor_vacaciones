@@ -32,7 +32,7 @@
                         <td style="background-color: #00aec1; color: white;">{{solicitud.aprobada_por}}</td>
                         <td style="background-color: #00aec1; color: white;">{{solicitud.denegada_por}}</td>
                         <td style="background-color: #00aec1; color: white;">
-                            <a type="button" class="btn button text-white ms-4">Ver</a>
+                            <a type="button" class="btn button text-white ms-4" [routerLink]="['/admin/solicitud',solicitud.id]">Ver</a>
                         </td>
                     </tr>
             </table>

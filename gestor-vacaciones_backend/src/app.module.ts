@@ -15,6 +15,7 @@ import { TrabajadorModule } from './trabajador/trabajador.module';
 import { EmpleadoModule } from './empleado/empleado.module';
 import { AuthModule } from './auth/auth.module';
 import { CeoModule } from './ceo/ceo.module';
+import { EmailService } from './email/email.service';
 
 @Module({
   imports: [
@@ -33,6 +34,6 @@ import { CeoModule } from './ceo/ceo.module';
     CeoModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, EmailService],
 })
 export class AppModule {}

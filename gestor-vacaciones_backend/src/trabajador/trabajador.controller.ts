@@ -23,13 +23,18 @@ import { CreateTrabajadorDto } from './dto/create-trabajador.dto';
 import { UpdateDateColumn } from 'typeorm';
 import { UpdateTrabajadorDto } from './dto/update-trabajador.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { EmailService } from 'src/email/email.service';
+import { EmailSolicitudEmpleado } from './dto/solicitud-email-usuario.dto';
 
 @Controller('trabajador')
 @ApiTags('Trabajadores')
 @ApiBearerAuth()
 @UseGuards(AuthGuard('jwt'))
 export class TrabajadorController {
-  constructor(private trabajadorService: TrabajadorService) {}
+  constructor(
+    private trabajadorService: TrabajadorService,
+    private mailService: EmailService,
+  ) {}
 
   @Get()
   @ApiOperation({ summary: 'Obtener lista de Trabajadores' })
@@ -60,6 +65,27 @@ export class TrabajadorController {
   ): Promise<Empleado> {
     return this.trabajadorService.createTrabajador(createTrabajadorDto);
   }
+
+  @Post('email')
+  async enviarMail(@Body() mail: EmailSolicitudEmpleado) {
+    try {
+      const htmlContent = `
+      <h1>Solicitud Vacacional</h1>
+      <p>${mail.nombre} ha creado una solicitud, revise la página y apruebela o rechacela antes de que esta expire</p>
+    `;
+      await this.mailService.sendMailTrabajador(
+        mail.destinatarios,
+        'Nueva Solicitud',
+        htmlContent,
+      );
+      return true;
+    } catch (error) {
+      console.log(error);
+
+      return 'Error al enviar el correo';
+    }
+  }
+
 
   @Put('/:id')
   @ApiOperation({ summary: 'Actualiza los datos del trabajador' })

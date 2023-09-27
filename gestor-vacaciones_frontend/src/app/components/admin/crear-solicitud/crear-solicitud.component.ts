@@ -3,6 +3,7 @@ import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/fo
 import { Router } from '@angular/router';
 import * as moment from 'moment';
 import { SolicitudCrear } from 'src/app/interfaces/crear_solicitud.interface';
+import { EmailTrabajadores } from 'src/app/interfaces/email_trabajadores.interface';
 import { Empleado, EmpleadoGenero } from 'src/app/interfaces/empleados.interface';
 import { SaldoVacacional } from 'src/app/interfaces/saldo_vacacional.interface';
 import { Solicitud, SolicitudEstado } from 'src/app/interfaces/solicitud.interface';
@@ -57,6 +58,10 @@ export class CrearSolicitudComponent {
       genero: EmpleadoGenero.OTRO,
       fecha_contratacion: '',
     }
+  }
+  mail: EmailTrabajadores={
+    nombre: '',
+    destinatarios: []
   }
 
   constructor(
@@ -129,6 +134,8 @@ export class CrearSolicitudComponent {
               title: 'Éxito',
               text: 'La Solicitud Ha Sido Creada con Éxito',
             }),
+            this.enviarMail()
+           
             setTimeout(() =>{
               this.router.navigate(['/trabajador/solicitud',res.id])
               }, 2000);}
@@ -161,6 +168,42 @@ export class CrearSolicitudComponent {
           console.log(err); 
         }
       })
+    }
+
+    enviarMail(){
+      const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: true,
+      })
+      
+      Toast.fire({
+        icon: 'success',
+        title: 'Enviando Notificación de Solicitud'
+      })
+      this.mail.nombre = this.empleado.nombre + this.empleado.apellidos;
+      this.trabajadorService.getMails()
+      .subscribe({
+        next: (res: string[])=> {
+          if(res){
+          this.mail.destinatarios = res;
+          this.trabajadorService.enviarMail(this.mail)
+          .subscribe({
+            next: (res: boolean)=>{
+              if (res){
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Éxito',
+                  text: 'Notificación Enviada',
+                })
+              }
+            }
+          })
+        }
+        }
+      }) 
     }
 
     minDateValidator(control: AbstractControl) {

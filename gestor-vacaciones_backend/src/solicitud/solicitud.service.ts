@@ -120,6 +120,19 @@ export class SolicitudService {
     }
   }
 
+  async getSolicitudesPendientesTrabajadores(): Promise<number> {
+    const total = await this.solicitudRepository
+      .createQueryBuilder('solicitud')
+      .innerJoin('solicitud.empleado', 'empleado')
+      .innerJoin('empleado.usuario', 'usuario')
+      .innerJoin('usuario.rol', 'rol', 'rol.nombre = :rolName', {
+        rolName: 'Trabajador',
+      })
+      .where('solicitud.estado = :estado', { estado: 'PENDIENTE' })
+      .getCount();
+    return total;
+  }
+
   async getSolicitudesAprobadas(): Promise<Solicitud[]> {
     try {
       const found = await this.solicitudRepository.find({

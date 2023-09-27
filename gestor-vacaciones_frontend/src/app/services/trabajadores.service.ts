@@ -7,6 +7,8 @@ import { Solicitud } from '../interfaces/solicitud.interface';
 import { SaldoVacacional } from '../interfaces/saldo_vacacional.interface';
 import { SolicitudCrear } from '../interfaces/crear_solicitud.interface';
 import { SolicitudEditar } from '../interfaces/solicitud-editar.interface';
+import { EmailTrabajadores } from '../interfaces/email_trabajadores.interface';
+import { SaldoActualizado } from '../interfaces/actualizar_saldo-vacacional.interface';
 
 
 @Injectable({
@@ -37,6 +39,14 @@ headers= new HttpHeaders({
 
   }
 
+  getMails(): Observable<string[]>{
+    return this.httpClient.get<string[]>(`${this.BASE_URL}/usuario/correos/1`)
+  }
+
+  enviarMail(email: EmailTrabajadores): Observable<boolean>{
+    return this.httpClient.post<boolean>(`${this.BASE_URL}/trabajador/email`, email);
+  }
+
   createSolicitud(solicitud: SolicitudCrear): Observable<Solicitud>{
   return this.httpClient.post<Solicitud>(`${this.BASE_URL}/solicitud`, solicitud)
   }
@@ -44,5 +54,10 @@ headers= new HttpHeaders({
   updateSolicitud(id: number, solicitud: SolicitudEditar): Observable<Solicitud>{
     return this.httpClient.put<Solicitud>(`${this.BASE_URL}/solicitud/${id}`, solicitud);
   }
+
+  updateSaldoVacacional(id: string, anio: number, saldoActualizado: SaldoActualizado): Observable<SaldoVacacional>{
+    return this.httpClient.put<SaldoVacacional>(`${this.BASE_URL}/saldo-vacacional/${id}/${anio}`, saldoActualizado)
+  }
+
 
 }

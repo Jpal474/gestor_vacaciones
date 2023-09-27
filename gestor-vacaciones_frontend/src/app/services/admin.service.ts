@@ -12,6 +12,7 @@ import { AprobarSolicitud } from '../interfaces/aprobar_solicitud.interface';
 import { SaldoVacacional } from '../interfaces/saldo_vacacional.interface';
 import { SaldoActualizado } from '../interfaces/actualizar_saldo-vacacional.interface';
 import { SolicitudEditar } from '../interfaces/solicitud-editar.interface';
+import { EmailTrabajadores } from '../interfaces/email_trabajadores.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -67,6 +68,24 @@ export class AdminService {
 
   getSolicitudById(id: number): Observable<Solicitud>{
     return this.httpClient.get<Solicitud>(`${this.BASE_URL}/solicitud/${id}`);
+  }
+
+  enviarMailRechazada(): Observable<boolean>{
+    let destinatario = 'lovad28459@apxby.com'
+    return this.httpClient.post<boolean>(`${this.BASE_URL}/admin/email/rechazar/${destinatario}`, {})
+  }
+
+  enviarMailAprobada(): Observable<boolean>{
+    let destinatario = 'lovad28459@apxby.com'
+    return this.httpClient.post<boolean>(`${this.BASE_URL}/admin/email/aprobar/${destinatario}`, {})
+  }
+
+  enviarMailSolicitud(): Observable<boolean>{
+    const mail: EmailTrabajadores ={
+      nombre: 'Edgar Iván Blas Peña',
+      destinatarios:['lovad28459@apxby.com']
+    }
+    return this.httpClient.post<boolean>(`${this.BASE_URL}/admin/email/solicitud/`, mail)
   }
 
   createDepartamento(departamento: Departamento): Observable<Departamento>{

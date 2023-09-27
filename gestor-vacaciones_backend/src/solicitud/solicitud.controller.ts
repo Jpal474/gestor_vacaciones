@@ -56,6 +56,21 @@ export class SolicitudController {
     return this.solicitudService.countPendingSolicitudes();
   }
 
+  @Get('pendientes_trab')
+  @ApiOperation({
+    summary: 'Contar Solicitudes Pendientes de los Trabajadores',
+  })
+  @ApiResponse({
+    status: 200,
+    description:
+      'Regresa el Número de Solicitudes Pendientes de los Trabajadores',
+    isArray: false,
+    type: Number,
+  })
+  contarSolicitudesTrabajadores(): Promise<number> {
+    return this.solicitudService.getSolicitudesPendientesTrabajadores();
+  }
+
   @Get('aprobadas')
   @ApiOperation({ summary: 'Obtiene todas las solicitudes Aprobadas' })
   @ApiResponse({
@@ -97,6 +112,7 @@ export class SolicitudController {
   getSolicitudesEmpleados(@Param('id') id: string): Promise<Solicitud[]> {
     return this.solicitudService.getSolicitudesByEmpleado(id);
   }
+
   @Post()
   @ApiOperation({ summary: 'Crear Solicitud' })
   @ApiBody({

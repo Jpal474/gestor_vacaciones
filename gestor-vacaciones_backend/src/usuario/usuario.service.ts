@@ -30,6 +30,30 @@ export class UsuarioService {
     } catch (error) {}
   }
 
+  async findCorreosByRolId(opcion: number): Promise<string[]> {
+    let correos;
+    if (opcion === 1) {
+      correos = await this.usuarioRepository
+        .createQueryBuilder('usuario')
+        .select('usuario.correo', 'correo')
+        .where('usuario.rolId = :rolId1 OR usuario.rolId = :rolId2', {
+          rolId1: 1,
+          rolId2: 2,
+        })
+        .getRawMany();
+    } else {
+      correos = await this.usuarioRepository
+        .createQueryBuilder('usuario')
+        .select('usuario.correo', 'correo')
+        .where('usuario.rolId = :rolId1', {
+          rolId1: 1,
+        })
+        .getRawMany();
+    }
+
+    return correos.map((item) => item.correo);
+  }
+
   async createEncargado(createUsuarioDto: CreateUsuarioDto): Promise<Usuario> {
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(createUsuarioDto.contraseña, salt);

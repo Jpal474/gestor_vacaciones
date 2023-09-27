@@ -5,6 +5,7 @@ import { Usuario } from 'src/usuario/usuario.entity';
 import { Repository } from 'typeorm';
 import { CreateTrabajadorDto } from './dto/create-trabajador.dto';
 import { UpdateTrabajadorDto } from './dto/update-trabajador.dto';
+import { EmailService } from 'src/email/email.service';
 
 @Injectable()
 export class TrabajadorService {
