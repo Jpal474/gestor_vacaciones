@@ -1,7 +1,7 @@
 <app-navbar></app-navbar>
 <h1 class="text-center text-white mt-5"> Solicitudes </h1>
 <div class="d-grid gap-2 col-6 mx-auto justify-content-md-end">
-    <a class="btn btn-success text-white" [routerLink]="['/encargado/registrar-trabajador']">CREAR SOLICITUD</a>
+    <a class="btn btn-success text-white" [routerLink]="['/admin/crear_solicitud']">CREAR SOLICITUD</a>
 </div>
 <div class="row justify-content-center mt-5">
     <div class="col">
@@ -28,8 +28,8 @@
                         <td style="background-color: #00aec1; color: white;">{{solicitud.aprobada_por}}</td>
                         <td style="background-color: #00aec1; color: white;">{{solicitud.denegada_por}}</td>
                         <td style="background-color: #00aec1; color: white;">
-                            <a type="button" class="btn button text-white ms-4" [routerLink]="['/trabajador/solicitud', solicitud.id]">Ver</a>
-                            <a type="button" class="btn button text-white ms-4" *ngIf="solicitud.estado === 'PENDIENTE'" [routerLink]="['/trabajador/editar_solicitud', solicitud.id]">Editar</a>
+                            <a type="button" class="btn button text-white ms-4" [routerLink]="['/admin/mi_solicitud', solicitud.id]">Ver</a>
+                            <a type="button" class="btn button text-white ms-4" *ngIf="solicitud.estado === 'PENDIENTE'" [routerLink]="['/admin/editar_solicitud', solicitud.id]">Editar</a>
 
                         </td>
                     </tr>

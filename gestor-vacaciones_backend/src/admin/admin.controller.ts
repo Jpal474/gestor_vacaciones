@@ -54,7 +54,7 @@ export class AdminController {
         'Observaciones Solicitud',
         htmlContent,
       );
-      return 'Correo enviado exitosamente';
+      return true;
     } catch (error) {
       console.log(error);
       

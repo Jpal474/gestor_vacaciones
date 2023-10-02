@@ -13,6 +13,7 @@ import { SaldoVacacional } from '../interfaces/saldo_vacacional.interface';
 import { SaldoActualizado } from '../interfaces/actualizar_saldo-vacacional.interface';
 import { SolicitudEditar } from '../interfaces/solicitud-editar.interface';
 import { EmailTrabajadores } from '../interfaces/email_trabajadores.interface';
+import { EmailObservacion } from '../interfaces/email_observacion.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -68,6 +69,14 @@ export class AdminService {
 
   getSolicitudById(id: number): Observable<Solicitud>{
     return this.httpClient.get<Solicitud>(`${this.BASE_URL}/solicitud/${id}`);
+  }
+
+  getSolicitudesPendientesTrabajadores(): Observable<number>{
+    return this.httpClient.get<number>(`${this.BASE_URL}/solicitud/pendientes_trab`);
+  }
+
+  enviarMailObservaciones(email : EmailObservacion): Observable<boolean>{
+    return this.httpClient.post<boolean>(`${this.BASE_URL}/admin/email`, email)
   }
 
   enviarMailRechazada(): Observable<boolean>{

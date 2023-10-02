@@ -12,9 +12,12 @@ import { CalendarioComponent } from './components/admin/calendario/calendario.co
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { TokenInterceptorService } from './interceptors/token.interceptor.service';
 import { EditarSolicitudComponent } from './components/admin/editar-solicitud/editar-solicitud.component';
+import { VerMisolicitudComponent } from './components/admin/ver-misolicitud/ver-misolicitud.component';
+import { CuentaComponent } from './components/admin/cuenta/cuenta.component';
 @NgModule({
   declarations: [
     AppComponent,
+    CuentaComponent,
   ],
   imports: [
     BrowserModule,

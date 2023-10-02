@@ -10,6 +10,7 @@ import { CalendarioComponent } from '../calendario/calendario.component';
 import { MisSolicitudesComponent } from '../mis-solicitudes/mis-solicitudes.component';
 import { CrearSolicitudComponent } from '../crear-solicitud/crear-solicitud.component';
 import { EditarSolicitudComponent } from '../editar-solicitud/editar-solicitud.component';
+import { VerMisolicitudComponent } from '../ver-misolicitud/ver-misolicitud.component';
 
 
 
@@ -22,6 +23,7 @@ export const ADMIN_ROUTES: Routes = [
     {path: 'solicitudes', component: SolicitudesComponent},
     {path: 'solicitud/:id', component: VerSolicitudComponent},
     {path: 'mis_solicitudes', component: MisSolicitudesComponent},
+    {path: 'mi_solicitud/:id', component: VerMisolicitudComponent},
     {path: 'crear_solicitud', component: CrearSolicitudComponent},
     {path: 'editar_solicitud/:id', component: EditarSolicitudComponent},
     {path: 'calendario', component: CalendarioComponent},

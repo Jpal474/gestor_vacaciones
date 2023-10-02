@@ -1,5 +1,9 @@
 <app-navbar></app-navbar>
 <div class="home">
+    <div class="alert alert-warning alert-dismissible fade show mb-5 mt-5" role="alert" *ngIf="vacaciones">
+        El año está por terminar, si no ha tomado sus vacaciones hágalo ahora o las perderá, si ya lo ha hecho, ignore este mensaje
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
     <div class="position-absolute top-50 start-50 translate-middle">
         <div class="row">
             <div class="col">
@@ -25,6 +29,7 @@
             <div class="col">
                 <a [routerLink]="['/admin/solicitudes']">
                     <div class="card" style="width: 13.5rem;">
+                        <p class="solicitudes">{{numero_solicitudes}}</p>
                         <div class="card-body d-flex justify-content-center">
                             <img src="../../../../assets/recursos/imagenes/superadmin/home/permiso.png" class="card-img-top" alt="...">
                         </div>

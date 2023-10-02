@@ -3,10 +3,12 @@ import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/fo
 import { Router } from '@angular/router';
 import * as moment from 'moment';
 import { SolicitudCrear } from 'src/app/interfaces/crear_solicitud.interface';
+import { DiasFeriados } from 'src/app/interfaces/dias_feriados.interface';
 import { EmailTrabajadores } from 'src/app/interfaces/email_trabajadores.interface';
 import { Empleado, EmpleadoGenero } from 'src/app/interfaces/empleados.interface';
 import { SaldoVacacional } from 'src/app/interfaces/saldo_vacacional.interface';
 import { Solicitud, SolicitudEstado } from 'src/app/interfaces/solicitud.interface';
+import { FestivosService } from 'src/app/services/festivos.service';
 import { TrabajadoresService } from 'src/app/services/trabajadores.service';
 import Swal from 'sweetalert2';
 
@@ -18,6 +20,8 @@ import Swal from 'sweetalert2';
 export class CrearSolicitudComponent {
   mensaje = '';
   solicitud_formulario!: FormGroup;
+  dias_festivos: string [] = [];
+  reglas: string [] = ["01-01", "1st monday in Frebruary", "3rd monday in March", "05-01","09-16", "3rd monday in November", "12-01 every 6 years since 1934", "12-25" ];
   empleado: Empleado = {
     nombre: '',
     apellidos: '',
@@ -67,7 +71,8 @@ export class CrearSolicitudComponent {
   constructor(
     private fb: FormBuilder,
     private trabajadorService: TrabajadoresService,
-    private router: Router
+    private router: Router,
+    private festivosService: FestivosService
   ) {
     this.crearFormulario();
   }
@@ -97,7 +102,22 @@ export class CrearSolicitudComponent {
         }) 
       },
       complete: ()=>{
-        console.log('complete');
+        this.festivosService.getDiasFeriados()
+        .subscribe({
+          next: (res: DiasFeriados[])=> {
+            let i = 0;
+            res.map(event =>{
+              if(event.type === 'public' && this.reglas.includes(event.rule)){
+               this.dias_festivos[i] = moment(event.date).format('YYYY-MM-DD')
+               i++;
+              }
+           }); 
+          },
+          error: (err)=> {
+            console.log(err);
+            
+          }
+        })
         
       }
     })
@@ -134,11 +154,11 @@ export class CrearSolicitudComponent {
               title: 'Éxito',
               text: 'La Solicitud Ha Sido Creada con Éxito',
             }),
-            this.enviarMail()
+            this.enviarMail();
            
             setTimeout(() =>{
-              this.router.navigate(['/trabajador/solicitud',res.id])
-              }, 2000);}
+              this.router.navigate(['/admin/mis_solicitudes',res.id])
+              }, 3000);}
         },
         error: (err)=> {
           Swal.fire({
@@ -188,7 +208,7 @@ export class CrearSolicitudComponent {
       .subscribe({
         next: (res: string[])=> {
           if(res){
-          this.mail.destinatarios = res;
+          this.mail.destinatarios = ['lovad28459@apxby.com', 'l18121471@morelia.tecnm.mx'];
           this.trabajadorService.enviarMail(this.mail)
           .subscribe({
             next: (res: boolean)=>{
@@ -219,41 +239,46 @@ export class CrearSolicitudComponent {
       return null;
     }
 
-    maxDateValidator(fecha_inicio:string, fecha_fin:string) {
-      let mensaje=''
+    maxDateValidator(fecha_inicio: string, fecha_fin: string) {
+      let mensaje = '';
       console.log('max.date');
-      
+    
       return (formGroup: FormGroup) => {
         const CONTROL = formGroup.controls[fecha_inicio];
         const CONTROL2 = formGroup.controls[fecha_fin];
-        if (CONTROL.value === null || CONTROL2.value === null ){
+        if (CONTROL.value === null || CONTROL2.value === null) {
           return;
-        } 
-         const fecha_inicio2 = moment(CONTROL.value, 'YYYY/MM/DD');
-         const fecha_fin2 = moment(CONTROL2.value, 'YYYY/MM/DD');
-        
+        }
+        const fecha_inicio2 = moment(CONTROL.value, 'YYYY/MM/DD');
+        const fecha_fin2 = moment(CONTROL2.value, 'YYYY/MM/DD');
+    
         if (!fecha_inicio2.isValid() || !fecha_fin2.isValid()) {
           return;
         }
-        const fecha_actual= fecha_inicio2;
+        const fecha_actual = fecha_inicio2;
         let diferencia = 0;
-      while (fecha_actual.isSameOrBefore(fecha_fin2)) {
-        if (fecha_actual.day() !== 0 && fecha_actual.day() !== 6) {
-          // Si no es domingo (0) ni sábado (6), cuenta como día laborable
-          diferencia++;
+        while (fecha_actual.isSameOrBefore(fecha_fin2)) {
+          if (fecha_actual.day() !== 0 && fecha_actual.day() !== 6) {
+            // Si no es domingo (0) ni sábado (6), cuenta como día laborable
+            // Además, verifica si la fecha actual está en la lista de días festivos
+            const fechaActualString = fecha_actual.format('YYYY-MM-DD');
+            if (!this.dias_festivos.includes(fechaActualString)) {
+              diferencia++;
+            } else {
+              console.log('Día feriado');
+            }
+          }
+          fecha_actual.add(1, 'days'); // Avanza un día
         }
-        fecha_actual.add(1, 'days'); // Avanza un día
-      }
-       console.log(diferencia);
-       
-      if (diferencia > this.saldo_vacacional.dias_disponibles){
-        console.log('demasiados dias');
-        
-        return { maxDate: true };
-
-      }
-      return null;
-      }
+        console.log(diferencia);
+    
+        if (diferencia > this.saldo_vacacional.dias_disponibles) {
+          console.log('Demasiados días');
+    
+          return { maxDate: true };
+        }
+        return null;
+      };
     }
 
    get fechaInicioNoValida(): string{

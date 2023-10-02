@@ -12,7 +12,10 @@ import { RechazarSolicitud } from 'src/app/interfaces/rechazar_solicitud.interfa
 import { AprobarSolicitud } from 'src/app/interfaces/aprobar_solicitud.interface';
 import { SaldoActualizado } from 'src/app/interfaces/actualizar_saldo-vacacional.interface';
 import { SaldoVacacional } from 'src/app/interfaces/saldo_vacacional.interface';
-
+import { EmailObservacion } from 'src/app/interfaces/email_observacion.interface';
+// Import pdfmake-wrapper and the fonts to use
+import { Canvas, Img, Line, PdfMakeWrapper, Txt } from 'pdfmake-wrapper';
+import * as pdfFonts from "pdfmake/build/vfs_fonts"; // fonts provided for pdfmake
 @Component({
   selector: 'app-ver-solicitud',
   templateUrl: './ver-solicitud.component.html',
@@ -64,6 +67,11 @@ export class VerSolicitudComponent {
     dias_disponibles: 0,
     dias_tomados: 0,
   }
+  email : EmailObservacion={
+    destinatario: '',
+    mensaje: '',
+  }
+
 
   constructor(
     private adminService: AdminService,
@@ -78,7 +86,7 @@ export class VerSolicitudComponent {
           this.solicitud = res;
           console.log(this.solicitud);
           this.getDias(this.solicitud.fecha_inicio, this.solicitud.fecha_fin);
-          console.log('despues de dias');
+          this.generarPDF();
           
         },
       });
@@ -223,7 +231,34 @@ export class VerSolicitudComponent {
     });
 
     if (text) {
-      Swal.fire(text);
+      let correo = this.solicitud.empleado.id!;
+      this.email = {
+        destinatario: 'lovad28459@apxby.com',
+        mensaje: text,
+      };
+      this.adminService.enviarMailObservaciones(this.email)
+      .subscribe({
+        next:(res: boolean)=> {
+          Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: 'Las observaciones han sido enviadas',
+            showConfirmButton: false,
+            timer: 2000
+          })
+        },
+        error: (err)=> {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: err,
+          })
+        }
+      })
+    }
+    else{
+      console.log('sin texto');
+      
     }
   }
 
@@ -339,5 +374,118 @@ export class VerSolicitudComponent {
         }
       }
     })
+  }
+
+  async generarPDF(){
+    const fecha = moment(new Date(), 'YYYY-MM-DD');
+    let dia = fecha.date()
+    const mes = moment(fecha, 'YYYY-MM-DD').format('MMMM')
+    const mes_español = this.traducirMes(mes);
+    const año = fecha.year()
+    const total_dias = this.dias.length + this.dias2.length;
+    const mes1 = this.traducirMes(moment(this.solicitud.fecha_inicio, 'YYYY-MM-DD').format('MMMM'))
+    const mes2 = this.traducirMes(moment(this.solicitud.fecha_fin, 'YYYY-MM-DD').format('MMMM'))
+
+    const img = await new Img('../../../../assets/recursos/imagenes/general/logo_innmortal.png')
+    .width(500)
+    .height(100)
+    .absolutePosition(40, -10)
+    .build();
+    const img2 = await new Img('../../../../assets/recursos/imagenes/general/footer_innmortal.png')
+    .width(600)
+    .height(100)
+    .absolutePosition(0, -90)
+    .build();
+    
+    
+// If any issue using previous fonts import. you can try this:
+// import pdfFonts from "pdfmake/build/vfs_fonts";
+
+// Set the fonts to use
+PdfMakeWrapper.setFonts(pdfFonts);
+
+const pdf = new PdfMakeWrapper();
+
+pdf.info({
+  title: `Solicitud Vacaciones ${this.solicitud.empleado.nombre} ${this.solicitud.empleado.apellidos}`,
+  author: 'INNMORTAL',
+})
+pdf.pageMargins([ 40, 140, 40, 0 ]);
+pdf.header(img);
+pdf.add(  
+new Txt(`Morelia, Michoacán ${dia} de ${mes_español} del año ${año}` ).bold().alignment("right").end,
+);
+pdf.add(
+new Txt('Solicitud de Vacaciones').bold().alignment('left').margin([40, 40]).end,
+)
+pdf.add(
+  new Txt('LCDE. Heriberto Padilla Ibarra, Director General').end
+)
+pdf.add(
+  new Txt('M. en A. Iván Padilla Ibarra, Director de Operaciones \n\n\n').end
+)
+pdf.add(
+  new Txt('Sirva la presente para saludarles y solicitarles la autorización de mis vacaciones.').alignment('justify').margin([0, 0, 0, 12]).end
+)
+pdf.add(
+  new Txt([
+    new Txt(`En la medida de lo posible dese disfrutar de un periodo vacacional correspondiente a `).end,
+    new Txt(`${total_dias} días`).bold().end,
+    new Txt(` comprendidos entre el `).end,
+    new Txt(` ${moment(this.solicitud.fecha_inicio).date()} de ${mes1} del ${año}`).bold().end,
+    ' al ',
+    new Txt(`${moment(this.solicitud.fecha_fin).date()} de ${mes2} del ${año}.`).bold().end
+  ]).alignment('justify').margin([0, 0, 0, 12]).end
+)
+
+pdf.add(
+  new Txt('Por ello, me gustaría saber si es conveniente estas fechas al cronograma de actividades de la empresa.').alignment('justify').margin([0, 0, 0, 12]).end
+)
+
+pdf.add(
+  new Txt('Esperando pronta y satisfactoria respuesta, sin más que agregar.').margin([0, 0, 0, 12]).alignment('justify').end
+)
+
+pdf.add(
+  new Txt('Atentamente,').margin([0, 0, 0, 12]).margin(5).end
+)
+
+pdf.add(
+  new Txt(`${this.solicitud.empleado.nombre} ${ this.solicitud.empleado.apellidos}`).margin(5).alignment('center').end
+)
+
+pdf.add(
+  new Canvas([
+    new Line([0, 100], [140, 100]).end,
+  ]).end
+  )
+
+pdf.add(
+  new Txt('Heriberto Padilla Ibarra \n').end
+)
+
+pdf.add(
+  new Txt('Director General').end
+)
+
+pdf.add(
+  new Canvas([
+    new Line([310, -28], [450, -28]).end,
+  ]).end
+  )
+
+pdf.add(
+  new Txt('Iván Padilla Ibarra').absolutePosition(350, 585).end
+)
+
+pdf.add(
+  new Txt('Director de Operaciones').absolutePosition(350, 600).end
+  )
+
+pdf.footer(img2)
+
+
+
+pdf.create().open();
   }
 }

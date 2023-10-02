@@ -16,6 +16,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MisSolicitudesComponent } from '../mis-solicitudes/mis-solicitudes.component';
 import { CrearSolicitudComponent } from '../crear-solicitud/crear-solicitud.component';
 import { EditarSolicitudComponent } from '../editar-solicitud/editar-solicitud.component';
+import { VerMisolicitudComponent } from '../ver-misolicitud/ver-misolicitud.component';
 
 
 
@@ -34,6 +35,7 @@ import { EditarSolicitudComponent } from '../editar-solicitud/editar-solicitud.c
     MisSolicitudesComponent,
     CrearSolicitudComponent,
     EditarSolicitudComponent,
+    VerMisolicitudComponent
   ],
   imports: [
     CommonModule,

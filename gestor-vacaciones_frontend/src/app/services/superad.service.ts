@@ -11,6 +11,7 @@ import { AprobarSolicitud } from '../interfaces/aprobar_solicitud.interface';
 import { RechazarSolicitud } from '../interfaces/rechazar_solicitud.interface';
 import { SaldoVacacional } from '../interfaces/saldo_vacacional.interface';
 import { SaldoActualizado } from '../interfaces/actualizar_saldo-vacacional.interface';
+import { EmailObservacion } from '../interfaces/email_observacion.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -57,6 +58,19 @@ export class SuperadService {
 
   getNumeroSolicitudesAprobadas(): Observable<Number>{
     return this.httpClient.get<Number>(`${this.BASE_URL}/solicitud/contar_solicitudes`)
+  }
+
+  getSaldoByEmpleadoId(id: string, anio: number){
+    return this.httpClient.get<SaldoVacacional>(`${this.BASE_URL}/saldo-vacacional/${id}/${anio}`)
+
+  }
+
+  generarSaldos(){
+    return this.httpClient.get(`${this.BASE_URL}/superad`)
+  }
+
+  enviarMailObservaciones(email : EmailObservacion): Observable<boolean>{
+    return this.httpClient.post<boolean>(`${this.BASE_URL}/superad/email`, email)
   }
 
   createDepartamento(departamento: Departamento): Observable<Departamento>{

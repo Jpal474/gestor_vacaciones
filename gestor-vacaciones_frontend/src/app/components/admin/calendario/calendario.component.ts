@@ -60,9 +60,11 @@ export class CalendarioComponent {
         this.adminService.getSolicitudesAprobadas()
         .subscribe({
           next: (res: Solicitud[])=> {
+            console.log(res);
+            
            events = [
             ...events,
-           ...res.map( event => ({title: `Vacaciones ${event.empleado.nombre}`, start: moment(event.fecha_inicio, 'DD/MM/YYYY').format('YYYY-MM-DD'), end: moment( event.fecha_fin, 'DD/MM/YYYYY').format('YYYY-MM-DD'), backgroundColor:'#378006'})),
+           ...res.map( event => ({title: `Vacaciones ${event.empleado.nombre}`, start: moment(event.fecha_inicio, '').format('YYYY-MM-DD'), end: moment( event.fecha_fin, 'YYYY-MM-DD').format('YYYY-MM-DD'), backgroundColor:'#378006'})),
             ]; 
             console.log(events);
             

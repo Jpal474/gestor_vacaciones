@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Empleado } from 'src/empleado/empleado.entity';
 import { SuperadService } from './superad.service';
@@ -12,6 +12,17 @@ export class SuperadController {
     private superAdminService: SuperadService,
     private mailService: EmailService,
   ) {}
+
+  @Get()
+  @ApiOperation({summary: 'Llamado a la funcion para actualizar saldos vacacionales'})
+  @ApiResponse({
+    status: 200,
+    description: 'Actualiza los saldos vacacionales de todos los empleados',
+    isArray: false,
+  })
+  actualizarSaldos(){
+    this.superAdminService.actualizarSaldosVacacionales();
+  }
 
   @Post()
   @ApiOperation({ summary: 'Crear SuperAdmin' })
@@ -40,7 +51,7 @@ export class SuperadController {
         'Observaciones Solicitud',
         htmlContent,
       );
-      return 'Correo enviado exitosamente';
+      return true;
     } catch (error) {
       console.log(error);
 

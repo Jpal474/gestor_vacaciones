@@ -1,21 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { EmpleadoGenero } from 'src/app/interfaces/empleados.interface';
-import { Solicitud, SolicitudEstado } from 'src/app/interfaces/solicitud.interface';
-import { TrabajadoresService } from 'src/app/services/trabajadores.service';
 import * as moment from 'moment';
-import { RechazarSolicitud } from 'src/app/interfaces/rechazar_solicitud.interface';
 import { AprobarSolicitud } from 'src/app/interfaces/aprobar_solicitud.interface';
-import Swal from 'sweetalert2';
-import { FestivosService } from 'src/app/services/festivos.service';
 import { DiasFeriados } from 'src/app/interfaces/dias_feriados.interface';
+import { EmpleadoGenero } from 'src/app/interfaces/empleados.interface';
+import { RechazarSolicitud } from 'src/app/interfaces/rechazar_solicitud.interface';
+import { Solicitud, SolicitudEstado } from 'src/app/interfaces/solicitud.interface';
+import { FestivosService } from 'src/app/services/festivos.service';
+import { TrabajadoresService } from 'src/app/services/trabajadores.service';
 
 @Component({
-  selector: 'app-ver-solicitud',
-  templateUrl: './ver-solicitud.component.html',
-  styleUrls: ['./ver-solicitud.component.css']
+  selector: 'app-ver-misolicitud',
+  templateUrl: './ver-misolicitud.component.html',
+  styleUrls: ['./ver-misolicitud.component.css']
 })
-export class VerSolicitudComponent implements OnInit {
+export class VerMisolicitudComponent {
   dias: Number[] = [];
   dias2: Number[]=[];
   band: boolean=false;

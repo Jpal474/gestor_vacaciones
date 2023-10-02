@@ -12,3 +12,15 @@
     width: 100px;
     height: 100px;
 }
+
+.solicitudes {
+    position: absolute;
+    top: -5%;
+    right: -5%;
+    background-color: red;
+    font-size: 1.5rem;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    text-align: center;
+}

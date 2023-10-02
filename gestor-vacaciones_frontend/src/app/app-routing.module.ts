@@ -21,7 +21,7 @@ const routes: Routes = [
   {path:'super', component:SuperadminComponent,canActivate:[authGuard, superGuard], children:SUPERADMIN_ROUTES},
   {path:'trabajador', component:TrabajadorComponent, canActivate:[authGuard, trabajadorGuard] ,children:TRABAJADOR_ROUTES},
   {path: 'pagenotfound', component: PagenotfoundComponent},
-  {path:'**', pathMatch:'full', redirectTo:'pagenotfound'},
+  {path:'**', pathMatch:'full', redirectTo:'landing'},
 
 ];
 
