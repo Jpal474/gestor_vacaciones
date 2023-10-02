@@ -15,6 +15,7 @@ import {
 import { EmpleadoGenero } from './empleado-models/empleado-genero.enum';
 import { Departamento } from 'src/departamento/departamento.entity';
 import { Exclude } from 'class-transformer';
+import { EstadoEmpleado } from './empleado-models/empleado-estado.enum';
 
 @Entity()
 export class Empleado {
@@ -46,6 +47,10 @@ export class Empleado {
   @ManyToOne(() => Departamento, (departamento) => departamento.empleado)
   @ApiProperty({ type: () => Departamento, isArray:false})
   departamento?: Departamento;
+
+  @Column({default: EstadoEmpleado.ACTIVO})
+  @ApiProperty()
+  estado: EstadoEmpleado;
 
   @OneToMany(() => Solicitud, (solicitud) => solicitud.empleado, {
     nullable: true,

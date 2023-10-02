@@ -2,6 +2,8 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Empleado } from './empleado.entity';
 import { Not, Repository } from 'typeorm';
+import { EstadoEmpleado } from './empleado-models/empleado-estado.enum';
+import { EstadoEmpleadoDto } from './dto/update-empleado-status.dto';
 
 @Injectable()
 export class EmpleadoService {
@@ -37,11 +39,57 @@ export class EmpleadoService {
         where: {
           usuario: { id: id },
         },
-      });      
+      });
       if (!found) {
         throw new NotFoundException(`No se ha encontrado al empleado`);
       }
       return found[0];
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  async updateEmpleadoStatus(id: string, opcion: number): Promise<boolean> {
+    try {
+      if (opcion == 1) {
+        const empleado = await this.getEmpleadoById(id);
+        empleado.estado = EstadoEmpleado.DE_VACACIONES;
+        this.empleadoRepository.save(empleado);
+      } else if (opcion == 2) {
+        const empleado = await this.getEmpleadoById(id);
+        empleado.estado = EstadoEmpleado.ACTIVO;
+        this.empleadoRepository.save(empleado);
+      }
+      return true;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  async porcentajeEmpleados(): Promise<boolean> {
+    try {
+      const query = await this.empleadoRepository.createQueryBuilder(
+        'empleados',
+      );
+      const total_empleados = await query.getCount();
+      if (!total_empleados) {
+        throw new NotFoundException('No se han encontrado empleados');
+      }
+      const total_empleados_vacaciones = await this.empleadoRepository.count({
+        where: {
+          estado: EstadoEmpleado.DE_VACACIONES,
+        },
+      });
+      if (total_empleados === 0) {
+        return false;
+      }
+      const porcentajeEmpleados =
+        (total_empleados_vacaciones / total_empleados) * 100;
+      if (porcentajeEmpleados > 30) {
+        return;
+      } else {
+        return false;
+      }
     } catch (error) {
       throw new Error(error);
     }
