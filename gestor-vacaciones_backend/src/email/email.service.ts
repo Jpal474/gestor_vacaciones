@@ -20,14 +20,18 @@ export class EmailService {
     subject: string,
     htmlContent: string,
   ): Promise<void> {
-    const mailOptions = {
-      from: process.env.USER_MAIL, // tu dirección de correo
-      to,
-      subject,
-      html: htmlContent,
-    };
+    try {
+      const mailOptions = {
+        from: process.env.USER_MAIL, // tu dirección de correo
+        to: to,
+        subject: subject,
+        html: htmlContent,
+      };
 
-    await this.transporter.sendMail(mailOptions);
+      await this.transporter.sendMail(mailOptions);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async sendMailTrabajador(
@@ -35,13 +39,17 @@ export class EmailService {
     subject: string,
     htmlContent: string,
   ): Promise<void> {
-    const mailOptions = {
-      from: process.env.USER_MAIL, // tu dirección de correo
-      to: to.join(','),
-      subject,
-      html: htmlContent,
-    };
+    try {
+      const mailOptions = {
+        from: process.env.USER_MAIL, // tu dirección de correo
+        to: to.join(','),
+        subject,
+        html: htmlContent,
+      };
 
-    await this.transporter.sendMail(mailOptions);
+      await this.transporter.sendMail(mailOptions);
+    } catch (error) {
+      console.log(error);
+    }
   }
 }

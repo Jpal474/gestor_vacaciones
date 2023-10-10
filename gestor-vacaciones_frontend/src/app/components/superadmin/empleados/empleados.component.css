@@ -17,3 +17,26 @@ td {
     background-color: #00aec1;
     color: white;
 }
+
+.regresar {
+    width: 30px;
+    height: 30px;
+}
+
+@media screen and (max-width: 750px) {
+    table {
+        width: 20vw;
+        font-size: small;
+    }
+    .btn {
+        margin-bottom: 10px;
+        font-size: small;
+    }
+}
+
+@media screen and (max-width: 1500px) and (min-width:701px) {
+    .btn {
+        margin-bottom: 10px;
+        font-size: medium;
+    }
+}

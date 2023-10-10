@@ -1,8 +1,10 @@
 <app-navbar></app-navbar>
-<h1 class="text-center text-white mt-5"> Editar Empleado</h1>
+<h1 class="text-center mt-5" style="color: #18020C;"> Editar Empleado</h1>
 <div class="d-grid gap-2 col-6 mx-auto justify-content-md-end">
-    <a class="btn btn-success text-white" style="background-color: green;" (click)="actualizarSaldoVacacional()">ACTUALIZAR DIAS VACACIONALES</a>
+    <a class="btn btn-success text-white" id="dias" style="background-color: green;" (click)="actualizarSaldoVacacional()">ACTUALIZAR DIAS VACACIONALES</a>
 </div>
+<a class="text-white" [routerLink]="['/super/home']"> <img src="../../../../assets/recursos/imagenes/general/regresar.svg" class="regresar"> Regresar</a>
+
 <div class="container ms-5 ">
     <div class="card mt-3">
         <div class="card-body">
@@ -52,29 +54,35 @@
                       </select>
                         <small class="text-danger" *ngIf="generoNoValido"> {{generoNoValido}} </small>
                     </div>
-                    <div class="input-box ms-5">
-                        <input type="date" id="id" class="form-control shadow-none" formControlName="fecha_contratacion" [class.is-invalid]="fechaNoValida">
+                    <div class="input-box ms-5" id="fecha">
+                        <input type="date" class="form-control shadow-none" formControlName="fecha_contratacion" [class.is-invalid]="fechaNoValida">
 
                         <label>Fecha Contratacion<span>*</span></label>
                         <small class="text-danger" *ngIf="fechaNoValida">{{fechaNoValida}}</small>
                     </div>
                     <div class="row">
                         <div class="input-box ms-5">
-                            <span class="icon"></span>
                             <input type="password" formControlName="contraseña" [class.is-invalid]="contraseniaNoValido">
                             <label>Contraseña</label>
                             <small class="text-danger" *ngIf="contraseniaNoValido"> El campo no puede estar vacío </small>
+                            <span class="icon" (click)="toggleFieldTextType()"><img
+                                [src]="fieldTextType? '../../../../../assets/recursos/imagenes/superadmin/generales/ocultar.svg' : '../../../../../assets/recursos/imagenes/superadmin/generales/mostrar.svg' "
+                                width="20px" 
+                                height="20px"></span>
                         </div>
                         <div class="input-box ms-5">
-                            <span class="icon"></span>
                             <input type="password" formControlName="confirmar_contraseña" [class.is-invalid]="confirmarContraseniaNoValida">
                             <label>Confirmar Contraseña</label>
                             <small class="text-danger" *ngIf="confirmarContraseniaNoValida"> Las contraseñas deben coincidir </small>
+                            <span class="icon" (click)="toggleFieldTextType2()"><img
+                                [src]="fieldTextType2? '../../../../../assets/recursos/imagenes/superadmin/generales/ocultar.svg' : '../../../../../assets/recursos/imagenes/superadmin/generales/mostrar.svg' "
+                                width="20px" 
+                                height="20px"></span>
                         </div>
                     </div>
 
                 </div>
-                <button type="submit" class="btn btn-primary" (click)="actualizarEmpleado()">Submit</button>
+                <button type="submit" class="btn btn-primary" (click)="confirmarActulizacion()">Guardar</button>
             </form>
         </div>
     </div>

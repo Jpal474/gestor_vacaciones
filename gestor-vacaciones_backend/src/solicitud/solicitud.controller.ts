@@ -32,18 +32,6 @@ import { AuthGuard } from '@nestjs/passport';
 export class SolicitudController {
   constructor(private solicitudService: SolicitudService) {}
 
-  @Get()
-  @ApiOperation({ summary: 'Listar Solicitudes' })
-  getSolicitudes(): Promise<Solicitud[]> {
-    return this.solicitudService.getSolicitudesAdministradores();
-  }
-
-  @Get('trabajadores')
-  @ApiOperation({ summary: 'Listar Solicitudes' })
-  getSolicitudesTrabajadores(): Promise<Solicitud[]> {
-    return this.solicitudService.getSolicitudesTrabajadores();
-  }
-
   @Get('contar_solicitudes')
   @ApiOperation({ summary: 'Contar Solicitudes Pendientes' })
   @ApiResponse({
@@ -97,7 +85,36 @@ export class SolicitudController {
     return this.solicitudService.getSolicitudById(id);
   }
 
-  @Get('empleados/:id')
+  @Get('aprobadas/:id')
+  @ApiOperation({
+    summary: 'Obtiene todas las solicitudes Aprobadas de Un Usuario Especifico',
+  })
+  @ApiParam({
+    name: 'ID',
+    description: 'ID del Usuario a buscar sus solicitudes ',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Regresa una lista con las solicitudes aprobadas',
+    isArray: true,
+    type: Solicitud,
+  })
+  getSolicitudesAprobadasByEmpleado(
+    @Param('id') id: string,
+  ): Promise<Solicitud[]> {
+    return this.solicitudService.getSolicitudesAprobadasByEmpleado(id);
+  }
+
+  @Get('/:size/:number')
+  @ApiOperation({ summary: 'Listar Solicitudes' })
+  getSolicitudes(
+    @Param('size') size: number,
+    @Param('number') number: number,
+  ): Promise<{ solicitudes: Solicitud[]; pages: number }> {
+    return this.solicitudService.getAllSolicitudes(size, number);
+  }
+
+  @Get('empleados/:id/:size/:number')
   @ApiOperation({
     summary: 'Obtener todas las solicitudes de un empleado en específico',
   })
@@ -109,8 +126,21 @@ export class SolicitudController {
     isArray: true,
     type: Solicitud,
   })
-  getSolicitudesEmpleados(@Param('id') id: string): Promise<Solicitud[]> {
-    return this.solicitudService.getSolicitudesByEmpleado(id);
+  getSolicitudesEmpleados(
+    @Param('id') id: string,
+    @Param('size') size: number,
+    @Param('number') number: number,
+  ): Promise<{ solicitudes: Solicitud[]; pages: number }> {
+    return this.solicitudService.getSolicitudesByEmpleado(id, size, number);
+  }
+
+  @Get('trabajadores/:size/:number')
+  @ApiOperation({ summary: 'Listar Solicitudes' })
+  getSolicitudesTrabajadores(
+    @Param('size') size: number,
+    @Param('number') number: number,
+  ): Promise<{ solicitudes: Solicitud[]; pages: number }> {
+    return this.solicitudService.getSolicitudesTrabajadores(size, number);
   }
 
   @Post()

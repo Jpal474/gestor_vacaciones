@@ -26,7 +26,7 @@ export class CreateSolicitudDto {
   @ApiProperty()
   fecha_creacion: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   @ApiProperty()
   justificacion: string;

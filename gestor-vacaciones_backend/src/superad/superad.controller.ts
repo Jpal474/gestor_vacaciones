@@ -1,12 +1,22 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { Empleado } from 'src/empleado/empleado.entity';
 import { SuperadService } from './superad.service';
 import { CreateSuperDto } from './dto/create-superad.dto';
 import { Ceo } from 'src/ceo/ceo.entity';
 import { EnviarMailDto } from './dto/enviar-mail.dto';
 import { EmailService } from 'src/email/email.service';
+import { AuthGuard } from '@nestjs/passport';
 @Controller('superad')
+@ApiTags('Super Admin')
+@ApiBearerAuth()
+@UseGuards(AuthGuard('jwt'))
 export class SuperadController {
   constructor(
     private superAdminService: SuperadService,
@@ -14,13 +24,15 @@ export class SuperadController {
   ) {}
 
   @Get()
-  @ApiOperation({summary: 'Llamado a la funcion para actualizar saldos vacacionales'})
+  @ApiOperation({
+    summary: 'Llamado a la funcion para actualizar saldos vacacionales',
+  })
   @ApiResponse({
     status: 200,
     description: 'Actualiza los saldos vacacionales de todos los empleados',
     isArray: false,
   })
-  actualizarSaldos(){
+  actualizarSaldos() {
     this.superAdminService.actualizarSaldosVacacionales();
   }
 
@@ -46,6 +58,8 @@ export class SuperadController {
       <h1>Observaciones sobre su solicitud</h1>
       <p>${mail.mensaje}</p>
     `;
+      console.log('Entro enviar email');
+
       await this.mailService.sendMail(
         mail.destinatario,
         'Observaciones Solicitud',
@@ -66,6 +80,8 @@ export class SuperadController {
       <h1>Solicitud Rehazada</h1>
       <p>Su solicitud vacacional ha sido rechazada</p>
     `;
+      console.log('Usuarios', destinatario);
+
       await this.mailService.sendMail(
         destinatario,
         'Estado Solicitud',

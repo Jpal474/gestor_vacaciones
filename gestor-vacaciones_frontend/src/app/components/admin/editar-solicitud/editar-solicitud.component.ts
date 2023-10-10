@@ -113,8 +113,14 @@ export class EditarSolicitudComponent {
   }
 
   getSaldoVacacional(){
-    const año = new Date().getFullYear()
-    console.log('saldo');
+    const dia = new Date().getDate();
+    const mes = new Date().getMonth();
+    let año = 0;
+    if(dia >= 18 && mes === 12){
+      año = new Date().getFullYear() + 1;
+    }else{
+      año = new Date().getFullYear()
+    }
     this.adminService.getSaldoByEmpleadoId(this.empleado.id!, año)
     .subscribe({
       next: (res: SaldoVacacional)=> {
@@ -125,7 +131,26 @@ export class EditarSolicitudComponent {
         }
       }, 
       error: (err)=> {
-        console.log(err); 
+        const cadena:string = 'unknown error'
+          if(cadena.includes(err)){
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Ha habido un error al completar la solicitud',
+            })
+          }
+          else if('unauthorized'.includes(err)){
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Debe iniciar sesión para completar la acción',
+            })
+          }
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'No se ha podido editar al usuario',
+          })
       }
     })
   }
@@ -156,11 +181,26 @@ export class EditarSolicitudComponent {
         }
         },
         error: (err)=> {
+          const cadena:string = 'unknown error'
+          if(cadena.includes(err)){
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Ha habido un error al completar la solicitud',
+            })
+          }
+          else if('unauthorized'.includes(err)){
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Debe iniciar sesión para completar la acción',
+            })
+          }
           Swal.fire({
             icon: 'error',
             title: 'Error',
             text: err,
-          }) 
+          })
         }
       })
     }

@@ -28,15 +28,15 @@ export class DepartamentoController {
   constructor(private departamentosService: DepartamentoService) {}
 
   @Get()
-  @ApiOperation({ summary: 'Obtener todos los departamentos' })
+  @ApiOperation({ summary: 'Obtener todos los departamentos sin paginacion' })
   @ApiResponse({
     status: 200,
-    description: 'Regresa un arreglo con los datos de los departamentos',
+    description: 'Regresa un objeto cpn los datos del Departamento Encontrado',
     isArray: true,
     type: Departamento,
   })
-  getDepartamentos(): Promise<Departamento[]> {
-    return this.departamentosService.getDepartamentos();
+  getAllDepartamentos(): Promise<Departamento[]> {
+    return this.departamentosService.getAllDepartamentos();
   }
 
   @Get('/:id')
@@ -50,7 +50,20 @@ export class DepartamentoController {
   getDepartamentoById(@Param('id') id: number): Promise<Departamento> {
     return this.departamentosService.getDepartamentoById(id);
   }
-
+  @Get('/:size/:number')
+  @ApiOperation({ summary: 'Obtener todos los departamentos' })
+  @ApiResponse({
+    status: 200,
+    description: 'Regresa un arreglo con los datos de los departamentos',
+    isArray: true,
+    type: Departamento,
+  })
+  getDepartamentos(
+    @Param('size') size: number,
+    @Param('number') number: number,
+  ): Promise<{ departamentos: Departamento[]; pages: number }> {
+    return this.departamentosService.getDepartamentos(size, number);
+  }
   @Post()
   @ApiOperation({ summary: 'Crear Departamento' })
   @ApiBody({

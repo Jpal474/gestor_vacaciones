@@ -1,1 +1,41 @@
-<p>cuenta works!</p>
+<section class="profile-card" id="profile-card">
+
+    <img id="profile-image" src="https://cdn-icons-png.flaticon.com/512/6073/6073873.png" />
+    <div class="container">
+
+    </div>
+
+    <h1>{{empleado.nombre}} {{empleado.apellidos}}</h1>
+
+    <div id="info-box">
+        <p>{{empleado.departamento.nombre}}</p>
+    </div>
+
+    <div class="row justify-content-around">
+        <div class="col-4">
+            <p>Días de Vacaciones Disponibles:</p>
+            <p>{{this.saldo_vacacional.dias_disponibles}}</p>
+        </div>
+        <div class="col-4">
+            <p>Días Tomados:</p>
+            <p>{{this.saldo_vacacional.dias_tomados}}</p>
+        </div>
+    </div><br>
+    <h3>¿Dudas Sobre tus Vacaciones?</h3>
+    <h6>Consulta la Ley Federal del Trabajo:</h6>
+    <a href="#">Artículos Actualizados</a>
+
+    <nav>
+
+        <ul>
+
+
+
+        </ul>
+
+        <button type="button" class="btn btn-success" [routerLink]="['/trabajador/crear_solicitud']">CREAR SOLICITUD</button>
+
+
+    </nav>
+
+</section>

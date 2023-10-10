@@ -15,6 +15,8 @@ import * as moment from 'moment';
   styleUrls: ['./agregar-trabajador.component.css']
 })
 export class AgregarTrabajadorComponent {
+  fieldTextType:boolean=false;
+  fieldTextType2:boolean=false;
   trabajador_formulario!: FormGroup;
   mensaje='';
   departamentos: Departamento[]= [];
@@ -68,20 +70,20 @@ export class AgregarTrabajadorComponent {
 
   crearFormulario(){
     this.trabajador_formulario= this.fb.group({
-      nombre: ['', [Validators.required, Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/), this.notOnlyWhitespace, Validators.minLength(3)]],
-      apellidos: ['', [Validators.required, Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s\-0-9]*$/), this.notOnlyWhitespace, Validators.minLength(3)]],
-      nombre_usuario: ['', [Validators.required, this.notOnlyWhitespace]],
+      nombre: ['', [Validators.required, Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/), this.notOnlyWhitespace, Validators.minLength(3), Validators.maxLength(100)]],
+      apellidos: ['', [Validators.required, Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s\-0-9]*$/), this.notOnlyWhitespace, Validators.minLength(3), Validators.maxLength(100)]],
+      nombre_usuario: ['', [Validators.required, this.notOnlyWhitespace, Validators.minLength(8), Validators.maxLength(20)]],
       correo: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$/), this.notOnlyWhitespace]],
       genero: ['', Validators.required],
       departamento: ['', Validators.required],
       fecha_contratacion: ['', [Validators.required, this.maxDateValidator]],
-      contraseña: ['', [Validators.required, this.notOnlyWhitespace]],
+      contraseña: ['', [Validators.required, this.notOnlyWhitespace, Validators.minLength(8), Validators.maxLength(15)]],
       confirmar_contraseña: ['', [Validators.required, this.notOnlyWhitespace]],
     })
       }
 
 getDepartamentos(){
-  this.adminService.getDepartamentos()
+  this.adminService.getAllDepartamentos()
   .subscribe({
       next: (res: Departamento[]) => {
           console.log(res);
@@ -89,6 +91,14 @@ getDepartamentos(){
           }
         })
       }
+      
+      toggleFieldTextType() {
+        this.fieldTextType = !this.fieldTextType;
+      }
+      toggleFieldTextType2() {
+        this.fieldTextType2 = !this.fieldTextType2;
+      }
+
 
       guardarTrabajador(){
         if (!this.trabajador_formulario.invalid){
@@ -125,30 +135,75 @@ getDepartamentos(){
                           }
                         },
                         error(err) {
+                          const cadena:string = 'unknown error'
+                          if(cadena.includes(err)){
+                            Swal.fire({
+                              icon: 'error',
+                              title: 'Error',
+                              text: 'Ha habido un error al completar la solicitud',
+                            })
+                          }
+                          else if('unauthorized'.includes(err)){
+                            Swal.fire({
+                              icon: 'error',
+                              title: 'Error',
+                              text: 'Debe iniciar sesión para completar la acción',
+                            })
+                          }
                           Swal.fire({
                             icon: 'error',
                             title: 'Error',
                             text: err,
-                          }) 
+                          })
                           
                         },
                       })
                   },
                   error(err) {                
+                    const cadena:string = 'unknown error'
+                    if(cadena.includes(err)){
+                      Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Ha habido un error al completar la solicitud',
+                      })
+                    }
+                    else if('unauthorized'.includes(err)){
+                      Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe iniciar sesión para completar la acción',
+                      })
+                    }
                     Swal.fire({
                       icon: 'error',
                       title: 'Error',
                       text: err,
-                    })   
+                    })
                   },
                 })//cierre subscribe de obtener departamento 
               },
               error(err) {
+                const cadena:string = 'unknown error'
+                if(cadena.includes(err)){
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Ha habido un error al completar la solicitud',
+                  })
+                }
+                else if('unauthorized'.includes(err)){
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Debe iniciar sesión para completar la acción',
+                  })
+                }
                 Swal.fire({
                   icon: 'error',
                   title: 'Error',
                   text: err,
-                })      
+                })    
               },
              })
         }
@@ -245,6 +300,21 @@ getDepartamentos(){
         }
         },
         error: (err)=> {
+          const cadena:string = 'unknown error'
+          if(cadena.includes(err)){
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Ha habido un error al completar la solicitud',
+            })
+          }
+          else if('unauthorized'.includes(err)){
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Debe iniciar sesión para completar la acción',
+            })
+          }
           Swal.fire({
             icon: 'error',
             title: 'Error',
@@ -308,6 +378,11 @@ getDepartamentos(){
     ) {
       this.mensaje = 'El nombre debe tener al menos 3 letras';
     }
+    else if (
+      this.trabajador_formulario.get('nombre')?.errors?.['maxlength']
+    ) {
+      this.mensaje = 'El nombre debe tener menos de 150 caracteres';
+    }
     return this.mensaje;
   }
 
@@ -325,6 +400,9 @@ getDepartamentos(){
     else if(this.trabajador_formulario.get('apellidos')?.errors?.['minlength']) {
       this.mensaje= "Los apellidos debe contener al menos 3 letras";
     }
+    else if(this.trabajador_formulario.get('apellidos')?.errors?.['minlength']) {
+      this.mensaje= "Los apellidos son muy largos";
+    }
     return this.mensaje
   }
 
@@ -337,7 +415,10 @@ getDepartamentos(){
       this.mensaje = "El campo no puede consistir sólo en espacios en blanco"
     }
     else if(this.trabajador_formulario.get('nombre_usuario')?.errors?.['minlength']) {
-      this.mensaje= "El nombre de usuario debe contener al menos 3 letras";
+      this.mensaje= "El nombre de usuario debe contener al menos 8 caracteres ";
+    }
+    else if(this.trabajador_formulario.get('nombre_usuario')?.errors?.['maxlength']) {
+      this.mensaje= "El nombre de usuario debe contener menos de 20 caracteres";
     }
     return this.mensaje
   }
@@ -356,6 +437,7 @@ getDepartamentos(){
   }
 
   get departamentoNoValido(){
+    this.mensaje = ''
     if(this.trabajador_formulario.get('departamento')?.invalid && this.trabajador_formulario.get('departamento')?.touched){
      this.mensaje = 'El campo no puede estar vacío';
     }
@@ -387,10 +469,20 @@ getDepartamentos(){
   }
 
   get contraseniaNoValido() {
-    return (
-      this.trabajador_formulario.get('contraseña')?.invalid &&
-      this.trabajador_formulario.get('contraseña')?.touched
-    );
+    this.mensaje='';
+    if( this.trabajador_formulario.get('contraseña')?.errors?.['required'] && this.trabajador_formulario.get('contraseña')?.touched){
+      this.mensaje = "El campo no puede estar vacío";
+    } 
+    else if( this.trabajador_formulario.get('contraseña')?.errors?.['notOnlyWhitespace'] && this.trabajador_formulario.get('contraseña')?.touched){
+      this.mensaje = "El campo no puede consistir sólo en espacios en blanco"
+    }
+    else if(this.trabajador_formulario.get('contraseña')?.errors?.['minlength']) {
+      this.mensaje= "La contraseña debe tener entre 8 y 15 caracteres ";
+    }
+    else if(this.trabajador_formulario.get('contraseña')?.errors?.['maxlength']) {
+      this.mensaje= "La contraseña es muy larga";
+    }
+    return this.mensaje
   }
   get confirmarContraseniaNoValida() {
     const pass1 = this.trabajador_formulario.get('contraseña')?.value;

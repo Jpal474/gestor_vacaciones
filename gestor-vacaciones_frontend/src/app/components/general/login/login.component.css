@@ -131,7 +131,7 @@
 
 .login__input:hover,
 .login__input:focus {
-    color: white;
+    color: #00171F;
     border: 2px solid rgba(255, 255, 255, 0.5);
     background-color: transparent;
 }

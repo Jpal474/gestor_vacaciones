@@ -10,25 +10,44 @@ import Swal from 'sweetalert2';
 })
 export class SolicitudesComponent implements OnInit{
   solicitudes: Solicitud[] = []
+  paginasArray: number[]=[];
+  paginas = 0;
 
   constructor(private adminService: AdminService) {}
 
   ngOnInit(): void {
-    this.getSolicitudes();
+    this.getSolicitudes(1);
   }
 
-  getSolicitudes(){
-    this.adminService.getSolicitudesTrabajadores()
+  getSolicitudes(page:number){
+    this.adminService.getSolicitudesTrabajadores(5,page)
     .subscribe({
-      next: (res: Solicitud[])=> {
-        this.solicitudes = res;        
+      next: (res: { solicitudes: Solicitud[]; pages: number })=> {
+        this.solicitudes = res.solicitudes;
+        this.paginas = res.pages;  
+        this.paginasArray = Array.from({ length: this.paginas }, (_, index) => index + 1);        
       },
       error: (err)=> {
+        const cadena:string = 'unknown error'
+        if(cadena.includes(err)){
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Ha habido un error al completar la solicitud',
+          })
+        }
+        else if('unauthorized'.includes(err)){
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Debe iniciar sesión para completar la acción',
+          })
+        }
         Swal.fire({
           icon: 'error',
           title: 'Error',
           text: err,
-        }) 
+        })
       }
     })
   }

@@ -21,7 +21,7 @@ export class SolicitudService {
   async getSolicitudById(id: number): Promise<Solicitud> {
     try {
       const found = await this.solicitudRepository.find({
-        relations: ['empleado'],
+        relations: ['empleado', 'empleado.usuario'],
         where: { id: id },
       });
       if (!found) {
@@ -33,21 +33,28 @@ export class SolicitudService {
     }
   }
 
-  async getSolicitudesAdministradores(): Promise<Solicitud[]> {
-    const solicitudes = await this.solicitudRepository
+  async getAllSolicitudes(
+    pageSize: number,
+    pageNumber: number,
+  ): Promise<{ solicitudes: Solicitud[]; pages: number }> {
+    const all_solicitudes = await this.solicitudRepository
       .createQueryBuilder('solicitud')
       .innerJoinAndSelect('solicitud.empleado', 'empleado')
       .innerJoin('empleado.usuario', 'usuario')
-      .innerJoin('usuario.rol', 'rol', 'rol.nombre = :rolNombre', {
-        rolNombre: 'Administrador',
-      })
       .getMany();
-
-    return solicitudes;
+    const pages = Math.ceil(all_solicitudes.length / pageSize);
+    const solicitudes = all_solicitudes.slice(
+      (pageNumber - 1) * pageSize,
+      pageNumber * pageSize,
+    );
+    return { solicitudes, pages };
   }
 
-  async getSolicitudesTrabajadores(): Promise<Solicitud[]> {
-    const solicitudes = await this.solicitudRepository
+  async getSolicitudesTrabajadores(
+    pageSize: number,
+    pageNumber: number,
+  ): Promise<{ solicitudes: Solicitud[]; pages: number }> {
+    const all_solicitudes = await this.solicitudRepository
       .createQueryBuilder('solicitud')
       .innerJoinAndSelect('solicitud.empleado', 'empleado')
       .innerJoin('empleado.usuario', 'usuario')
@@ -56,13 +63,17 @@ export class SolicitudService {
       })
       .getMany();
 
-    if (!solicitudes) {
+    if (!all_solicitudes) {
       throw new NotFoundException(
         'No Se Han Encontrado Solicitudes Para Trabajadores',
       );
     }
-
-    return solicitudes;
+    const pages = Math.ceil(all_solicitudes.length / pageSize);
+    const solicitudes = all_solicitudes.slice(
+      (pageNumber - 1) * pageSize,
+      pageNumber * pageSize,
+    );
+    return { solicitudes, pages };
   }
 
   async createSolicitud(
@@ -145,7 +156,23 @@ export class SolicitudService {
     }
   }
 
-  async getSolicitudesByEmpleado(id: string): Promise<Solicitud[]> {
+  async getSolicitudesAprobadasByEmpleado(id: string): Promise<Solicitud[]> {
+    try {
+      const found = await this.solicitudRepository.find({
+        relations: ['empleado'],
+        where: { estado: 'ACEPTADO', empleado: { id: id } },
+      });
+      return found;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  async getSolicitudesByEmpleado(
+    id: string,
+    pageSize: number,
+    pageNumber: number,
+  ): Promise<{ solicitudes: Solicitud[]; pages: number }> {
     try {
       const found = await this.solicitudRepository.find({
         relations: ['empleado'],
@@ -158,7 +185,12 @@ export class SolicitudService {
           `No se han encontrado solicitudes para este empleado`,
         );
       }
-      return found;
+      const pages = Math.ceil(found.length / pageSize);
+      const solicitudes = found.slice(
+        (pageNumber - 1) * pageSize,
+        pageNumber * pageSize,
+      );
+      return { solicitudes, pages };
     } catch (error) {
       throw new Error(error);
     }

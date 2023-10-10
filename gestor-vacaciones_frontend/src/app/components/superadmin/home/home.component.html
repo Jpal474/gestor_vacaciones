@@ -2,9 +2,9 @@
 <div class="home">
     <div class="position-absolute top-50 start-50 translate-middle">
         <div class="row">
-            <div class="col-md-2 me-2">
+            <div class="col">
                 <a [routerLink]="['/super/departamentos']">
-                    <div class="card" style="width: 7vw;">
+                    <div class="card">
                         <div class="card-body d-flex justify-content-center">
                             <img src="../../../../assets/recursos/imagenes/superadmin/home/departamento.png" class="card-img-top" alt="...">
                         </div>
@@ -12,9 +12,9 @@
                     </div>
                 </a>
             </div>
-            <div class="col-md-2 me-2">
+            <div class="col">
                 <a [routerLink]="['/super/empleados']">
-                    <div class="card" style="width: 7vw;">
+                    <div class="card">
                         <div class="card-body d-flex justify-content-center">
                             <img src="../../../../assets/recursos/imagenes/superadmin/home/trabajo-en-equipo.png" class="card-img-top" alt="...">
                         </div>
@@ -22,9 +22,9 @@
                     </div>
                 </a>
             </div>
-            <div class="col-md-2 me-2">
+            <div class="col">
                 <a [routerLink]="['/super/solicitudes']">
-                    <div class="card" style="width: 7vw; position: relative;">
+                    <div class="card" style=" position: relative;">
                         <p class="solicitudes">{{numero_solicitudes}}</p>
                         <div class="card-body d-flex justify-content-center">
                             <img src="../../../../assets/recursos/imagenes/superadmin/home/permiso.png" class="card-img-top" alt="...">
@@ -34,9 +34,9 @@
                 </a>
             </div>
 
-            <div class="col-md-2 me-2">
+            <div class="col">
                 <a [routerLink]="['/super/calendario']">
-                    <div class="card" style="width: 7vw;">
+                    <div class="card">
                         <div class="card-body d-flex justify-content-center">
                             <img src="../../../../assets/recursos/imagenes/superadmin/home/calendario.png" class="card-img-top" alt="...">
                         </div>
@@ -45,16 +45,6 @@
                 </a>
             </div>
 
-            <div class="col-md-2">
-                <a (click)="generarSaldoVacacional()">
-                    <div class="card" style="width: 7vw; position: relative;">
-                        <div class="card-body d-flex justify-content-center">
-                            <img src="../../../../assets/recursos/imagenes/superadmin/home/puesta-de-sol.png" class="card-img-top" alt="...">
-                        </div>
-                        <p class="text-center">Actualizar Saldo Vacacional</p>
-                    </div>
-                </a>
-            </div>
         </div>
     </div>
 </div>

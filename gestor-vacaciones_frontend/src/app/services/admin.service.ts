@@ -1,6 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { DiasFeriados } from '../interfaces/dias_feriados.interface';
 import { Observable } from 'rxjs';
 import { Departamento } from '../interfaces/departamento.interface';
 import { Empresa } from '../interfaces/empresa.interface';
@@ -26,7 +25,11 @@ export class AdminService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getDepartamentos(): Observable<Departamento[]>{
+  getDepartamentos(size: number, page:number): Observable<{ departamentos: Departamento[]; pages: number }>{
+    return this.httpClient.get<{ departamentos: Departamento[]; pages: number }>(`${this.BASE_URL}/departamento/${size}/${page}`)
+  }
+
+  getAllDepartamentos(): Observable<Departamento[]>{
     return this.httpClient.get<Departamento[]>(`${this.BASE_URL}/departamento`)
   }
 
@@ -34,20 +37,20 @@ export class AdminService {
     return this.httpClient.get<Empresa>(`${this.BASE_URL}/empresa`)
   }
 
-  getTrabajadores():Observable<Empleado[]>{
-    return this.httpClient.get<Empleado[]>(`${this.BASE_URL}/trabajador`)
+  getTrabajadores(size: number, page:number):Observable<{ trabajadores: Empleado[]; pages: number }>{
+    return this.httpClient.get<{ trabajadores: Empleado[]; pages: number }>(`${this.BASE_URL}/trabajador/${size}/${page}`)
   }
 
-  getSolicitudesTrabajadores(): Observable<Solicitud[]>{
-    return this.httpClient.get<Solicitud[]>(`${this.BASE_URL}/solicitud/trabajadores`);
+  getSolicitudesTrabajadores(size: number, page:number): Observable<{ solicitudes: Solicitud[]; pages: number }>{
+    return this.httpClient.get<{ solicitudes: Solicitud[]; pages: number }>(`${this.BASE_URL}/solicitud/trabajadores/${size}/${page}`);
   }
 
   getSolicitudesAprobadas(): Observable<Solicitud[]>{
     return this.httpClient.get<Solicitud[]>(`${this.BASE_URL}/solicitud/aprobadas`)
   }
 
-  getMisSolicitudes(id: string): Observable<Solicitud[]>{
-    return this.httpClient.get<Solicitud[]>(`${this.BASE_URL}/solicitud/empleados/${id}`)
+  getMisSolicitudes(id: string, size:number, page:number): Observable<{ solicitudes: Solicitud[]; pages: number }>{
+   return this.httpClient.get<{ solicitudes: Solicitud[]; pages: number }>(`${this.BASE_URL}/solicitud/empleados/${id}/${size}/${page}`)
    }
 
   getDepartamentoById(id: number): Observable<Departamento>{
@@ -75,17 +78,19 @@ export class AdminService {
     return this.httpClient.get<number>(`${this.BASE_URL}/solicitud/pendientes_trab`);
   }
 
+  getEmpleadosVacaciones(): Observable<boolean>{
+    return this.httpClient.get<boolean>(`${this.BASE_URL}/empleado/vacaciones`)
+  }
+
   enviarMailObservaciones(email : EmailObservacion): Observable<boolean>{
     return this.httpClient.post<boolean>(`${this.BASE_URL}/admin/email`, email)
   }
 
-  enviarMailRechazada(): Observable<boolean>{
-    let destinatario = 'lovad28459@apxby.com'
+  enviarMailRechazada(destinatario: string): Observable<boolean>{
     return this.httpClient.post<boolean>(`${this.BASE_URL}/admin/email/rechazar/${destinatario}`, {})
   }
 
-  enviarMailAprobada(): Observable<boolean>{
-    let destinatario = 'lovad28459@apxby.com'
+  enviarMailAprobada(destinatario: string): Observable<boolean>{
     return this.httpClient.post<boolean>(`${this.BASE_URL}/admin/email/aprobar/${destinatario}`, {})
   }
 
@@ -137,6 +142,10 @@ export class AdminService {
 
   aprobarSolicitud(nombre:AprobarSolicitud, id:number){
     return this.httpClient.put<boolean>(`${this.BASE_URL}/solicitud/aprobar/${id}`, nombre);
+  }
+
+  updateEmpleadoStatus(id: string, opcion: number): Observable<boolean>{
+    return this.httpClient.put<boolean>(`${this.BASE_URL}/empleado/${id}/${opcion}`, {});
   }
 
 

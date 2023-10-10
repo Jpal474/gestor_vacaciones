@@ -26,15 +26,23 @@ headers= new HttpHeaders({
     return this.httpClient.get<Empleado>(`${this.BASE_URL}/empleado/usuario/${id}`)
   }
   
-  getSolicitudes(id: string): Observable<Solicitud[]>{
-   return this.httpClient.get<Solicitud[]>(`${this.BASE_URL}/solicitud/empleados/${id}`)
+  getSolicitudes(id: string, size:number, page:number): Observable<{ solicitudes: Solicitud[]; pages: number }>{
+   return this.httpClient.get<{ solicitudes: Solicitud[]; pages: number }>(`${this.BASE_URL}/solicitud/empleados/${id}/${size}/${page}`)
   }
 
   getSolicitudById(id: number): Observable<Solicitud>{
     return this.httpClient.get<Solicitud>(`${this.BASE_URL}/solicitud/${id}`);
   }
 
+  getSolicitudesAprobadasByEmpleadoId(id: string): Observable<Solicitud[]>{
+    return this.httpClient.get<Solicitud[]>(`${this.BASE_URL}/solicitud/aprobadas/${id}`);
+  }
+  
+
   getSaldoByEmpleadoId(id: string, anio: number){
+    console.log('id', id);
+    console.log('año', anio);
+    
     return this.httpClient.get<SaldoVacacional>(`${this.BASE_URL}/saldo-vacacional/${id}/${anio}`)
 
   }

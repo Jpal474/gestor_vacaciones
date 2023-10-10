@@ -8,6 +8,7 @@ import { RechazarSolicitud } from 'src/app/interfaces/rechazar_solicitud.interfa
 import { Solicitud, SolicitudEstado } from 'src/app/interfaces/solicitud.interface';
 import { FestivosService } from 'src/app/services/festivos.service';
 import { TrabajadoresService } from 'src/app/services/trabajadores.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-ver-misolicitud',
@@ -73,7 +74,26 @@ export class VerMisolicitudComponent {
           console.log(this.solicitud);
         },
         error: (err)=> {
-          console.log(err);  
+          const cadena:string = 'unknown error'
+          if(cadena.includes(err)){
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Ha habido un error al completar la solicitud',
+            })
+          }
+          else if('unauthorized'.includes(err)){
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Debe iniciar sesión para completar la acción',
+            })
+          }
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: err,
+          })
         },
         complete: ()=>{
           this.festivosService.getDiasFeriados()
@@ -93,7 +113,26 @@ export class VerMisolicitudComponent {
               }
             },
             error: (err)=> {
-              console.log(err);
+              const cadena:string = 'unknown error'
+          if(cadena.includes(err)){
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Ha habido un error al completar la solicitud',
+            })
+          }
+          else if('unauthorized'.includes(err)){
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Debe iniciar sesión para completar la acción',
+            })
+          }
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: err,
+          })
               
             }
           }) 
@@ -125,7 +164,12 @@ export class VerMisolicitudComponent {
             console.log('entra al while');
             }
           else{
-            if(fecha_actual.date() == 1 || fecha_actual.date() == 2){
+            if (
+              fecha_actual.date() == 1 &&
+              (fechaInicio.month() < fechaFinal.month() ||
+                (fecha_actual.date() == 2 &&
+                  fechaInicio.month() < fechaFinal.month()))
+            ){
               this.dias2.push(fecha_actual.date())
               this.band = true;
             }

@@ -24,6 +24,8 @@ import * as moment from 'moment';
 })
 export class AgregarEmpleadoComponent implements OnInit {
   mensaje = '';
+  fieldTextType:boolean=false;
+  fieldTextType2:boolean=false;
   empleado_formulario!: FormGroup;
   departamentos: Departamento[] = [];
   usuario: Usuario = {
@@ -77,6 +79,7 @@ export class AgregarEmpleadoComponent implements OnInit {
           Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/),
           this.notOnlyWhitespace,
           Validators.minLength(3),
+          Validators.maxLength(100),
         ],
       ],
       apellidos: [
@@ -86,9 +89,10 @@ export class AgregarEmpleadoComponent implements OnInit {
           Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s\-0-9]*$/),
           this.notOnlyWhitespace,
           Validators.minLength(3),
+          Validators.maxLength(100)
         ],
       ],
-      nombre_usuario: ['', [Validators.required, this.notOnlyWhitespace]],
+      nombre_usuario: ['', [Validators.required, this.notOnlyWhitespace, Validators.minLength(3), Validators.maxLength(15)]],
       correo: [
         '',
         [
@@ -101,8 +105,8 @@ export class AgregarEmpleadoComponent implements OnInit {
       departamento: ['', Validators.required],
       rol: ['', Validators.required],
       fecha_contratacion: ['', [Validators.required, this.maxDateValidator]],
-      contraseña: ['', [Validators.required, this.notOnlyWhitespace]],
-      confirmar_contraseña: ['', [Validators.required, this.notOnlyWhitespace]],
+      contraseña: ['', [Validators.required, this.notOnlyWhitespace,  Validators.minLength(8), Validators.maxLength(15)]],
+      confirmar_contraseña: ['', [Validators.required, this.notOnlyWhitespace,]],
     });
   }
 
@@ -111,13 +115,20 @@ export class AgregarEmpleadoComponent implements OnInit {
   }
 
   getDepartamentos() {
-    this.superadService.getDepartamentos().subscribe({
+    this.superadService.getAllDepartamentos().subscribe({
       next: (res: Departamento[]) => {
         console.log(res);
    
         this.departamentos = res;
       },
     });
+  }
+
+  toggleFieldTextType() {
+    this.fieldTextType = !this.fieldTextType;
+  }
+  toggleFieldTextType2() {
+    this.fieldTextType2 = !this.fieldTextType2;
   }
 
   guardarEmpleado() {
@@ -197,6 +208,21 @@ export class AgregarEmpleadoComponent implements OnInit {
           console.log(err);
         },
       });
+    }
+    else {
+      console.log(this.empleado_formulario.invalid);
+
+      return Object.values(this.empleado_formulario.controls).forEach(
+        (control) => {
+          if (control instanceof FormGroup) {
+            Object.values(control.controls).forEach((control) =>
+              control.markAsTouched()
+            );
+          } else {
+            control.markAsTouched();
+          }
+        }
+      );
     }
   }
 
@@ -340,6 +366,9 @@ export class AgregarEmpleadoComponent implements OnInit {
     } else if (this.empleado_formulario.get('nombre')?.errors?.['minlength']) {
       this.mensaje = 'El nombre debe tener al menos 3 letras';
     }
+    else if (this.empleado_formulario.get('nombre')?.errors?.['maxlength']) {
+      this.mensaje = 'El nombre es muy largo';
+    }
     return this.mensaje;
   }
 
@@ -365,6 +394,9 @@ export class AgregarEmpleadoComponent implements OnInit {
     ) {
       this.mensaje = 'Los apellidos debe contener al menos 3 letras';
     }
+    else if (this.empleado_formulario.get('apellidos')?.errors?.['maxlength']) {
+      this.mensaje = 'Los apellidos son muy largos';
+    }
     return this.mensaje;
   }
 
@@ -387,6 +419,9 @@ export class AgregarEmpleadoComponent implements OnInit {
     ) {
       this.mensaje = 'El nombre de usuario debe contener al menos 3 letras';
     }
+    else if (this.empleado_formulario.get('nombre_usuario')?.errors?.['maxlength']) {
+      this.mensaje = 'El nombre de usuario es muy largo';
+    }
     return this.mensaje;
   }
 
@@ -404,6 +439,7 @@ export class AgregarEmpleadoComponent implements OnInit {
   }
 
   get departamentoNoValido() {
+    this.mensaje = '';
     if (
       this.empleado_formulario.get('departamento')?.invalid &&
       this.empleado_formulario.get('departamento')?.touched
@@ -436,7 +472,7 @@ export class AgregarEmpleadoComponent implements OnInit {
   }
 
   get fechaNoValida() {
-    this.mensaje;
+    this.mensaje='';
     if (
       this.empleado_formulario.get('fecha_contratacion')?.invalid &&
       this.empleado_formulario.get('fecha_contratacion')?.touched
@@ -447,10 +483,28 @@ export class AgregarEmpleadoComponent implements OnInit {
   }
 
   get contraseniaNoValido() {
-    return (
-      this.empleado_formulario.get('contraseña')?.invalid &&
+    this.mensaje = '';
+    if (
+      this.empleado_formulario.get('contraseña')?.errors?.['required'] &&
       this.empleado_formulario.get('contraseña')?.touched
-    );
+    ) {
+      this.mensaje = 'El campo no puede estar vacío';
+    } else if (
+      this.empleado_formulario.get('contraseña')?.errors?.[
+        'notOnlyWhitespace'
+      ] &&
+      this.empleado_formulario.get('contraseña')?.touched
+    ) {
+      this.mensaje = 'El campo no puede consistir sólo en espacios en blanco';
+    } else if (
+      this.empleado_formulario.get('contraseña')?.errors?.['minlength']
+    ) {
+      this.mensaje = 'La contraseña debe tener entre 8 y 15 caracteres';
+    }
+    else if (this.empleado_formulario.get('contraseña')?.errors?.['maxlength']) {
+      this.mensaje = 'La contraseña es muy larga';
+    }
+    return this.mensaje;
   }
   get confirmarContraseniaNoValida() {
     const pass1 = this.empleado_formulario.get('contraseña')?.value;

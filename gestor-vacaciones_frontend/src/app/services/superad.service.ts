@@ -24,15 +24,19 @@ export class SuperadService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getAdministradores():Observable<Empleado[]>{
-    return this.httpClient.get<Empleado[]>(`${this.BASE_URL}/admin`)
+  getEmpleados(size: number, number:number):Observable<{ empleados: Empleado[], pages:number}>{
+    return this.httpClient.get<{ empleados: Empleado[], pages:number}>(`${this.BASE_URL}/empleado/${size}/${number}`)
   }
 
   getTrabajador():Observable<Empleado[]>{
     return this.httpClient.get<Empleado[]>(`${this.BASE_URL}/trabajador`)
   }
 
-  getDepartamentos(): Observable<Departamento[]>{
+  getDepartamentos(size: number, page:number): Observable<{ departamentos: Departamento[]; pages: number }>{
+    return this.httpClient.get<{ departamentos: Departamento[]; pages: number }>(`${this.BASE_URL}/departamento/${size}/${page}`)
+  }
+
+  getAllDepartamentos(): Observable<Departamento[]>{
     return this.httpClient.get<Departamento[]>(`${this.BASE_URL}/departamento`)
   }
 
@@ -65,6 +69,11 @@ export class SuperadService {
 
   }
 
+  getEmpleadosVacaciones(): Observable<boolean>{
+    return this.httpClient.get<boolean>(`${this.BASE_URL}/empleado/vacaciones`)
+  }
+
+
   generarSaldos(){
     return this.httpClient.get(`${this.BASE_URL}/superad`)
   }
@@ -81,13 +90,12 @@ export class SuperadService {
     return this.httpClient.delete<boolean>(`${this.BASE_URL}/departamento/${id}`)
   }
 
-  enviarMailRechazada(): Observable<boolean>{
-    let destinatario = 'lovad28459@apxby.com'
+  enviarMailRechazada(destinatario: string): Observable<boolean>{
+    
     return this.httpClient.post<boolean>(`${this.BASE_URL}/admin/email/rechazar/${destinatario}`, {})
   }
 
-  enviarMailAprobada(): Observable<boolean>{
-    let destinatario = 'lovad28459@apxby.com'
+  enviarMailAprobada(destinatario: string): Observable<boolean>{
     return this.httpClient.post<boolean>(`${this.BASE_URL}/admin/email/aprobar/${destinatario}`, {})
   }
 
@@ -122,11 +130,15 @@ export class SuperadService {
     return this.httpClient.put<SaldoVacacional>(`${this.BASE_URL}/saldo-vacacional/${id}/${anio}`, saldoActualizado)
   }
 
-  getSolicitudesAdmins(): Observable<Solicitud[]>{
-    return this.httpClient.get<Solicitud[]>(`${this.BASE_URL}/solicitud`);
+  updateEmpleadoStatus(id: string, opcion: number): Observable<boolean>{
+    return this.httpClient.put<boolean>(`${this.BASE_URL}/empleado/${id}/${opcion}`, {});
   }
-  getSolicitudesTrabajadores(): Observable<Solicitud[]>{
-    return this.httpClient.get<Solicitud[]>(`${this.BASE_URL}/solicitud/trabajadores`);
+
+  getAllSolicitudes(size:number, page:number): Observable<{ solicitudes: Solicitud[]; pages: number }>{
+    return this.httpClient.get<{ solicitudes: Solicitud[]; pages: number }>(`${this.BASE_URL}/solicitud/${size}/${page}`);
+  }
+  getSolicitudesTrabajadores(): Observable<{ solicitudes: Solicitud[]; pages: number }>{
+    return this.httpClient.get<{ solicitudes: Solicitud[]; pages: number }>(`${this.BASE_URL}/solicitud/trabajadores`);
   }
 
   rechazarSolicitud(nombre: RechazarSolicitud, id:number){

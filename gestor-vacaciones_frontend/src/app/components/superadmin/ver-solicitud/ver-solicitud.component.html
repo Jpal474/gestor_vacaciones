@@ -1,7 +1,7 @@
 <app-navbar></app-navbar>
 <section class="profile-card" id="profile-card">
 
-    <img id="profile-image" src="https://avatars3.githubusercontent.com/u/26097311?v=4&s=400" />
+    <img id="profile-image" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_vIj2V-KO5sDYPu71xxPorJXWX_FX7BzWww&usqp=CAU" />
 
     <h1>{{solicitud.empleado.nombre}} {{solicitud.empleado.apellidos}}</h1>
     <div class="card" style="background-color: #f8f9fa;">
@@ -17,9 +17,18 @@
                     <li class="ms-2" *ngFor="let dia of dias; let i=index">
                         <p class="social-media-icon" style="color: white;">{{dia}}</p>
                     </li>
-                    <div *ngIf="band">
+                    <div *ngIf="band_anio">
                         <li>
                             <p style="float: left;">{{fechas.mes2}} {{fechas.anio2}}</p>
+                        </li>
+                        <li class="ms-2" *ngFor="let dia2 of dias2">
+                            <p class="social-media-icon" style="color: white;">{{dia2}}</p>
+                        </li>
+                    </div>
+
+                    <div *ngIf="band">
+                        <li>
+                            <p style="float: left;">{{fechas.mes2}} {{fechas.anio}}</p>
                         </li>
                         <li class="ms-2" *ngFor="let dia2 of dias2">
                             <p class="social-media-icon" style="color: white;">{{dia2}}</p>
@@ -30,12 +39,12 @@
                 </ul>
 
                 <h6 class="card-title text-center" style="color: #818ea2;">Justificacion</h6>
-                <p>{{solicitud.justificacion}} </p>
+                <p class="fs-6">{{solicitud.justificacion}} </p>
                 <br>
                 <div *ngIf="solicitud.estado === 'PENDIENTE'">
                     <button type="button" class="btn btn-success mb-5" (click)="enviarMail()">Comentarios Adicionales</button>
                     <br>
-                    <button type="button" class="btn btn-success" (click)="aprobarSolicitud()">APROBAR</button>
+                    <button type="button" class="btn btn-success" (click)="getEmpleadosVacaciones()">APROBAR</button>
                     <button type="button" class="btn btn-danger ms-5" (click)="rechazarSolicitud()">RECHAZAR</button> </div>
 
                 <div *ngIf="solicitud.estado === 'ACEPTADO'">

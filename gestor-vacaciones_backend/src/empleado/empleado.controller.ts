@@ -1,9 +1,19 @@
-import { Controller, Get, Param, Put } from '@nestjs/common';
+import { Controller, Get, Param, Put, UseGuards } from '@nestjs/common';
 import { EmpleadoService } from './empleado.service';
-import { ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { Empleado } from './empleado.entity';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('empleado')
+@ApiTags('Empleados')
+@ApiBearerAuth()
+@UseGuards(AuthGuard('jwt'))
 export class EmpleadoController {
   constructor(private empleadoService: EmpleadoService) {}
 
@@ -44,6 +54,14 @@ export class EmpleadoController {
   @ApiParam({ name: 'ID', description: 'ID del usuario' })
   getEmpleadoByUsuarioId(@Param('id') id: string): Promise<Empleado> {
     return this.empleadoService.getEmpleadoByUserId(id);
+  }
+
+  @Get('/:size/:number')
+  getAllEmpleados(
+    @Param('size') size: number,
+    @Param('number') number: number,
+  ): Promise<{ empleados: Empleado[]; pages: number }> {
+    return this.empleadoService.getEmpleados(size, number);
   }
 
   @Put('/:id/:opcion')

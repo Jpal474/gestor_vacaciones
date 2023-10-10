@@ -1,11 +1,15 @@
 /* eslint-disable prettier/prettier */
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { EmpresaService } from './empresa.service';
-import { ApiBody, ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateEmpresaDto } from './dto/create-empresa.dto';
 import { Empresa } from './empresa.entity';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('empresa')
+@ApiTags('empresa')
+@ApiBearerAuth()
+@UseGuards(AuthGuard('jwt'))
 export class EmpresaController {
   constructor(private empresaService: EmpresaService) {}
 

@@ -17,6 +17,7 @@ import { MisSolicitudesComponent } from '../mis-solicitudes/mis-solicitudes.comp
 import { CrearSolicitudComponent } from '../crear-solicitud/crear-solicitud.component';
 import { EditarSolicitudComponent } from '../editar-solicitud/editar-solicitud.component';
 import { VerMisolicitudComponent } from '../ver-misolicitud/ver-misolicitud.component';
+import { CuentaComponent } from '../cuenta/cuenta.component';
 
 
 
@@ -35,7 +36,8 @@ import { VerMisolicitudComponent } from '../ver-misolicitud/ver-misolicitud.comp
     MisSolicitudesComponent,
     CrearSolicitudComponent,
     EditarSolicitudComponent,
-    VerMisolicitudComponent
+    VerMisolicitudComponent,
+    CuentaComponent
   ],
   imports: [
     CommonModule,

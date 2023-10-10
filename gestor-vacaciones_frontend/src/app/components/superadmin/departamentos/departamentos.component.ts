@@ -10,6 +10,8 @@ import Swal from 'sweetalert2';
   styleUrls: ['./departamentos.component.css']
 })
 export class DepartamentosComponent implements OnInit {
+  paginas = 0;
+  paginasArray: number[]=[];
   departamentos: Departamento[] = [];
   departamento: Departamento = {
     nombre: '',
@@ -25,7 +27,7 @@ export class DepartamentosComponent implements OnInit {
   constructor(private superadService: SuperadService) {}
 
   ngOnInit(): void {
-    this.getDepartamentos();
+    this.getDepartamentos(1);
   }
 
   async guardarDepartamento() {
@@ -77,11 +79,15 @@ export class DepartamentosComponent implements OnInit {
   }}
 
 
-  getDepartamentos(){
-    this.superadService.getDepartamentos()
+  getDepartamentos(number:number){
+    this.superadService.getDepartamentos(5,number)
     .subscribe({
-      next: (res:Departamento[])=> {
-        this.departamentos=res        
+      next: (res:{ departamentos: Departamento[]; pages: number })=> {
+       const {departamentos, pages} = res;
+        this.departamentos=departamentos
+        console.log(res);
+        this.paginas = res.pages;
+        this.paginasArray = Array.from({ length: this.paginas }, (_, index) => index + 1);      
       },
       error: (e: string)=> {
         Swal.fire({
@@ -94,33 +100,46 @@ export class DepartamentosComponent implements OnInit {
   }
 
   borrarDepartamento(id: number | undefined){
-    if(id){
-   this.superadService.deleteDepartamento(id)
-   .subscribe({
-    next: (res: Boolean)=>{
-      if(res){
-      Swal.fire({
-        icon: 'success',
-        title: 'Éxito',
-        text: 'El departamento ha sido borrado con éxito',
-      })  
-    }
-    else{
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'No se ha podido eliminar el departamento',
-      })
-    }
-    },
-    error(err) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: err,
-      })
-    },
-   })
-  }
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: "Los cambios no son reversibles",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Borrar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        if(id){
+          this.superadService.deleteDepartamento(id)
+          .subscribe({
+           next: (res: Boolean)=>{
+             if(res){
+             Swal.fire({
+               icon: 'success',
+               title: 'Éxito',
+               text: 'El departamento ha sido borrado con éxito',
+             })  
+           }
+           else{
+             Swal.fire({
+               icon: 'error',
+               title: 'Error',
+               text: 'No se ha podido eliminar el departamento',
+             })
+           }
+           },
+           error(err) {
+             Swal.fire({
+               icon: 'error',
+               title: 'Error',
+               text: 'Se ha producito en error al eliminar el departamento',
+             })
+           },
+          })
+         }
+      }
+    })
+    
   }
 }

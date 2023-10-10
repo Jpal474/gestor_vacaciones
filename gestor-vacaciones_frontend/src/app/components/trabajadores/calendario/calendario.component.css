@@ -4,3 +4,15 @@ full-calendar {
     width: 70vw;
     height: 90vh;
 }
+
+@media screen and (max-width: 500px) {
+    full-calendar {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 95vw;
+        margin-top: 20px;
+        font-size: small;
+    }
+}

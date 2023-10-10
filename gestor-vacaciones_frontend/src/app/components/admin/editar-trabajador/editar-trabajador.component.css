@@ -1,48 +1,3 @@
- /* .input-group label {
-    position: absolute;
-    top: 50%;
-    left: 1%;
-    transform: translateY(-50%);
-    font-size: 1em;
-    color: black;
-    font-weight: 500;
-    pointer-events: none;
-    transition: .5s;
-}
-
-.input-group input:focus~label,
-.input-group input:valid~label {
-    top: -5px;
-    background: white;
-    box-shadow: none;
-} */
- /* 
-.wrapper {
-    width: 600px;
-    height: 700px;
-    background: transparent;
-    border: 2px solid rgba(255, 255, 255, .5);
-    position: relative;
-    margin: -25px 0 0 -25px;
-    border-radius: 20px;
-    backdrop-filter: blur(20px);
-    box-shadow: 0 0 0 30px rgba(0, 0, 0, 0.5);
-    top: 30%;
-    left: 30%;
-  
-}
-
-.wrapper .form-box {
-    width: 100%;
-    padding: 40px;
-}
-
-.form-box h2 {
-    font-size: 2em;
-    color: white;
-    text-align: center;
-} */
- 
  .card {
      height: auto;
      width: 80vw;
@@ -128,4 +83,34 @@
      font-size: 1em;
      color: #fff;
      font-weight: 500;
+ }
+ 
+ .img-small {
+     width: 20px;
+     height: 20px;
+ }
+ 
+ @media screen and (max-width: 500px) {
+     .card {
+         width: 75vw;
+         left: 5%
+     }
+     .input-box {
+         position: relative;
+         width: 30%;
+         font-size: small;
+     }
+     .btn {
+         margin-top: 25px;
+     }
+     #fecha {
+         width: 60%;
+     }
+     #dias {
+         font-size: small;
+     }
+     .img-small {
+         width: 10px;
+         height: 10px;
+     }
  }

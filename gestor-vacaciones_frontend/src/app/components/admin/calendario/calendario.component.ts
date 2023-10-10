@@ -9,6 +9,7 @@ import { AdminService } from 'src/app/services/admin.service';
 import { FestivosService } from 'src/app/services/festivos.service';
 import * as moment from 'moment';
 import { Solicitud } from 'src/app/interfaces/solicitud.interface';
+import Swal from 'sweetalert2';
 
 
 
@@ -54,7 +55,26 @@ export class CalendarioComponent {
         }
       },
       error: (err) => {
-
+        const cadena:string = 'unknown error'
+        if(cadena.includes(err)){
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Ha habido un error al completar la solicitud',
+          })
+        }
+        else if('unauthorized'.includes(err)){
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Debe iniciar sesión para completar la acción',
+          })
+        }
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: err,
+        })
       },
       complete: () => {
         this.adminService.getSolicitudesAprobadas()
@@ -72,7 +92,29 @@ export class CalendarioComponent {
             events: events
           }
 
+          },
+          error: (err)=> {
+            const cadena:string = 'unknown error'
+          if(cadena.includes(err)){
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Ha habido un error al completar la solicitud',
+            })
           }
+          else if('unauthorized'.includes(err)){
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Debe iniciar sesión para completar la acción',
+            })
+          }
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: err,
+          })
+          },
         })
       }
     })

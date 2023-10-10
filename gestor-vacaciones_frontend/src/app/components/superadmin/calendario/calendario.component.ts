@@ -29,8 +29,7 @@ export class CalendarioComponent {
     events: [],
     eventClick: function(info) {
       alert('Event: ' + info.event.title);
-      alert('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
-      alert('View: ' + info.view.type);
+      alert('Fecha: ' + info.event.start + ',' + info.jsEvent.pageY);
     }
   };
 
@@ -40,6 +39,7 @@ export class CalendarioComponent {
 
   ngOnInit(): void {
     let events:any;
+    const año = new Date().getFullYear()
     this.festivosService.getDiasFeriados().
     subscribe({
       next: (res: DiasFeriados[]) => {
@@ -59,7 +59,7 @@ export class CalendarioComponent {
           next: (res: Solicitud[])=> {
            events = [
             ...events,
-           ...res.map( event => ({title: `Vacaciones ${event.empleado.nombre}`, start: moment(event.fecha_inicio, 'DD/MM/YYYY').format('YYYY-MM-DD'), end: moment( event.fecha_fin, 'DD/MM/YYYYY').format('YYYY-MM-DD'), backgroundColor:'#378006'})),
+           ...res.map( event => ({title: `Vacaciones ${event.empleado.nombre}`, start: moment(event.fecha_inicio, 'YYYY-MM-DD').format('YYYY-MM-DD'), end: moment( event.fecha_fin, 'YYYY-MM-DD').format('YYYY-MM-DD'), backgroundColor:'#378006'})),
             ]; 
             console.log(events);
             

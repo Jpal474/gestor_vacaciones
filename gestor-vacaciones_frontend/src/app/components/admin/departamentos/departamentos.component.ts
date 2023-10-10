@@ -10,6 +10,8 @@ import Swal from 'sweetalert2';
   styleUrls: ['./departamentos.component.css'],
 })
 export class DepartamentosComponent implements OnInit{
+  paginas = 0;
+  paginasArray: number[]=[];
   departamentos: Departamento[] = [];
   departamento: Departamento = {
     nombre: '',
@@ -24,14 +26,16 @@ export class DepartamentosComponent implements OnInit{
 constructor(private adminService: AdminService) {}
 
  ngOnInit(): void {
-  this.getDepartamentos();
+  this.getDepartamentos(1);
  }
 
- getDepartamentos(){
-  this.adminService.getDepartamentos()
+ getDepartamentos(page: number){
+  this.adminService.getDepartamentos(5, page)
   .subscribe({
-    next: (res:Departamento[])=> {
-      this.departamentos=res        
+    next: (res:{ departamentos: Departamento[], pages:number})=> {
+      this.departamentos=res.departamentos;   
+      this.paginas = res.pages;
+        this.paginasArray = Array.from({ length: this.paginas }, (_, index) => index + 1);     
     },
     error: (e: string)=> {
       Swal.fire({
@@ -92,34 +96,51 @@ constructor(private adminService: AdminService) {}
 }}
 
 borrarDepartamento(id: number | undefined){
-  if(id){
- this.adminService.deleteDepartamento(id)
- .subscribe({
-  next: (res: Boolean)=>{
-    if(res){
-    Swal.fire({
-      icon: 'success',
-      title: 'Éxito',
-      text: 'El departamento ha sido borrado con éxito',
-    })  
-  }
-  else{
-    Swal.fire({
-      icon: 'error',
-      title: 'Error',
-      text: 'No se ha podido eliminar el departamento',
-    })
-  }
-  },
-  error: (err)=> {
-    Swal.fire({
-      icon: 'error',
-      title: 'Error',
-      text: err,
-    })
-  },
- })
-}
+  Swal.fire({
+    title: 'Are you sure?',
+    text: "You won't be able to revert this!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, delete it!'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      if(id){
+        this.adminService.deleteDepartamento(id)
+        .subscribe({
+         next: (res: Boolean)=>{
+           if(res){
+           Swal.fire({
+             icon: 'success',
+             title: 'Éxito',
+             text: 'El departamento ha sido borrado con éxito',
+           }),
+           setTimeout(function(){
+            window.location.reload();
+         }, 2000); //recargo la página después de 2 segundos
+         }
+         else{
+           Swal.fire({
+             icon: 'error',
+             title: 'Error',
+             text: 'No se ha podido eliminar el departamento',
+           })
+         }
+         },
+         error: (err)=> {
+           Swal.fire({
+             icon: 'error',
+             title: 'Error',
+             text: 'No se ha podido eliminar el departamento',
+           }), 
+           console.log(err);
+           
+         },
+        })
+       }
+    }
+  })
 }
 
 }

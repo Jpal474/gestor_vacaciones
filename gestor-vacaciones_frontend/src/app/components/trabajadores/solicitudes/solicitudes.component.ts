@@ -12,6 +12,9 @@ import Swal from 'sweetalert2';
 })
 export class SolicitudesComponent implements OnInit {
   solicitudes: SolicitudEmpleado[] = [] 
+  empleado_id='';
+  paginas = 0;
+  paginasArray: number[]=[];
 
   constructor(private trabajadorService: TrabajadoresService) {}
 
@@ -24,11 +27,14 @@ export class SolicitudesComponent implements OnInit {
       .subscribe({
         next: (res: Empleado)=> {
           if(res.id){
+            this.empleado_id=res.id;
             console.log(res);
-           this.trabajadorService.getSolicitudes(res.id)
+           this.trabajadorService.getSolicitudes(res.id, 5,1)
            .subscribe({
-              next: (res: Solicitud[])=> {
-                this.solicitudes = res;
+              next: (res: { solicitudes: Solicitud[]; pages: number })=> {
+                this.solicitudes = res.solicitudes;
+                this.paginas = res.pages;
+                this.paginasArray = Array.from({ length: this.paginas }, (_, index) => index + 1);  
               if(!(this.solicitudes)){
                 Swal.fire({
                   icon: 'warning',
@@ -46,6 +52,25 @@ export class SolicitudesComponent implements OnInit {
       })
     }
     
+  }
+
+  getSolicitudes(pagina:number){
+    this.trabajadorService.getSolicitudes(this.empleado_id, 5,pagina)
+           .subscribe({
+              next: (res: { solicitudes: Solicitud[]; pages: number })=> {
+                this.solicitudes = res.solicitudes;
+                this.paginas = res.pages;
+                this.paginasArray = Array.from({ length: this.paginas }, (_, index) => index + 1);  
+              if(!(this.solicitudes)){
+                Swal.fire({
+                  icon: 'warning',
+                  title: 'No Hay Solicitudes Por Mostrar',
+                }) 
+
+              }
+                
+              }
+           })
   }
 
 }

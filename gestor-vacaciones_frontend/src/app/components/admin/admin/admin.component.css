@@ -1,4 +1,5 @@
 .home {
     height: 100vh;
     background-image: url(../../../../assets/recursos/imagenes/general/login/fondo-app.jpg);
+    overflow-x: hidden;
 }

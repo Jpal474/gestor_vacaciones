@@ -17,7 +17,6 @@ import { CuentaComponent } from './components/admin/cuenta/cuenta.component';
 @NgModule({
   declarations: [
     AppComponent,
-    CuentaComponent,
   ],
   imports: [
     BrowserModule,

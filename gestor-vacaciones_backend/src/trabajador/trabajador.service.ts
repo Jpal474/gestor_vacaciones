@@ -14,15 +14,26 @@ export class TrabajadorService {
     private empleadoRepository: Repository<Empleado>,
   ) {}
 
-  async getTrabajadores(nombre: string): Promise<Empleado[]> {
+  async getTrabajadores(
+    nombre: string,
+    pageSize: number,
+    pageNumber: number,
+  ): Promise<{ trabajadores: Empleado[]; pages: number }> {
     try {
-      return await this.empleadoRepository
+      const all_trabajadores = await this.empleadoRepository
         .createQueryBuilder('empleado')
         .leftJoinAndSelect('empleado.usuario', 'usuario')
         .leftJoinAndSelect('usuario.rol', 'rol')
         .leftJoinAndSelect('empleado.departamento', 'departamento') // Add this line
         .where('rol.nombre = :nombre', { nombre })
         .getMany();
+
+      const pages = Math.ceil(all_trabajadores.length / pageSize);
+      const trabajadores = all_trabajadores.slice(
+        (pageNumber - 1) * pageSize,
+        pageNumber * pageSize,
+      );
+      return { trabajadores, pages };
     } catch (error) {
       console.log(error);
     }

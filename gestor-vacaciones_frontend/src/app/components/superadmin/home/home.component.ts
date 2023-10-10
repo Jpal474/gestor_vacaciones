@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import * as moment from 'moment';
 import { SuperadService } from 'src/app/services/superad.service';
 import Swal from 'sweetalert2';
 
@@ -16,11 +17,14 @@ ngOnInit(): void {
   .subscribe({
     next: (res: Number)=> {
       this.numero_solicitudes=res;
+      this.generarSaldoVacacional();
     }
   })
 }
 
 async generarSaldoVacacional(){
+  const hoy = moment( new Date(), 'YYYY-MM-DD')
+  if(hoy.month() === 12 && hoy.date() >=15){
   this.superadService.generarSaldos()
   .subscribe({
     next: (res)=>{
@@ -33,4 +37,5 @@ async generarSaldoVacacional(){
     }
   })
 }
+}//fin de la funcion
 }

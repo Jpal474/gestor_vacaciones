@@ -7,6 +7,8 @@ import { FooterComponent } from './shared/footer/footer.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
+import { RecuperarContraseniaComponent } from './recuperar-contrasenia/recuperar-contrasenia.component';
+import { ActualizarContraseniaComponent } from './actualizar-contrasenia/actualizar-contrasenia.component';
 
 
 
@@ -17,6 +19,8 @@ import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
     HeaderComponent,
     FooterComponent,
     PagenotfoundComponent,
+    RecuperarContraseniaComponent,
+    ActualizarContraseniaComponent,
   ],
   imports: [
     CommonModule,

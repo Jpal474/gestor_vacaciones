@@ -14,7 +14,7 @@ import { SaldoActualizado } from 'src/app/interfaces/actualizar_saldo-vacacional
 import { SaldoVacacional } from 'src/app/interfaces/saldo_vacacional.interface';
 import { EmailObservacion } from 'src/app/interfaces/email_observacion.interface';
 import { Canvas, Img, Line, PdfMakeWrapper, Txt } from 'pdfmake-wrapper';
-import * as pdfFonts from "pdfmake/build/vfs_fonts"; // fonts provided for pdfmake
+import * as pdfFonts from 'pdfmake/build/vfs_fonts'; // fonts provided for pdfmake
 
 @Component({
   selector: 'app-ver-solicitud',
@@ -23,21 +23,21 @@ import * as pdfFonts from "pdfmake/build/vfs_fonts"; // fonts provided for pdfma
 })
 export class VerSolicitudComponent {
   dias: Number[] = [];
-  dias2: Number[]=[];
-  band: boolean=false;
+  dias2: Number[] = [];
+  band: boolean = false;
   band_anio: boolean = false;
-  nombre_rechazar:RechazarSolicitud = {
+  nombre_rechazar: RechazarSolicitud = {
     nombre: '',
-  }
-  nombre_aceptar: AprobarSolicitud={
+  };
+  nombre_aceptar: AprobarSolicitud = {
     nombre: '',
-  }
-  fechas={
+  };
+  fechas = {
     mes: '',
-    mes2:'',
+    mes2: '',
     anio: '',
-    anio2:'',
-  }
+    anio2: '',
+  };
   solicitud: Solicitud = {
     id: 0,
     fecha_inicio: '',
@@ -63,19 +63,19 @@ export class VerSolicitudComponent {
       },
     },
   };
-  saldo_vacacional: SaldoActualizado={
+  saldo_vacacional: SaldoActualizado = {
     dias_disponibles: 0,
     dias_tomados: 0,
-  }
-  email : EmailObservacion={
+  };
+  email: EmailObservacion = {
     destinatario: '',
     mensaje: '',
-  }
+  };
 
   constructor(
     private superadService: SuperadService,
     private activadedRoute: ActivatedRoute,
-    private router: Router,
+    private router: Router
   ) {}
   ngOnInit(): void {
     const params = this.activadedRoute.snapshot.params;
@@ -85,101 +85,95 @@ export class VerSolicitudComponent {
           this.solicitud = res;
           console.log(this.solicitud);
           this.getDias(this.solicitud.fecha_inicio, this.solicitud.fecha_fin);
-          this.generarPDF();
-          
         },
       });
     }
   }
 
-  getDias(fecha_inicio: string, fecha_fin: string) { 
+  getDias(fecha_inicio: string, fecha_fin: string) {
     console.log('---------');
-       
+
     const fechaInicio = moment(fecha_inicio, 'YYYY-MM-DD');
     const fechaFinal = moment(fecha_fin, 'YYYY-MM-DD');
     console.log(fechaInicio, 'inicio');
     console.log(fechaFinal, 'final');
     const anio = fechaInicio.year();
     const anio2 = fechaFinal.year();
-    
-    
+
     let fecha_actual = fechaInicio.clone();
-    let i= 0;
-    while (fecha_actual.isSameOrBefore(fechaFinal, 'day')) {      
+    let i = 0;
+    while (fecha_actual.isSameOrBefore(fechaFinal, 'day')) {
       // Verificar si el día actual no es sábado (6) ni domingo (0)
       console.log(i);
       if (fecha_actual.day() !== 6 && fecha_actual.day() !== 0) {
-        
-        if(i<0){
-        this.dias.push(fecha_actual.date());
-        console.log('entra al while');
-        }
-      else{
-        if(fecha_actual.date() == 1){
-          this.dias2.push(fecha_actual.date())
-          this.band = true;
-        }
-        else if (!this.band) {
-            this.dias.push(fecha_actual.date())
-        }
-        else{
-          this.dias2.push(fecha_actual.date())
+        if (i < 0) {
+          this.dias.push(fecha_actual.date());
+          console.log('entra al while');
+        } else {
+          if (
+            fecha_actual.date() == 1 &&
+            (fechaInicio.month() < fechaFinal.month() ||
+              (fecha_actual.date() == 2 &&
+                fechaInicio.month() < fechaFinal.month()))
+          ) {
+            this.dias2.push(fecha_actual.date());
+            this.band = true;
+          } else if (!this.band) {
+            this.dias.push(fecha_actual.date());
+          } else {
+            this.dias2.push(fecha_actual.date());
+          }
         }
       }
-      }
-      i+=1;
+      i += 1;
       // Avanzar al siguiente día
       console.log('salida de while');
-      
+
       fecha_actual.add(1, 'day');
     }
-    i=0;
-    if(anio < anio2){ //si anio2 es mayor a anio, significa que habrá 2 nios
-      this.band_anio= true;
+    i = 0;
+    if (anio < anio2) {
+      //si anio2 es mayor a anio, significa que habrá 2 nios
+      this.band_anio = true;
       console.log(fechaInicio);
       console.log(fechaFinal);
       console.log('------');
-    
-       this.fechas.anio = anio.toString();
-       this.fechas.anio2 = anio2.toString();
-       const DATEMOMENT = moment(fechaInicio, 'YYYY-MM-DD').format('MMMM')
-       const DATEMOMENT2 = moment(fechaFinal, 'YYYY-MM-DD').format('MMMM');
-       console.log('traducir mes');
-       
-       this.fechas.mes = this.traducirMes(DATEMOMENT);
-       this.fechas.mes2 = this.traducirMes(DATEMOMENT2);
-    }
-    else if (this.band){
-      console.log('traducir mes2');
-      this.fechas.anio = anio.toString()
-      const DATEMOMENT = moment(fechaInicio, 'YYYY-MM-DD').format('MMMM')
+
+      this.fechas.anio = anio.toString();
+      this.fechas.anio2 = anio2.toString();
+      const DATEMOMENT = moment(fechaInicio, 'YYYY-MM-DD').format('MMMM');
+      const DATEMOMENT2 = moment(fechaFinal, 'YYYY-MM-DD').format('MMMM');
+      console.log('traducir mes');
+
       this.fechas.mes = this.traducirMes(DATEMOMENT);
-      const DATEMOMENT2 = moment(fechaInicio, 'YYYY-MM-DD').format('MMMM')
       this.fechas.mes2 = this.traducirMes(DATEMOMENT2);
-    }
-    else{
+    } else if (this.band) {
+      console.log('traducir mes2');
+      this.fechas.anio = anio.toString();
+      const DATEMOMENT = moment(fechaInicio, 'YYYY-MM-DD').format('MMMM');
+      this.fechas.mes = this.traducirMes(DATEMOMENT);
+      const DATEMOMENT2 = moment(fechaInicio, 'YYYY-MM-DD').format('MMMM');
+      this.fechas.mes2 = this.traducirMes(DATEMOMENT2);
+    } else {
       console.log('traducir mes3');
       this.fechas.anio = anio.toString();
-      const DATEMOMENT = moment(fechaInicio, 'YYYY-MM-DD').format('MMMM')
+      const DATEMOMENT = moment(fechaInicio, 'YYYY-MM-DD').format('MMMM');
       this.fechas.mes = this.traducirMes(DATEMOMENT);
     }
     console.log(this.fechas, 'fechas');
     console.log(this.dias, 'dias');
     console.log(this.dias2);
-    
-    
-    
   }
 
-  traducirMes(mes: string): string{
-     let mes_español='';
-    switch(mes){
-      case 'January': 
-      mes_español = 'Enero';
-      break;
-      case 'February': 
-      mes_español = 'Febrero';
-      break;
+  traducirMes(mes: string): string {
+    let mes_español = '';
+    switch (mes) {
+      case 'January':
+        mes_español = 'Enero';
+        break;
+      case 'February':
+        mes_español = 'Febrero';
+        break;
       case 'March':
         mes_español = 'Marzo';
         break;
@@ -189,33 +183,32 @@ export class VerSolicitudComponent {
       case 'May':
         mes_español = 'Mayo';
         break;
-       case 'June':
+      case 'June':
         mes_español = 'Junio';
         break;
-       case 'July':
+      case 'July':
         mes_español = 'Julio';
         break;
-        case 'August':
-          mes_español = 'Agosto';
-          break;
-        case 'September':
-          mes_español = 'Septiembre';
-          break;
-        case 'October':
-          mes_español = 'Octubre';
-          break;
-        case 'November':
-          mes_español = 'Noviembre';
-          break;
-        case 'December':
-          mes_español = 'Diciembre' ;
-          break;
-        default:
-          console.log('Opcion No Reconocida');
-          break;
-          
+      case 'August':
+        mes_español = 'Agosto';
+        break;
+      case 'September':
+        mes_español = 'Septiembre';
+        break;
+      case 'October':
+        mes_español = 'Octubre';
+        break;
+      case 'November':
+        mes_español = 'Noviembre';
+        break;
+      case 'December':
+        mes_español = 'Diciembre';
+        break;
+      default:
+        console.log('Opcion No Reconocida');
+        break;
     }
-    return mes_español
+    return mes_español;
   }
 
   async enviarMail() {
@@ -229,263 +222,311 @@ export class VerSolicitudComponent {
       showCancelButton: true,
     });
 
-    if (text) {
-      let correo = this.solicitud.empleado.id!;
+    if (text && text.length < 250) {
+      let correo = this.solicitud.empleado.usuario.correo!;
       this.email = {
-        destinatario: 'lovad28459@apxby.com',
+        destinatario: correo,
         mensaje: text,
       };
-      this.superadService.enviarMailObservaciones(this.email)
-      .subscribe({
-        next:(res: boolean)=> {
+      this.superadService.enviarMailObservaciones(this.email).subscribe({
+        next: (res: boolean) => {
           Swal.fire({
             position: 'top-end',
             icon: 'success',
             title: 'Las observaciones han sido enviadas',
             showConfirmButton: false,
-            timer: 2000
-          })
+            timer: 2000,
+          });
         },
-        error: (err)=> {
+        error: (err) => {
           Swal.fire({
             icon: 'error',
             title: 'Error',
             text: err,
-          })
-        }
-      })
-    }
-    else{
-      console.log('sin texto');
-      
+          });
+        },
+      });
+    } else if (text.length > 250) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'El máximo de caracteres debe ser menor a 250',
+      });
     }
   }
 
-  rechazarSolicitud(){
+  rechazarSolicitud() {
     let nombre_usuario = JSON.parse(atob(localStorage.getItem('usuario')!));
-    if(nombre_usuario && this.solicitud.id)
-    this.nombre_rechazar.nombre = nombre_usuario
-    this.superadService.rechazarSolicitud(this.nombre_rechazar, this.solicitud.id!)
-    .subscribe({
-      next: (res: boolean)=> {
-          if(res){
+    if (nombre_usuario && this.solicitud.id)
+      this.nombre_rechazar.nombre = nombre_usuario;
+    this.superadService
+      .rechazarSolicitud(this.nombre_rechazar, this.solicitud.id!)
+      .subscribe({
+        next: (res: boolean) => {
+          if (res) {
             Swal.fire({
               icon: 'success',
               title: 'Éxito',
               text: 'La solicitud ha sido rechaza!',
-            })
-            this.superadService.enviarMailRechazada()
-            .subscribe({
-              next: (res: boolean)=>{
-                if(res){
-                  this.router.navigate([`/super/home`]);
-                }
-              }
-            })
-
-          }
-          else{
+            });
+            this.superadService
+              .enviarMailRechazada(this.solicitud.empleado.usuario.correo)
+              .subscribe({
+                next: (res: boolean) => {
+                  if (res) {
+                    this.router.navigate([`/super/home`]);
+                  }
+                },
+              });
+          } else {
             Swal.fire({
               icon: 'error',
               title: 'Error',
               text: 'No se ha podido rechazar la solicitud',
-            }) 
+            });
           }
-      },
-      error: (err)=> {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: err,
-        }) 
-      }
-    })
+        },
+        error: (err) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: err,
+          });
+        },
+      });
   }
 
-  aprobarSolicitud(){
+  aprobarSolicitud() {
     let nombre_usuario = JSON.parse(atob(localStorage.getItem('usuario')!));
-    if(nombre_usuario && this.solicitud.id)
-    this.nombre_aceptar.nombre = nombre_usuario
-    return this.superadService.aprobarSolicitud(this.nombre_aceptar, this.solicitud.id!)
-    .subscribe({
-      next: (res: boolean)=> {
-          if(res){
+    if (nombre_usuario && this.solicitud.id)
+      this.nombre_aceptar.nombre = nombre_usuario;
+    return this.superadService
+      .aprobarSolicitud(this.nombre_aceptar, this.solicitud.id!)
+      .subscribe({
+        next: (res: boolean) => {
+          if (res) {
             Swal.fire({
               icon: 'success',
               title: 'Éxito',
               text: 'La solicitud ha sido aprobada!',
-            })
-            this.obtenerSaldoVacacional(); 
-          }
-          else{
+            });
+            this.obtenerSaldoVacacional();
+            this.generarPDF();
+          } else {
             Swal.fire({
               icon: 'error',
               title: 'Error',
               text: 'No se ha podido aprobar la solicitud',
-            }) 
+            });
           }
-      },
-      error: (err)=> {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: err,
-        }) 
-      }
-    })
+        },
+        error: (err) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: err,
+          });
+        },
+      });
   }
 
-
-actualizarSaldoVacacional(año: number){
-  this.saldo_vacacional.dias_tomados += this.dias.length + this.dias2.length;
-  console.log(this.saldo_vacacional.dias_tomados);
-  this.saldo_vacacional.dias_disponibles = this.saldo_vacacional.dias_disponibles - (this.dias.length + this.dias2.length)
- console.log(this.saldo_vacacional.dias_disponibles);
-  this.superadService.updateSaldoVacacional(this.solicitud.empleado.id!,año, this.saldo_vacacional)
-  .subscribe({
-    next: (res: SaldoVacacional)=> {
-      if(res){
-      this.superadService.enviarMailAprobada()
-      .subscribe({
-        next: (res: boolean)=> {
-          if(res){
-            this.router.navigate([`/super/home`]);
-          }
+  getEmpleadosVacaciones() {
+    this.superadService.getEmpleadosVacaciones().subscribe({
+      next: (res: boolean) => {
+        if (res) {
+          Swal.fire({
+            title: 'El 30% o más de los empleados se encuentran de vacaciones!',
+            text: '¿Estás Seguro de Aprobar Esta Solicitud',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Aprobar',
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.aprobarSolicitud();
+            }
+          });
+        } else {
+          this.aprobarSolicitud();
         }
-      })
-    }
-    },
-    error(err) {
-      console.log(err);
-      
-    },
-  })
-}
+      },
+    });
+  }
 
-obtenerSaldoVacacional(){
-  const año = new Date().getFullYear()
-  this.superadService.getSaldoByEmpleadoId(this.solicitud.empleado.id!,año)
-  .subscribe({
-    next: (res: SaldoVacacional)=> {
-      if(res){
-        this.saldo_vacacional.dias_disponibles = res.dias_disponibles;
-        this.saldo_vacacional.dias_tomados = res.dias_tomados;
-        this.actualizarSaldoVacacional(año);
-      }
-    }
-  })
-}
+  actualizarSaldoVacacional(año: number) {
+    this.saldo_vacacional.dias_tomados += this.dias.length + this.dias2.length;
+    console.log(this.saldo_vacacional.dias_tomados);
+    this.saldo_vacacional.dias_disponibles =
+      this.saldo_vacacional.dias_disponibles -
+      (this.dias.length + this.dias2.length);
+    console.log(this.saldo_vacacional.dias_disponibles);
+    this.superadService
+      .updateSaldoVacacional(
+        this.solicitud.empleado.id!,
+        año,
+        this.saldo_vacacional
+      )
+      .subscribe({
+        next: (res: SaldoVacacional) => {
+          if (res) {
+            this.superadService
+              .enviarMailAprobada(this.solicitud.empleado.usuario.correo)
+              .subscribe({
+                next: (res: boolean) => {
+                  if (res) {
+                    this.router.navigate([`/super/home`]);
+                  }
+                },
+              });
+          }
+        },
+        error(err) {
+          console.log(err);
+        },
+      });
+  }
 
-async generarPDF(){
-  const fecha = moment(new Date(), 'YYYY-MM-DD');
-  let dia = fecha.date()
-  const mes = moment(fecha, 'YYYY-MM-DD').format('MMMM')
-  const mes_español = this.traducirMes(mes);
-  const año = fecha.year()
-  const total_dias = this.dias.length + this.dias2.length;
-  const mes1 = this.traducirMes(moment(this.solicitud.fecha_inicio, 'YYYY-MM-DD').format('MMMM'))
-  const mes2 = this.traducirMes(moment(this.solicitud.fecha_fin, 'YYYY-MM-DD').format('MMMM'))
+  obtenerSaldoVacacional() {
+    const año = new Date().getFullYear();
+    this.superadService
+      .getSaldoByEmpleadoId(this.solicitud.empleado.id!, año)
+      .subscribe({
+        next: (res: SaldoVacacional) => {
+          if (res) {
+            this.saldo_vacacional.dias_disponibles = res.dias_disponibles;
+            this.saldo_vacacional.dias_tomados = res.dias_tomados;
+            this.actualizarSaldoVacacional(año);
+          }
+        },
+      });
+  }
 
-  const img = await new Img('../../../../assets/recursos/imagenes/general/logo_innmortal.png')
-  .width(500)
-  .height(100)
-  .absolutePosition(40, -10)
-  .build();
-  const img2 = await new Img('../../../../assets/recursos/imagenes/general/footer_innmortal.png')
-  .width(600)
-  .height(100)
-  .absolutePosition(0, -90)
-  .build();
-  
-  
-// If any issue using previous fonts import. you can try this:
-// import pdfFonts from "pdfmake/build/vfs_fonts";
+  async generarPDF() {
+    const fecha = moment(new Date(), 'YYYY-MM-DD');
+    let dia = fecha.date();
+    const mes = moment(fecha, 'YYYY-MM-DD').format('MMMM');
+    const mes_español = this.traducirMes(mes);
+    const año = fecha.year();
+    const total_dias = this.dias.length + this.dias2.length;
+    const mes1 = this.traducirMes(
+      moment(this.solicitud.fecha_inicio, 'YYYY-MM-DD').format('MMMM')
+    );
+    const mes2 = this.traducirMes(
+      moment(this.solicitud.fecha_fin, 'YYYY-MM-DD').format('MMMM')
+    );
 
-// Set the fonts to use
-PdfMakeWrapper.setFonts(pdfFonts);
+    const img = await new Img(
+      '../../../../assets/recursos/imagenes/general/logo_innmortal.png'
+    )
+      .width(500)
+      .height(100)
+      .absolutePosition(40, -10)
+      .build();
+    const img2 = await new Img(
+      '../../../../assets/recursos/imagenes/general/footer_innmortal.png'
+    )
+      .width(600)
+      .height(100)
+      .absolutePosition(0, -90)
+      .build();
 
-const pdf = new PdfMakeWrapper();
+    // If any issue using previous fonts import. you can try this:
+    // import pdfFonts from "pdfmake/build/vfs_fonts";
 
-pdf.info({
-title: `Solicitud Vacaciones ${this.solicitud.empleado.nombre} ${this.solicitud.empleado.apellidos}`,
-author: 'INNMORTAL',
-})
-pdf.pageMargins([ 40, 140, 40, 0 ]);
-pdf.header(img);
-pdf.add(  
-new Txt(`Morelia, Michoacán ${dia} de ${mes_español} del año ${año}` ).bold().alignment("right").end,
-);
-pdf.add(
-new Txt('Solicitud de Vacaciones').bold().alignment('left').margin([40, 40]).end,
-)
-pdf.add(
-new Txt('LCDE. Heriberto Padilla Ibarra, Director General').end
-)
-pdf.add(
-new Txt('M. en A. Iván Padilla Ibarra, Director de Operaciones \n\n\n').end
-)
-pdf.add(
-new Txt('Sirva la presente para saludarles y solicitarles la autorización de mis vacaciones.').alignment('justify').margin([0, 0, 0, 12]).end
-)
-pdf.add(
-new Txt([
-  new Txt(`En la medida de lo posible dese disfrutar de un periodo vacacional correspondiente a `).end,
-  new Txt(`${total_dias} días`).bold().end,
-  new Txt(` comprendidos entre el `).end,
-  new Txt(` ${moment(this.solicitud.fecha_inicio).date()} de ${mes1} del ${año}`).bold().end,
-  ' al ',
-  new Txt(`${moment(this.solicitud.fecha_fin).date()} de ${mes2} del ${año}.`).bold().end
-]).alignment('justify').margin([0, 0, 0, 12]).end
-)
+    // Set the fonts to use
+    PdfMakeWrapper.setFonts(pdfFonts);
 
-pdf.add(
-new Txt('Por ello, me gustaría saber si es conveniente estas fechas al cronograma de actividades de la empresa.').alignment('justify').margin([0, 0, 0, 12]).end
-)
+    const pdf = new PdfMakeWrapper();
 
-pdf.add(
-new Txt('Esperando pronta y satisfactoria respuesta, sin más que agregar.').margin([0, 0, 0, 12]).alignment('justify').end
-)
+    pdf.info({
+      title: `Solicitud Vacaciones ${this.solicitud.empleado.nombre} ${this.solicitud.empleado.apellidos}`,
+      author: 'INNMORTAL',
+    });
+    pdf.pageMargins([40, 140, 40, 0]);
+    pdf.header(img);
+    pdf.add(
+      new Txt(`Morelia, Michoacán ${dia} de ${mes_español} del año ${año}`)
+        .bold()
+        .alignment('right').end
+    );
+    pdf.add(
+      new Txt('Solicitud de Vacaciones')
+        .bold()
+        .alignment('left')
+        .margin([40, 40]).end
+    );
+    pdf.add(new Txt('LCDE. Heriberto Padilla Ibarra, Director General').end);
+    pdf.add(
+      new Txt('M. en A. Iván Padilla Ibarra, Director de Operaciones \n\n\n')
+        .end
+    );
+    pdf.add(
+      new Txt(
+        'Sirva la presente para saludarles y solicitarles la autorización de mis vacaciones.'
+      )
+        .alignment('justify')
+        .margin([0, 0, 0, 12]).end
+    );
+    pdf.add(
+      new Txt([
+        new Txt(
+          `En la medida de lo posible dese disfrutar de un periodo vacacional correspondiente a `
+        ).end,
+        new Txt(`${total_dias} días`).bold().end,
+        new Txt(` comprendidos entre el `).end,
+        new Txt(
+          ` ${moment(this.solicitud.fecha_inicio).date()} de ${mes1} del ${año}`
+        ).bold().end,
+        ' al ',
+        new Txt(
+          `${moment(this.solicitud.fecha_fin).date()} de ${mes2} del ${año}.`
+        ).bold().end,
+      ])
+        .alignment('justify')
+        .margin([0, 0, 0, 12]).end
+    );
 
-pdf.add(
-new Txt('Atentamente,').margin([0, 0, 0, 12]).margin(5).end
-)
+    pdf.add(
+      new Txt(
+        'Por ello, me gustaría saber si es conveniente estas fechas al cronograma de actividades de la empresa.'
+      )
+        .alignment('justify')
+        .margin([0, 0, 0, 12]).end
+    );
 
-pdf.add(
-new Txt(`${this.solicitud.empleado.nombre} ${ this.solicitud.empleado.apellidos}`).margin(5).alignment('center').end
-)
+    pdf.add(
+      new Txt(
+        'Esperando pronta y satisfactoria respuesta, sin más que agregar.'
+      )
+        .margin([0, 0, 0, 12])
+        .alignment('justify').end
+    );
 
-pdf.add(
-new Canvas([
-  new Line([0, 100], [140, 100]).end,
-]).end
-)
+    pdf.add(new Txt('Atentamente,').margin([0, 0, 0, 12]).margin(5).end);
 
-pdf.add(
-new Txt('Heriberto Padilla Ibarra \n').end
-)
+    pdf.add(
+      new Txt(
+        `${this.solicitud.empleado.nombre} ${this.solicitud.empleado.apellidos}`
+      )
+        .margin(5)
+        .alignment('center').end
+    );
 
-pdf.add(
-new Txt('Director General').end
-)
+    pdf.add(new Canvas([new Line([0, 100], [140, 100]).end]).end);
 
-pdf.add(
-new Canvas([
-  new Line([310, -28], [450, -28]).end,
-]).end
-)
+    pdf.add(new Txt('Heriberto Padilla Ibarra \n').end);
 
-pdf.add(
-new Txt('Iván Padilla Ibarra').absolutePosition(350, 585).end
-)
+    pdf.add(new Txt('Director General').end);
 
-pdf.add(
-new Txt('Director de Operaciones').absolutePosition(350, 600).end
-)
+    pdf.add(new Canvas([new Line([310, -28], [450, -28]).end]).end);
 
-pdf.footer(img2)
+    pdf.add(new Txt('Iván Padilla Ibarra').absolutePosition(350, 585).end);
 
+    pdf.add(new Txt('Director de Operaciones').absolutePosition(350, 600).end);
 
+    pdf.footer(img2);
 
-pdf.create().open();
-}
+    pdf.create().open();
+  }
 }

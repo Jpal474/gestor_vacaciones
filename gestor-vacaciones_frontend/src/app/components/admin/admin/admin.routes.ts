@@ -11,6 +11,7 @@ import { MisSolicitudesComponent } from '../mis-solicitudes/mis-solicitudes.comp
 import { CrearSolicitudComponent } from '../crear-solicitud/crear-solicitud.component';
 import { EditarSolicitudComponent } from '../editar-solicitud/editar-solicitud.component';
 import { VerMisolicitudComponent } from '../ver-misolicitud/ver-misolicitud.component';
+import { CuentaComponent } from '../cuenta/cuenta.component';
 
 
 
@@ -27,6 +28,7 @@ export const ADMIN_ROUTES: Routes = [
     {path: 'crear_solicitud', component: CrearSolicitudComponent},
     {path: 'editar_solicitud/:id', component: EditarSolicitudComponent},
     {path: 'calendario', component: CalendarioComponent},
+    {path: 'cuenta', component: CuentaComponent},
     {path:'**', pathMatch:'full', redirectTo:'pagenotfound'},
     //{ path: 'path/:routeParam', component: MyComponent },
     //{ path: 'staticPath', component: ... },

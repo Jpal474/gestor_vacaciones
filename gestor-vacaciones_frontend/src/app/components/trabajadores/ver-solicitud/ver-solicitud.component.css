@@ -6,14 +6,13 @@ section {
     border-radius: 24px;
     position: fixed;
     top: 164px;
-    left: 25%;
+    left: calc(50vw - (900px / 2));
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
 }
 
 @media screen and (max-width: 572px) {
     section {
         width: auto;
-        max-width: 100%;
         left: 0;
         top: 0;
         transform: none;
@@ -25,8 +24,8 @@ section {
 
 @media screen and (max-height: 742px) {
     section {
-        width: auto;
-        top: 0;
+        width: 65vw;
+        top: 40px;
         transform: none;
         -webkit-animation: none !important;
         animation: none !important;

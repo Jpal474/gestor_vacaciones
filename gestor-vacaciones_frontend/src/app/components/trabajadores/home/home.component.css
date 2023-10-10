@@ -1,14 +1,61 @@
 .home {
     height: 100vh;
-    background-image: url(../../../../assets/recursos/imagenes/general/login/fondo-app.jpg);
+    background-image: url(../../../../assets/recursos/imagenes/general/login/fondo_playa.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.row {
+    display: flex;
+    justify-content: center;
+    /* Horizontal centering */
+    align-items: center;
+    /* Vertical centering */
+    text-align: center;
+    background-color: transparent;
+    width: 70vw;
+    height: 35vh;
+    position: relative;
+    margin: -25px 0 0 -25px;
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    box-shadow: 0 50px 70px -20px rgba(0, 0, 0, 0.85);
 }
 
 .card {
     background-color: #27a082;
     color: white;
+    width: 9.5rem;
+    display: inline-block;
+    /* Make the card inline-block to center it */
+    padding: 10px;
+    /* Add padding or adjust as needed */
+    box-shadow: 0 50px 70px -20px rgba(0, 0, 0, 0.85);
 }
 
 .col img {
     width: 100px;
     height: 100px;
+}
+
+@media screen and (max-width:500px) {
+    .card {
+        margin-bottom: 10px
+    }
+}
+
+@media screen and (max-width:900px) and (min-width:501px) {
+    .card {
+        margin-bottom: 10px;
+        align-items: center;
+        position: relative;
+        left: 20%;
+    }
+}
+
+@media screen and (max-width:2500px) and (min-width:1400px) {
+    .card {
+        margin-bottom: 10px;
+        width: 13.5rem;
+    }
 }

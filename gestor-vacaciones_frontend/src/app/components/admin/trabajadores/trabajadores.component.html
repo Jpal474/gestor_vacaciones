@@ -1,8 +1,9 @@
 <app-navbar></app-navbar>
-<h1 class="text-center text-white mt-5"> Trabajadores </h1>
+<h1 class="text-center mt-5" style="color: #18020C;"> Trabajadores </h1>
 <div class="d-grid gap-2 col-6 mx-auto justify-content-md-end">
     <a class="btn btn-success text-white" [routerLink]="['/admin/agregar_trabajador']">AGREGAR TRABAJADOR</a>
 </div>
+<a class="text-white" [routerLink]="['/admin/home']"> <img src="../../../../assets/recursos/imagenes/general/regresar.svg" class="regresar"> Regresar</a>
 
 <div class="row justify-content-center mt-5">
     <div class="col">
@@ -16,6 +17,7 @@
                         <th class="th" scope="col">Correo</th>
                         <th class="th" scope="col">Genero</th>
                         <th class="th" scope="col">Nombre Usuario</th>
+                        <th class="th" scope="col">Estado</th>
                         <th class="th" scope="col">Acciones</th>
                     </tr>
                 </thead>
@@ -26,13 +28,26 @@
                         <td>{{trabajador.usuario.correo}}</td>
                         <td>{{trabajador.genero}}</td>
                         <td>{{trabajador.usuario.nombre_usuario}}</td>
+                        <td [ngStyle]="{'background-color': trabajador.estado === 'ACTIVO' ? 'green' : (trabajador.estado === 'DE VACACIONES' ? 'yellow' : 'red'), 'color': trabajador.estado === 'ACTIVO' ? 'white' : (trabajador.estado === 'DE VACACIONES' ? 'black' : 'white')}"
+                            style="font-size: 0.9rem;">{{trabajador.estado}}</td>
                         <td>
                             <a type="button" class="btn button text-white ms-4" [routerLink]="['/admin/editar_trabajador',trabajador.id]">Editar</a>
                             <a type="button" class="btn button-red text-white ms-4" (click)="eliminarTrabajador(trabajador.usuario.id)">Eliminar</a>
+                            <a type="button" class="btn button-red text-white ms-4" (click)="cambiarEstado(trabajador.id, trabajador.estado)">Cambiar Estado</a>
+
                         </td>
                     </tr>
                     <tr>
             </table>
         </div>
     </div>
+</div>
+
+<div class="d-flex justify-content-center">
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            <li class="page-item" *ngFor="let i of paginasArray"><a class="page-link" (click)="getTrabajadores(i)">{{i}}</a></li>
+
+        </ul>
+    </nav>
 </div>

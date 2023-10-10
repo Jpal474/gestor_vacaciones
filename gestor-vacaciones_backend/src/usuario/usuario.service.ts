@@ -1,6 +1,8 @@
 import {
   BadRequestException,
   ConflictException,
+  HttpException,
+  HttpStatus,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -55,6 +57,25 @@ export class UsuarioService {
   }
 
   async createEncargado(createUsuarioDto: CreateUsuarioDto): Promise<Usuario> {
+    const mail = await this.usuarioRepository.findOneBy({
+      correo: createUsuarioDto.correo,
+    });
+
+    const nom_usuario = await this.usuarioRepository.findOneBy({
+      nombre_usuario: createUsuarioDto.nombre_usuario,
+    });
+    if (mail) {
+      throw new HttpException(
+        'El correo ya se encuentra en uso',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    if (nom_usuario) {
+      throw new HttpException(
+        'El nombre de usuario ya se encuentra en uso',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(createUsuarioDto.contraseña, salt);
     createUsuarioDto.contraseña = hashedPassword;
@@ -81,7 +102,25 @@ export class UsuarioService {
     id: string,
   ): Promise<Usuario> {
     try {
+      const mail = await this.usuarioRepository.findOneBy({
+        correo: updateUsuarioDto.correo,
+      });
+      const nom_usuario = await this.usuarioRepository.findOneBy({
+        nombre_usuario: updateUsuarioDto.nombre_usuario,
+      });
       const usuario = await this.getUsuarioById(id);
+      if (mail.id !== usuario.id) {
+        throw new HttpException(
+          'El correo ya se encuentra en uso',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+      if (nom_usuario.id !== usuario.id) {
+        throw new HttpException(
+          'El correo ya se encuentra en uso',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
       if (updateUsuarioDto.contraseña) {
         const salt = await bcrypt.genSalt();
         const hashedPassword = await bcrypt.hash(

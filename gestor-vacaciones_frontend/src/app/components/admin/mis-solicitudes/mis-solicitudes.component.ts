@@ -13,6 +13,9 @@ import Swal from 'sweetalert2';
 export class MisSolicitudesComponent {
 
   solicitudes: SolicitudEmpleado[] = [] 
+  paginas = 0;
+  paginasArray: number[]=[]; 
+  empleado_id = '';
 
   constructor(private adminService: AdminService) {}
 
@@ -25,11 +28,14 @@ export class MisSolicitudesComponent {
       .subscribe({
         next: (res: Empleado)=> {
           if(res.id){
+            this.empleado_id = res.id;
             console.log(res);
-           this.adminService.getMisSolicitudes(res.id)
+           this.adminService.getMisSolicitudes(res.id, 5,1)
            .subscribe({
-              next: (res: Solicitud[])=> {
-                this.solicitudes = res;
+              next: (res: { solicitudes: Solicitud[]; pages: number })=> {
+                this.solicitudes = res.solicitudes;
+                this.paginas = res.pages;
+                this.paginasArray = Array.from({ length: this.paginas }, (_, index) => index + 1);
               if(!(this.solicitudes)){
                 Swal.fire({
                   icon: 'warning',
@@ -43,5 +49,46 @@ export class MisSolicitudesComponent {
          }
       })
     } 
+  }
+
+  getSolicitudes(pagina:number){
+    this.adminService.getMisSolicitudes(this.empleado_id, 5,pagina)
+           .subscribe({
+              next: (res: { solicitudes: Solicitud[]; pages: number })=> {
+                this.solicitudes = res.solicitudes;
+                this.paginas = res.pages;
+                this.paginasArray = Array.from({ length: this.paginas }, (_, index) => index + 1);  
+              if(!(this.solicitudes)){
+                Swal.fire({
+                  icon: 'warning',
+                  title: 'No Hay Solicitudes Por Mostrar',
+                }) 
+              }
+              },
+              error: (err)=>{
+                const cadena:string = 'unknown error'
+          if(cadena.includes(err)){
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Ha habido un error al completar la solicitud',
+            })
+          }
+          else if('unauthorized'.includes(err)){
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Debe iniciar sesión para completar la acción',
+            })
+          }
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: err,
+          })
+        
+          
+              }
+           })
   }
 }

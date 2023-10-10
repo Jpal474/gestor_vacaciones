@@ -24,3 +24,15 @@
     height: 35px;
     text-align: center;
 }
+
+@media screen and (max-width:500px) {
+    .card {
+        margin-bottom: 10px;
+    }
+}
+
+@media screen and (max-width:1500px) and (min-width:501px) {
+    .card {
+        margin-bottom: 10px;
+    }
+}

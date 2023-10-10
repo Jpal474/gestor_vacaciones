@@ -1,27 +1,24 @@
 <section class="profile-card" id="profile-card">
 
-    <img id="profile-image" src="https://avatars3.githubusercontent.com/u/26097311?v=4&s=400" />
+    <img id="profile-image" src="https://cdn-icons-png.flaticon.com/512/6073/6073873.png" />
     <div class="container">
-        <label for="file-upload" class="custom-file-upload">
-    <img src="../../../../assets/recursos/encargado/ICONOS GENERALES/camara.png" class="img2">
-    </label>
-        <input id="file-upload" class="file-upload" type="file" accept=".jpg, .png, .jpeg" formControlName="imagen" />
+
     </div>
 
-    <h1>Marius Niveri</h1>
+    <h1>{{empleado.nombre}} {{empleado.apellidos}}</h1>
 
     <div id="info-box">
-        <p>Departamento</p>
+        <p>{{empleado.departamento.nombre}}</p>
     </div>
 
     <div class="row justify-content-around">
         <div class="col-4">
-            <p>Días de Vacaciones:</p>
-            <p>12 días</p>
+            <p>Días de Vacaciones Disponibles:</p>
+            <p>{{this.saldo_vacacional.dias_disponibles}}</p>
         </div>
         <div class="col-4">
-            <p>Días Restantes:</p>
-            <p>12 días</p>
+            <p>Días Tomados:</p>
+            <p>{{this.saldo_vacacional.dias_tomados}}</p>
         </div>
     </div><br>
     <h3>¿Dudas Sobre tus Vacaciones?</h3>
@@ -32,39 +29,11 @@
 
         <ul>
 
-            <li>
-                <a target="_blank" href="https://github.com/m4r1vs/">
-                    <img class="social-media-icon" title="Find me on GitHub" src="https://maniyt.de/images/github-icon.svg" alt="GitHub Logo">
-                </a>
-            </li>
 
-            <li>
-                <a target="_blank" href="https://twitter.com/@mariusniveri">
-                    <img class="social-media-icon" title="My Twitter" src="https://maniyt.de/images/twitter-icon.svg" alt="Twitter Logo">
-                </a>
-            </li>
-
-            <li>
-                <a target="_blank" href="https://codepen.io/m4r1vs">
-                    <img class="social-media-icon" title="My work on Codepen" src="https://maniyt.de/images/codepen-icon.png" alt="Codepen Logo">
-                </a>
-            </li>
-
-            <li>
-                <a target="_blank" href="https://stackoverflow.com/users/6065233/marius-niveri">
-                    <img class="social-media-icon" title="See my Stack Overflow" src="https://maniyt.de/images/stackoverflow-icon.svg" alt="Stack Overflow Logo">
-                </a>
-            </li>
-
-            <li>
-                <a href="mailto:marius.niveri@gmail.com">
-                    <img class="social-media-icon" title="E-Mail me" src="https://maniyt.de/images/email-icon.svg" alt="E-Mail Icon">
-                </a>
-            </li>
 
         </ul>
 
-        <button type="button" class="btn btn-success">CREAR SOLICITUD</button>
+        <button type="button" class="btn btn-success" [routerLink]="['/trabajador/crear_solicitud']">CREAR SOLICITUD</button>
 
 
     </nav>

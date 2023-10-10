@@ -36,7 +36,7 @@ export class TrabajadorController {
     private mailService: EmailService,
   ) {}
 
-  @Get()
+  @Get('/:size/:number')
   @ApiOperation({ summary: 'Obtener lista de Trabajadores' })
   @ApiResponse({
     status: 200,
@@ -44,8 +44,11 @@ export class TrabajadorController {
     isArray: true,
     type: Empleado,
   })
-  getTrabajadores(): Promise<Empleado[]> {
-    return this.trabajadorService.getTrabajadores('Trabajador');
+  getTrabajadores(
+    @Param('size') size: number,
+    @Param('number') number: number,
+  ): Promise<{ trabajadores: Empleado[]; pages: number }> {
+    return this.trabajadorService.getTrabajadores('Trabajador', size, number);
   }
 
   @Post()
@@ -85,7 +88,6 @@ export class TrabajadorController {
       return 'Error al enviar el correo';
     }
   }
-
 
   @Put('/:id')
   @ApiOperation({ summary: 'Actualiza los datos del trabajador' })

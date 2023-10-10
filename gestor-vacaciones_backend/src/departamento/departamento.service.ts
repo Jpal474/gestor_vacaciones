@@ -1,6 +1,8 @@
 /* eslint-disable prettier/prettier */
 import {
   BadRequestException,
+  HttpException,
+  HttpStatus,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -16,16 +18,36 @@ export class DepartamentoService {
     private departamentoRepository: Repository<Departamento>,
   ) {}
 
-  async getDepartamentos(): Promise<Departamento[]> {
+  async getAllDepartamentos(): Promise<Departamento[]> {
     try {
       const query = await this.departamentoRepository.createQueryBuilder(
         'departamentos',
       );
-      const departamentos = await query.getMany();
-      if (!departamentos) {
+      const all_departamentos = await query.getMany();
+      if (!all_departamentos) {
         throw new NotFoundException('No se han encontrado departamentos');
       }
-      return departamentos;
+      return all_departamentos;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+  
+  async getDepartamentos(pageSize: number, pageNumber: number): Promise<{departamentos: Departamento[], pages:number}> {
+    try {
+      const query = await this.departamentoRepository.createQueryBuilder(
+        'departamentos',
+      );
+      const all_departamentos = await query.getMany();
+      if (!all_departamentos) {
+        throw new NotFoundException('No se han encontrado departamentos');
+      }
+      const pages = Math.ceil(all_departamentos.length / pageSize);
+      const departamentos = all_departamentos.slice(
+        (pageNumber - 1) * pageSize,
+        pageNumber * pageSize,
+      );
+      return { departamentos, pages };
     } catch (error) {
       throw new Error(error);
     }
@@ -49,6 +71,13 @@ export class DepartamentoService {
     cretaeDepartamentoDto: CreateDepartamentoDto,
   ): Promise<Departamento> {
     try {
+      const departamento_repetido = await this.departamentoRepository.findOneBy({nombre: cretaeDepartamentoDto.nombre})
+      if(departamento_repetido){
+        throw new HttpException(
+          'El departamento ya se cuentra registrado',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
       const departamento = this.departamentoRepository.create(
         cretaeDepartamentoDto,
       );

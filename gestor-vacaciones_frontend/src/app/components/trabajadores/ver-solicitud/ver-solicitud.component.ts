@@ -126,7 +126,12 @@ export class VerSolicitudComponent implements OnInit {
             console.log('entra al while');
             }
           else{
-            if(fecha_actual.date() == 1 || fecha_actual.date() == 2){
+            if (
+              fecha_actual.date() == 1 &&
+              (fechaInicio.month() < fechaFinal.month() ||
+                (fecha_actual.date() == 2 &&
+                  fechaInicio.month() < fechaFinal.month()))
+            ){
               this.dias2.push(fecha_actual.date())
               this.band = true;
             }

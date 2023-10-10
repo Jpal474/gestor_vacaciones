@@ -6,6 +6,7 @@
 .card {
     background-color: #27a082;
     color: white;
+    width: 12rem;
 }
 
 .col img {
@@ -23,4 +24,18 @@
     width: 35px;
     height: 35px;
     text-align: center;
+}
+
+@media screen and (max-width:500px) {
+    .card {
+        margin-bottom: 10px;
+        width: 40vw;
+    }
+}
+
+@media screen and (max-width:1500px) and (min-width:501px) {
+    .card {
+        margin-bottom: 10px;
+        width: 20vw;
+    }
 }

@@ -12,6 +12,29 @@ export class EmpleadoService {
     private empleadoRepository: Repository<Empleado>,
   ) {}
 
+  async getEmpleados(pageSize, pageNumber) {
+    try {
+      const all_empleados = await this.empleadoRepository
+        .createQueryBuilder('empleado')
+        .leftJoinAndSelect('empleado.usuario', 'usuario')
+        .leftJoinAndSelect('usuario.rol', 'rol')
+        .leftJoinAndSelect('empleado.departamento', 'departamento') // Add this line
+        .getMany();
+
+      if (!all_empleados) {
+        throw new NotFoundException('No se han encontrado empleados');
+      }
+      const pages = Math.ceil(all_empleados.length / pageSize);
+      const empleados = all_empleados.slice(
+        (pageNumber - 1) * pageSize,
+        pageNumber * pageSize,
+      );
+      return { empleados, pages };
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
   async getEmpleadoById(id: string): Promise<Empleado> {
     try {
       const empleado = await this.empleadoRepository
@@ -35,7 +58,7 @@ export class EmpleadoService {
   async getEmpleadoByUserId(id: string): Promise<Empleado> {
     try {
       const found = await this.empleadoRepository.find({
-        relations: ['usuario'],
+        relations: ['usuario', 'departamento'],
         where: {
           usuario: { id: id },
         },

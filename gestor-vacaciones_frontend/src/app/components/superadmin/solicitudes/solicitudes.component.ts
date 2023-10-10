@@ -10,38 +10,21 @@ import Swal from 'sweetalert2';
 })
 export class SolicitudesComponent implements OnInit {
   solicitudes: Solicitud[] = []
-
+  paginas = 0;
+  paginasArray: number[]=[];
   constructor(private superadService: SuperadService) {}
 
   ngOnInit(): void {
-    this.getSolicitudes();
+    this.getSolicitudes(1);
   }
 
-  getSolicitudes(){
-    this.superadService.getSolicitudesAdmins()
+  getSolicitudes(page:number){
+    this.superadService.getAllSolicitudes(5,page)
     .subscribe({
-      next: (res:Solicitud[])=> {
-        this.solicitudes=res;
-        this.superadService.getSolicitudesTrabajadores()
-        .subscribe({
-          next: (res: Solicitud[])=> {
-            this.solicitudes = [
-              ...this.solicitudes,
-              ...res
-            ]
-            console.log(res);
-            
-          },
-          error: (err)=> {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: err,
-            })  
-           
-          }
-        })
-        
+      next: (res:{ solicitudes: Solicitud[]; pages: number })=> {
+        this.solicitudes=res.solicitudes;
+        this.paginas = res.pages;
+          this.paginasArray = Array.from({ length: this.paginas }, (_, index) => index + 1);
       },
       error(err) {
         Swal.fire({

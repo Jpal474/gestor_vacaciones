@@ -95,11 +95,26 @@ export class CrearSolicitudComponent {
            }
       },
       error: (err)=> {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: err,
-        }) 
+        const cadena:string = 'unknown error'
+          if(cadena.includes(err)){
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Ha habido un error al completar la solicitud',
+            })
+          }
+          else if('unauthorized'.includes(err)){
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Debe iniciar sesión para completar la acción',
+            })
+          }
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: err,
+          })
       },
       complete: ()=>{
         this.festivosService.getDiasFeriados()
@@ -114,7 +129,26 @@ export class CrearSolicitudComponent {
            }); 
           },
           error: (err)=> {
-            console.log(err);
+            const cadena:string = 'unknown error'
+          if(cadena.includes(err)){
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Ha habido un error al completar la solicitud',
+            })
+          }
+          else if('unauthorized'.includes(err)){
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Debe iniciar sesión para completar la acción',
+            })
+          }
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: err,
+          })
             
           }
         })
@@ -127,11 +161,11 @@ export class CrearSolicitudComponent {
 
   crearFormulario(){
       this.solicitud_formulario = this.fb.group({
-       fecha_inicio: ['', [Validators.required, this.minDateValidator]],
+            fecha_inicio: ['', [Validators.required, this.minDateValidator, this.allowedDateValidator, ]],
        fecha_fin: ['', Validators.required],
        justificacion: ['']
       },{
-      validators:[ this.maxDateValidator('fecha_inicio', 'fecha_fin')]
+      validators:[ this.maxDateValidator('fecha_inicio', 'fecha_fin'), this.rangeDateValidator('fecha_inicio', 'fecha_fin')]
       });
     }
 
@@ -161,11 +195,26 @@ export class CrearSolicitudComponent {
               }, 3000);}
         },
         error: (err)=> {
+          const cadena:string = 'unknown error'
+          if(cadena.includes(err)){
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Ha habido un error al completar la solicitud',
+            })
+          }
+          else if('unauthorized'.includes(err)){
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Debe iniciar sesión para completar la acción',
+            })
+          }
           Swal.fire({
             icon: 'error',
             title: 'Error',
             text: err,
-          }) 
+          })
         }
       })
        
@@ -173,8 +222,14 @@ export class CrearSolicitudComponent {
     }
 
     getSaldoVacacional(){
-      const año = new Date().getFullYear()
-      console.log('saldo');
+      const dia = new Date().getDate();
+      const mes = new Date().getMonth();
+      let año = 0;
+      if(dia >= 18 && mes === 12){
+        año = new Date().getFullYear() + 1;
+      }else{
+        año = new Date().getFullYear()
+      }
       this.trabajadorService.getSaldoByEmpleadoId(this.empleado.id!, año)
       .subscribe({
         next: (res: SaldoVacacional)=> {
@@ -185,7 +240,26 @@ export class CrearSolicitudComponent {
           }
         }, 
         error: (err)=> {
-          console.log(err); 
+          const cadena:string = 'unknown error'
+          if(cadena.includes(err)){
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Ha habido un error al completar la solicitud',
+            })
+          }
+          else if('unauthorized'.includes(err)){
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Debe iniciar sesión para completar la acción',
+            })
+          }
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: err,
+          }) 
         }
       })
     }
@@ -219,6 +293,15 @@ export class CrearSolicitudComponent {
                   text: 'Notificación Enviada',
                 })
               }
+            },
+            error: (err)=>{
+              Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Hubo un error al enviar la notificación',
+              }),
+              console.log(err);
+              
             }
           })
         }
@@ -281,6 +364,44 @@ export class CrearSolicitudComponent {
       };
     }
 
+    allowedDateValidator(control: AbstractControl) {
+      const fecha = moment(new Date(control.value), 'YYYY-MM-DD');
+      const hoy = moment(new Date(), 'YYYY-MM-DD');
+      if (hoy.year() + 1 === fecha.year()) {
+        if (hoy.month() != 12 || (hoy.date() <= 16 && hoy.month() === 12)) {
+          return { allowedDate: true };
+        } else {
+          return null;
+        }
+      } else {
+        return null;
+      }
+    }
+  
+    rangeDateValidator(fecha_inicio: string, fecha_fin: string) {
+      let mensaje = '';
+      console.log('max.date');
+  
+      return (formGroup: FormGroup) => {
+        const CONTROL = formGroup.controls[fecha_inicio];
+        const CONTROL2 = formGroup.controls[fecha_fin];
+        if (CONTROL.value === null || CONTROL2.value === null) {
+          return;
+        }
+        const fecha_inicio2 = moment(CONTROL.value, 'YYYY/MM/DD');
+        const fecha_fin2 = moment(CONTROL2.value, 'YYYY/MM/DD');
+  
+        if (!fecha_inicio2.isValid() || !fecha_fin2.isValid()) {
+          return;
+        }
+  
+        if (fecha_inicio2 && fecha_fin2 && fecha_inicio2 > fecha_fin2) {
+          return { dateRange: true };
+        }
+        return null;
+      };
+    }
+
    get fechaInicioNoValida(): string{
     this.mensaje='';
     if (
@@ -291,6 +412,11 @@ export class CrearSolicitudComponent {
     }else if (this.solicitud_formulario.get('fecha_inicio')?.errors?.['minDate'] &&
     this.solicitud_formulario.get('fecha_inicio')?.touched ){
       this.mensaje = 'La soicitud debe hacerse con 2 semanas de anticipación';
+
+    }
+    else if (this.solicitud_formulario.get('fecha_inicio')?.errors?.['allowedDate'] &&
+    this.solicitud_formulario.get('fecha_inicio')?.touched ){
+      this.mensaje = 'Aún no puedes crear una solicitud para el siguiente año';
 
     }
     return this.mensaje;
@@ -306,6 +432,11 @@ export class CrearSolicitudComponent {
     }else if (this.solicitud_formulario.errors?.['maxDate'] &&
     this.solicitud_formulario.get('fecha_fin')?.touched){
       this.mensaje = 'Los días de la solicitud sobrepasan sus días disponibles';
+
+    }
+    else if (this.solicitud_formulario.errors?.['dateRange'] &&
+    this.solicitud_formulario.get('fecha_fin')?.touched){
+      this.mensaje = 'La fecha de fin no puede ser menor a la de inicio';
 
     }
     return this.mensaje;

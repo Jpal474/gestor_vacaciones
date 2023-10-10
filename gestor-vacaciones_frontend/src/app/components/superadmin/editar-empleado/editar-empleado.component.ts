@@ -15,6 +15,8 @@ import { SaldoVacacional } from 'src/app/interfaces/saldo_vacacional.interface';
   styleUrls: ['./editar-empleado.component.css']
 })
 export class EditarEmpleadoComponent {
+  fieldTextType:boolean=false;
+  fieldTextType2:boolean=false;
   mensaje='';
   pass = '';
   rol = '';
@@ -69,7 +71,7 @@ this.empleado_formulario= this.fb.group({
   genero: ['', Validators.required],
   departamento: ['', Validators.required],
   fecha_contratacion: ['', [Validators.required, this.maxDateValidator]],
-  contraseña: [''],
+  contraseña: ['', [Validators.minLength(8), Validators.maxLength(15)]],
   confirmar_contraseña: [''],
 })
   }
@@ -108,7 +110,7 @@ this.empleado_formulario= this.fb.group({
   }
 
   getDepartamentos(){
-    this.superadService.getDepartamentos()
+    this.superadService.getAllDepartamentos()
     .subscribe({
       next: (res: Departamento[]) => {
         console.log(res);
@@ -116,6 +118,44 @@ this.empleado_formulario= this.fb.group({
         this.departamentos = res;
       }
     })
+  }
+
+  toggleFieldTextType() {
+    this.fieldTextType = !this.fieldTextType;
+  }
+  toggleFieldTextType2() {
+    this.fieldTextType2 = !this.fieldTextType2;
+  }
+
+  confirmarActulizacion(){
+    if (!this.empleado_formulario.invalid){
+      Swal.fire({
+        title: '¿Estás Seguro?',
+        text: "Los cambios no son reversibles",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#008000',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Guardar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.actualizarEmpleado();
+        }
+      })
+    }
+    else {
+      return Object.values(this.empleado_formulario.controls).forEach(
+        (control) => {
+          if (control instanceof FormGroup) {
+            Object.values(control.controls).forEach((control) =>
+              control.markAsTouched()
+            );
+          } else {
+            control.markAsTouched();
+          }
+        }
+      );
+    }
   }
 
   actualizarEmpleado(){    
@@ -274,14 +314,16 @@ this.empleado_formulario= this.fb.group({
 async actualizarSaldoVacacional(){
   const año = new Date().getFullYear();
   const fechaFormateada = new Date().toISOString().split('T')[0];
-  console.log(fechaFormateada, 'formateada');
-  const actual = moment(fechaFormateada, 'YYYY/MM/DD');
-  console.log('fecha_c', this.empleado.fecha_contratacion);
-  const fecha_contratacion = moment(this.empleado.fecha_contratacion, 'YYYY/MM/DD');
-  const diferencia = actual.diff(fecha_contratacion, 'years');
-  console.log('actual', actual);
-  console.log('fecha_contratacion', fecha_contratacion);
-  console.log('diferencia', diferencia);
+  let fecha_c = '';
+  if( this.empleado.fecha_contratacion){
+    fecha_c =this.empleado.fecha_contratacion
+  }
+  else{
+    fecha_c = this.empleado_formulario.value['fecha_contratacion']
+  }
+  const actual = moment(fechaFormateada, 'YYYY-MM-DD');
+  const fecha_contratacion = moment(fecha_c, 'YYYY-MM-DD');
+  const diferencia = actual.diff(fecha_contratacion, 'year');
   if (diferencia > 0) {
     const { value: dias_tomados } = await Swal.fire({//ingresa el nombre del departamento
       title: 'Ingrese Los Dias Vacacionales Tomados Por Su Trabajador',
@@ -321,8 +363,6 @@ async actualizarSaldoVacacional(){
     } else if (diferencia >= 31 || diferencia <= 35) {
       this.saldo_vacacional.dias_disponibles = 32-dias_tomados;
     }
-
-  console.log('saldo vacacional',this.saldo_vacacional);
   }
 
   if(this.empleado.id){
@@ -341,7 +381,7 @@ this.superadService.updateSaldoVacacional(this.empleado.id!,año, this.saldo_vac
     Swal.fire({
       icon: 'error',
       title: 'Error',
-      text: err,
+      text: 'Hubo un error al actualizar los datos',
     }) 
   }
 })
@@ -472,11 +512,18 @@ this.superadService.updateSaldoVacacional(this.empleado.id!,año, this.saldo_vac
   }
 
   get contraseniaNoValido() {
-    return (
-      this.empleado_formulario.get('contraseña')?.invalid &&
-      this.empleado_formulario.get('contraseña')?.touched
-    );
-  }
+    this.mensaje = '';
+     if (
+      this.empleado_formulario.get('contraseña')?.errors?.['minlength']
+    ) {
+      this.mensaje = 'La contraseña debe tener entre 8 y 15 caracteres';
+    }
+    else if (this.empleado_formulario.get('contraseña')?.errors?.['maxlength']) {
+      this.mensaje = 'La contraseña es muy larga';
+    }
+    return this.mensaje;
+  } 
+
   get confirmarContraseniaNoValida() {
     const pass1 = this.empleado_formulario.get('contraseña')?.value;
     const pass2 = this.empleado_formulario.get('confirmar_contraseña')?.value;

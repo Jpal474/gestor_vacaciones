@@ -8,14 +8,15 @@ import {
 import { AdminService } from 'src/app/services/admin.service';
 import Swal from 'sweetalert2';
 import * as moment from 'moment';
-import { RechazarSolicitud } from 'src/app/interfaces/rechazar_solicitud.interface';
-import { AprobarSolicitud } from 'src/app/interfaces/aprobar_solicitud.interface';
-import { SaldoActualizado } from 'src/app/interfaces/actualizar_saldo-vacacional.interface';
-import { SaldoVacacional } from 'src/app/interfaces/saldo_vacacional.interface';
-import { EmailObservacion } from 'src/app/interfaces/email_observacion.interface';
+
 // Import pdfmake-wrapper and the fonts to use
 import { Canvas, Img, Line, PdfMakeWrapper, Txt } from 'pdfmake-wrapper';
 import * as pdfFonts from "pdfmake/build/vfs_fonts"; // fonts provided for pdfmake
+import { RechazarSolicitud } from 'src/app/interfaces/rechazar_solicitud.interface';
+import { AprobarSolicitud } from 'src/app/interfaces/aprobar_solicitud.interface';
+import { SaldoActualizado } from 'src/app/interfaces/actualizar_saldo-vacacional.interface';
+import { EmailObservacion } from 'src/app/interfaces/email_observacion.interface';
+import { SaldoVacacional } from 'src/app/interfaces/saldo_vacacional.interface';
 @Component({
   selector: 'app-ver-solicitud',
   templateUrl: './ver-solicitud.component.html',
@@ -85,9 +86,7 @@ export class VerSolicitudComponent {
         next: (res: Solicitud) => {
           this.solicitud = res;
           console.log(this.solicitud);
-          this.getDias(this.solicitud.fecha_inicio, this.solicitud.fecha_fin);
-          this.generarPDF();
-          
+          this.getDias(this.solicitud.fecha_inicio, this.solicitud.fecha_fin);          
         },
       });
     }
@@ -116,7 +115,12 @@ export class VerSolicitudComponent {
         console.log('entra al while');
         }
       else{
-        if(fecha_actual.date() == 1){
+        if (
+          fecha_actual.date() == 1 &&
+          (fechaInicio.month() < fechaFinal.month() ||
+            (fecha_actual.date() == 2 &&
+              fechaInicio.month() < fechaFinal.month()))
+        ){
           this.dias2.push(fecha_actual.date())
           this.band = true;
         }
@@ -230,10 +234,10 @@ export class VerSolicitudComponent {
       showCancelButton: true,
     });
 
-    if (text) {
-      let correo = this.solicitud.empleado.id!;
+    if (text && text-length <= 250) {
+      let correo = this.solicitud.empleado.usuario.correo;
       this.email = {
-        destinatario: 'lovad28459@apxby.com',
+        destinatario: correo,
         mensaje: text,
       };
       this.adminService.enviarMailObservaciones(this.email)
@@ -251,13 +255,17 @@ export class VerSolicitudComponent {
           Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: err,
+            text: 'Ocurrió un Error al Enviar el Mail',
           })
         }
       })
     }
-    else{
-      console.log('sin texto');
+    else if (text.length > 250){
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'La cantidad de caracteres debe ser menor o igual a 250',
+      }) 
       
     }
   }
@@ -270,7 +278,7 @@ export class VerSolicitudComponent {
     .subscribe({
       next: (res: boolean)=> {
           if(res){
-            this.adminService.enviarMailRechazada()
+            this.adminService.enviarMailRechazada(this.solicitud.empleado.usuario.correo)
             .subscribe({
               next: (res: boolean)=>{
                 if(res){
@@ -316,6 +324,8 @@ export class VerSolicitudComponent {
               text: 'La solicitud ha sido aprobada!',
             }),
             this.obtenerSaldoVacacional();
+            this.generarPDF();
+
           }
           else{
             Swal.fire({
@@ -334,6 +344,36 @@ export class VerSolicitudComponent {
       }
     })
   }
+ 
+  getEmpleadosVacaciones(){
+    this.adminService.getEmpleadosVacaciones()
+    .subscribe({
+      next: (res: boolean)=> {
+        if(res){
+          Swal.fire({
+            title: 'El 30% o más de los empleados se encuentran de vacaciones!',
+            text: "¿Estás Seguro de Aprobar Esta Solicitud",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Aprobar'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.aprobarSolicitud();
+              console.log('botoón confirmado');
+              
+            }
+          })
+        }
+        else{
+          console.log('botoón no confirmado');
+           this.aprobarSolicitud();
+        }
+      }
+    })
+  }
+
 
 
    actualizarSaldoVacacional(año: number){
@@ -345,7 +385,7 @@ export class VerSolicitudComponent {
     .subscribe({
       next: (res: SaldoVacacional)=> {
         if(res){
-        this.adminService.enviarMailAprobada()
+        this.adminService.enviarMailAprobada(this.solicitud.empleado.usuario.correo)
         .subscribe({
           next: (res: boolean)=> {
             if(res){

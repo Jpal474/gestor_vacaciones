@@ -15,6 +15,8 @@ import * as moment from 'moment';
   styleUrls: ['./editar-trabajador.component.css']
 })
 export class EditarTrabajadorComponent {
+  fieldTextType:boolean=false;
+  fieldTextType2:boolean=false;
   trabajador_formulario!: FormGroup;
   mensaje='';
   pass = '';
@@ -106,7 +108,7 @@ export class EditarTrabajadorComponent {
       }
 
 getDepartamentos(){
-  this.adminService.getDepartamentos()
+  this.adminService.getAllDepartamentos()
   .subscribe({
       next: (res: Departamento[]) => {
           console.log(res);
@@ -114,6 +116,29 @@ getDepartamentos(){
           }
         })
       }
+
+      toggleFieldTextType() {
+        this.fieldTextType = !this.fieldTextType;
+      }
+      toggleFieldTextType2() {
+        this.fieldTextType2 = !this.fieldTextType2;
+      }
+
+confirmarActualizacion(){
+  Swal.fire({
+    title: '¿Estás seguro?',
+    text: "Los cambios no son reversibles",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#007a00',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Guardar'
+  }).then((result) => {
+    if (result.isConfirmed) {
+     this.actualizarTrabajador();
+    }
+  })
+}
 
 actualizarTrabajador(){
   if(!this.trabajador_formulario.invalid){
@@ -154,7 +179,26 @@ actualizarTrabajador(){
            })
         },
         error: (err)=>{
-
+          const cadena:string = 'unknown error'
+          if(cadena.includes(err)){
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Ha habido un error al completar la solicitud',
+            })
+          }
+          else if('unauthorized'.includes(err)){
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Debe iniciar sesión para completar la acción',
+            })
+          }
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: err,
+          }),
           setTimeout(function(){
             window.location.reload();
          }, 2000);
@@ -234,11 +278,26 @@ this.adminService.updateSaldoVacacional(this.trabajador.id!,año, this.saldo_vac
   } 
   },
   error: (err)=> {
+    const cadena:string = 'unknown error'
+    if(cadena.includes(err)){
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Ha habido un error al completar la solicitud',
+      })
+    }
+    else if('unauthorized'.includes(err)){
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Debe iniciar sesión para completar la acción',
+      })
+    }
     Swal.fire({
       icon: 'error',
       title: 'Error',
       text: err,
-    }) 
+    })
   }
 })
 }
