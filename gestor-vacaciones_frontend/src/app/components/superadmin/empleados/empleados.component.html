@@ -32,7 +32,7 @@
                         <td>
                             <a type="button" class="btn button text-white ms-4" [routerLink]="['/super/editar_empleado',empleado.id]">Editar</a>
                             <a type="button" class="btn button-red text-white ms-4" (click)="eliminarEmpleado(empleado.usuario.id)">Eliminar</a>
-                            <a type="button" class="btn button-red text-white ms-4" (click)="cambiarEstado(empleado.id, empleado.estado)">Cambiar Estado</a>
+                            <a type="button" id="boton_estado" class="btn button-red text-white ms-4" (click)="cambiarEstado(empleado.id, empleado.estado)">Cambiar Estado</a>
 
                         </td>
                     </tr>

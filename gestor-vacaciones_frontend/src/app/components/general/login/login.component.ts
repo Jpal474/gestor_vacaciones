@@ -35,6 +35,8 @@ export class LoginComponent {
     this.authService.getAuth(this.login_formulario.value.correo, this.login_formulario.value.contraseña)
     .subscribe({
       next: (login: Login) => {
+        console.log(login);
+        
         this.usuarioNotFound = '';
         this.passwordInvalid = '';
         const tokenCodificado = btoa(JSON.stringify(login.accessToken))
@@ -71,7 +73,7 @@ export class LoginComponent {
         Swal.fire({
           icon: 'error',
           title: 'Error',
-          text: e,
+          text: 'Hubo un error al iniciar sesion, revise su credenciales y si el error persiste, pongase en contacto con la página',
         })
       }
     })

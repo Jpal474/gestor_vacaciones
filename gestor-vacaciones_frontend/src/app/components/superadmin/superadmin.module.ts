@@ -13,6 +13,8 @@ import { FullCalendarModule } from '@fullcalendar/angular';
 import { AgregarEmpleadoComponent } from './agregar-empleado/agregar-empleado.component';
 import { EditarEmpleadoComponent } from './editar-empleado/editar-empleado.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { CuentaComponent } from './cuenta/cuenta.component';
+import { EditarCuentaComponent } from './editar-cuenta/editar-cuenta.component';
 
 
 
@@ -28,6 +30,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     EmpleadosComponent,
     AgregarEmpleadoComponent,
     EditarEmpleadoComponent,
+    CuentaComponent,
+    EditarCuentaComponent,
   ],
   imports: [
     CommonModule,

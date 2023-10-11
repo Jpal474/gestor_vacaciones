@@ -9,6 +9,8 @@ import { RouterModule } from '@angular/router';
 import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
 import { RecuperarContraseniaComponent } from './recuperar-contrasenia/recuperar-contrasenia.component';
 import { ActualizarContraseniaComponent } from './actualizar-contrasenia/actualizar-contrasenia.component';
+import { Header2Component } from './shared/header2/header2.component';
+
 
 
 
@@ -21,6 +23,7 @@ import { ActualizarContraseniaComponent } from './actualizar-contrasenia/actuali
     PagenotfoundComponent,
     RecuperarContraseniaComponent,
     ActualizarContraseniaComponent,
+    Header2Component
   ],
   imports: [
     CommonModule,

@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Usuario } from 'src/usuario/usuario.entity';
@@ -8,6 +8,7 @@ import { AuthCredentialDto } from './dto/auth-credentials-dto';
 import * as bcrypt from 'bcryptjs';
 import { JwtPayload } from './jwt.payload.interface';
 import { Empleado } from 'src/empleado/empleado.entity';
+import { TokenDto } from './dto/token.dto';
 
 @Injectable()
 export class AuthService {
@@ -43,5 +44,37 @@ export class AuthService {
         'Correo o contraseña no válidos, revise sus credenciales',
       );
     }
+  }
+
+  async findUserByMail(correo: string): Promise<Usuario>{
+    try {
+      const usuario = await this.usuarioRepository.findOneBy({correo: correo})
+      if(!usuario){
+        throw new NotFoundException(`No se ha encontrado usuario con ese correo`)
+      }
+      return usuario;
+    } catch (error) {
+      throw new Error(`Hubo un error: ${error}`)
+    }
+  }
+
+  async changePassword(id: string, token:TokenDto): Promise<boolean>{
+  try {
+
+    console.log(token.contraseña, 'contraseña');
+    console.log(id, 'id');
+    
+    const usuario = await this.usuarioRepository.findOneBy({id:id})
+    if(usuario){
+      const salt = await bcrypt.genSalt();
+    const hashedPassword = await bcrypt.hash(token.contraseña, salt);
+    token.contraseña = hashedPassword;
+      usuario.contraseña = token.contraseña;
+      await this.usuarioRepository.save(usuario);
+      return true;
+    }
+  } catch (error) {
+    throw new Error(`Hubo un error: ${error}`)
+  }
   }
 }

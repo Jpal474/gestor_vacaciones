@@ -15,7 +15,9 @@ export class RecuperarContraseniaComponent {
     private authService : AuthService,
     private fb : FormBuilder,
     private router: Router
-    ){}
+    ){
+      this.crearFormulario();
+    }
 
  ngOnInit(): void {
    this.enviarMail();
@@ -31,6 +33,15 @@ export class RecuperarContraseniaComponent {
     if (!this.mail_formulario.invalid){
       this.destinatario = this.mail_formulario.value['correo']
   this.authService.enviarMail(this.destinatario)
+  .subscribe({
+    next: (res: boolean)=>{
+      console.log('correo enviado');
+    },
+    error: (err)=>{
+      console.log(`correo no enviado: ${err}`);
+      
+    }
+  })
   }
    }
 

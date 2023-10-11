@@ -32,8 +32,12 @@ export class AuthService {
       
     }
 
-    enviarMail(destinatario: string){
+    enviarMail(destinatario: string): Observable<boolean>{
+       return this.httpClient.post<boolean>(`${this.BASE_URL}/auth/email/${destinatario}`, {})
+    }
 
+    changePassword(id: string, contraseña: string){
+      return this.httpClient.post<boolean>(`${this.BASE_URL}/auth/password/${id}`, {contraseña})
     }
   
 }

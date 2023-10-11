@@ -6,6 +6,8 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './jwt.strategy';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Usuario } from 'src/usuario/usuario.entity';
+import { EmailService } from 'src/email/email.service';
+import { SecurityService } from 'src/security/security.service';
 
 @Module({
   imports: [
@@ -19,7 +21,7 @@ import { Usuario } from 'src/usuario/usuario.entity';
     TypeOrmModule.forFeature([Usuario]),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy],
+  providers: [AuthService, JwtStrategy, EmailService, SecurityService],
   exports: [AuthService, JwtStrategy, PassportModule],
 })
 export class AuthModule {}

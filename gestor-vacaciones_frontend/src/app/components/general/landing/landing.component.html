@@ -59,20 +59,4 @@
         </div>
     </div>
 </section>
-
-<section id="clients">
-    <h1 class="text-center">Métodos de Pago</h1>
-    <div class="container-fluid text-center mt-5">
-        <div class="row">
-            <div class="col" *ngFor="let imagen of metodos_pago; let i= index">
-                <div class="card-clients">
-                    <div class="card-body">
-                        <img [src]="imagen" class="img-pagos" />
-                        <h4 class="card-title">{{titulos_pagos[i]}}</h4>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 <app-footer></app-footer>

@@ -13,6 +13,8 @@ import { adminGuard } from './guards/admin.guard';
 import { superGuard } from './guards/super.guard';
 import { trabajadorGuard } from './guards/trabajador.guard';
 import { PagenotfoundComponent } from './components/general/pagenotfound/pagenotfound.component';
+import { RecuperarContraseniaComponent } from './components/general/recuperar-contrasenia/recuperar-contrasenia.component';
+import { ActualizarContraseniaComponent } from './components/general/actualizar-contrasenia/actualizar-contrasenia.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -20,6 +22,8 @@ const routes: Routes = [
   {path:'admin', component:AdminComponent, canActivate:[authGuard, adminGuard], children:ADMIN_ROUTES},
   {path:'super', component:SuperadminComponent,canActivate:[authGuard, superGuard], children:SUPERADMIN_ROUTES},
   {path:'trabajador', component:TrabajadorComponent, canActivate:[authGuard, trabajadorGuard] ,children:TRABAJADOR_ROUTES},
+  {path:'confirmar_cambio_contraseña', component:RecuperarContraseniaComponent},
+  {path:'cambiar_contra/:token', component:ActualizarContraseniaComponent},
   {path: 'pagenotfound', component: PagenotfoundComponent},
   {path:'**', pathMatch:'full', redirectTo:'landing'},
 

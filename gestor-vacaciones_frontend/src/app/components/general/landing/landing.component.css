@@ -13,14 +13,22 @@
 }
 
 #info {
-    background-color: #8dd3f5;
+    background-color: #00aec1;
 }
 
 #trabajo {
-    background-color: #70A0AF;
+    background-color: #fadbb9;
+    height: 30vh;
 }
 
 .img-pagos {
     width: 150px;
     height: 150px;
+}
+
+@media screen and (max-width:600px) {
+    #trabajo {
+        background-color: #fadbb9;
+        height: 50vh;
+    }
 }

@@ -16,6 +16,7 @@ import { EmpleadoModule } from './empleado/empleado.module';
 import { AuthModule } from './auth/auth.module';
 import { CeoModule } from './ceo/ceo.module';
 import { EmailService } from './email/email.service';
+import { SecurityService } from './security/security.service';
 
 @Module({
   imports: [
@@ -34,6 +35,6 @@ import { EmailService } from './email/email.service';
     CeoModule,
   ],
   controllers: [AppController],
-  providers: [AppService, EmailService],
+  providers: [AppService, EmailService, SecurityService],
 })
 export class AppModule {}
