@@ -333,6 +333,8 @@ export class VerSolicitudComponent {
   getEmpleadosVacaciones() {
     this.superadService.getEmpleadosVacaciones().subscribe({
       next: (res: boolean) => {
+        console.log(res, 'empleados vacaciones');
+        
         if (res) {
           Swal.fire({
             title: 'El 30% o más de los empleados se encuentran de vacaciones!',

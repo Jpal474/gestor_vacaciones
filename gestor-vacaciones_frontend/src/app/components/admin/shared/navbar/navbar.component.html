@@ -1,12 +1,12 @@
 <nav class="navbar fixed-top">
     <div class="container-fluid">
-        <a class="navbar-brand" [routerLink]="['/admin/home']">My Vacation</a>
+        <a class="navbar-brand" [routerLink]="['/admin/home']">Vacation Manager</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
         <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel" style="background-color: #27a082; color: white;">
             <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasNavbarLabel">My Vacation </h5>
+                <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Vacation Manager</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div class="offcanvas-body">
@@ -34,6 +34,11 @@
                     <li class="nav-item">
                         <a class="nav-link" [routerLink]="['/admin/calendario']" style="color: white;">
                             <img src="../../../../assets/recursos/imagenes/superadmin/home/calendario.png" class="me-1" height="10px" width="10px"> Calendario
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" [routerLink]="['/admin/cuenta']" style="color: white;">
+                            <img src="../../../../assets/recursos/imagenes/superadmin/home/usuario(2).png" class="me-1" height="10px" width="10px"> Cuenta
                         </a>
                     </li>
                     <li class="nav-item dropdown">

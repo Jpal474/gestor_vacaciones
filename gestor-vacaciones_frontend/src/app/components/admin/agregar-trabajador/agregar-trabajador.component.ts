@@ -323,6 +323,36 @@ getDepartamentos(){
         }
       })
       }
+      else{
+        this.saldo_vacacional.empleado.nombre = this.trabajador.nombre;
+        this.saldo_vacacional.empleado.apellidos = this.trabajador.apellidos;
+        this.saldo_vacacional.empleado.genero = this.trabajador.genero;
+        this.saldo_vacacional.empleado.fecha_contratacion = this.trabajador.fecha_contratacion;
+        this.saldo_vacacional.año = actual.year(); 
+  
+        this.adminService.createSaldoVacacional(this.saldo_vacacional)
+      .subscribe({
+        next: (res: SaldoVacacional)=> {
+          if(res){
+          Swal.fire({
+            icon: 'success',
+            title: 'Éxito',
+            text: 'El Empleado ha sido guardado con éxito',
+          });
+          setTimeout(() =>{
+            this.router.navigate([`/super/empleados`]);
+         }, 2000);
+        }
+        },
+        error: (err)=> {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: err,
+          })
+        }
+      })
+      }
     }
      
 

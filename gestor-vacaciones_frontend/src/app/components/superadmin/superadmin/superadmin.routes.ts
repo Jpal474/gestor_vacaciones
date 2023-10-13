@@ -7,6 +7,8 @@ import { CalendarioComponent } from '../calendario/calendario.component';
 import { EmpleadosComponent } from '../empleados/empleados.component';
 import { AgregarEmpleadoComponent } from '../agregar-empleado/agregar-empleado.component';
 import { EditarEmpleadoComponent } from '../editar-empleado/editar-empleado.component';
+import { CuentaComponent } from '../cuenta/cuenta.component';
+import { EditarCuentaComponent } from '../editar-cuenta/editar-cuenta.component';
 
 
 export const SUPERADMIN_ROUTES: Routes = [
@@ -18,10 +20,8 @@ export const SUPERADMIN_ROUTES: Routes = [
     {path: 'solicitudes', component: SolicitudesComponent },
     {path: 'solicitud/:id', component: VerSolicitudComponent},
     {path: 'calendario', component: CalendarioComponent},
+    {path: 'cuenta', component: CuentaComponent},
+    {path: 'editar_cuenta/:id', component: EditarCuentaComponent},
     {path:'**', pathMatch:'full', redirectTo:'pagenotfound'},
-    //{ path: 'path/:routeParam', component: MyComponent },
-    //{ path: 'staticPath', component: ... },
-    //{ path: '**', component: ... },
-    //{ path: 'oldPath', redirectTo: '/staticPath' },
-    //{ path: ..., component: ..., data: { message: 'Custom' }
+    
 ];

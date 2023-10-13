@@ -90,9 +90,9 @@ export class UsuarioService {
           'El correo que ha escrito ya se encuentra en uso',
         );
       } else if (error.code === '23502') {
-        throw new BadRequestException(
-          'Error: Datos Invalidos Para El Encargado',
-        );
+        throw new BadRequestException('Datos Invalidos Para El Encargado');
+      } else {
+        throw new HttpException(error, HttpStatus.BAD_REQUEST);
       }
     }
   }
@@ -109,15 +109,15 @@ export class UsuarioService {
         nombre_usuario: updateUsuarioDto.nombre_usuario,
       });
       const usuario = await this.getUsuarioById(id);
-      if (mail.id !== usuario.id) {
+      if (mail && mail.id !== usuario.id) {
         throw new HttpException(
           'El correo ya se encuentra en uso',
           HttpStatus.BAD_REQUEST,
         );
       }
-      if (nom_usuario.id !== usuario.id) {
+      if (nom_usuario && nom_usuario.id !== usuario.id) {
         throw new HttpException(
-          'El correo ya se encuentra en uso',
+          'El nombre de usuario ya se encuentra en uso',
           HttpStatus.BAD_REQUEST,
         );
       }
@@ -139,7 +139,7 @@ export class UsuarioService {
       }
       return usuario;
     } catch (error) {
-      throw new Error(error);
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
     }
   }
 

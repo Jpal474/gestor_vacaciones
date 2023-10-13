@@ -191,7 +191,7 @@ export class CrearSolicitudComponent {
             this.enviarMail();
            
             setTimeout(() =>{
-              this.router.navigate(['/admin/mis_solicitudes',res.id])
+              this.router.navigate(['/admin/home'])
               }, 3000);}
         },
         error: (err)=> {
@@ -218,6 +218,15 @@ export class CrearSolicitudComponent {
         }
       })
        
+      }
+      else{
+        return Object.values( this.solicitud_formulario.controls ).forEach( control => {
+          if ( control instanceof FormGroup ) {
+            Object.values( control.controls ).forEach( control => control.markAsTouched() );
+          } else {
+            control.markAsTouched();
+          }
+        });
       }
     }
 

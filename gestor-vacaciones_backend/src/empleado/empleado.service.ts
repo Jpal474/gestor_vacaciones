@@ -109,7 +109,7 @@ export class EmpleadoService {
       const porcentajeEmpleados =
         (total_empleados_vacaciones / total_empleados) * 100;
       if (porcentajeEmpleados > 30) {
-        return;
+        return true;
       } else {
         return false;
       }

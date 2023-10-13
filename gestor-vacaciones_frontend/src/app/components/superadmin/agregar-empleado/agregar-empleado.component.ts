@@ -241,7 +241,7 @@ export class AgregarEmpleadoComponent implements OnInit {
     
     
     if (diferencia > 0) {
-      const { value: dias_tomados } = await Swal.fire({//ingresa el nombre del departamento
+      let { value: dias_tomados } = await Swal.fire({//ingresa el nombre del departamento
         title: 'Ingrese Los Dias Vacacionales Tomados Por Su Trabajador',
         input: 'text',
         inputLabel: 'En caso de no tener, deje en blanco el espacio',
@@ -260,6 +260,10 @@ export class AgregarEmpleadoComponent implements OnInit {
       this.saldo_vacacional.dias_tomados = parseInt(dias_tomados);    
   }else if (dias_tomados && parseInt(dias_tomados) === 0){
     this.saldo_vacacional.dias_tomados = 0;
+  }
+  else{
+    this.saldo_vacacional.dias_tomados=0;
+    dias_tomados=0;
   }
     
     if (diferencia === 1) { 
@@ -291,6 +295,36 @@ export class AgregarEmpleadoComponent implements OnInit {
     
        
     this.superadService.createSaldoVacacional(this.saldo_vacacional)
+    .subscribe({
+      next: (res: SaldoVacacional)=> {
+        if(res){
+        Swal.fire({
+          icon: 'success',
+          title: 'Éxito',
+          text: 'El Empleado ha sido guardado con éxito',
+        });
+        setTimeout(() =>{
+          this.router.navigate([`/super/empleados`]);
+       }, 2000);
+      }
+      },
+      error: (err)=> {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: err,
+        })
+      }
+    })
+    }
+    else{
+      this.saldo_vacacional.empleado.nombre = this.empleado.nombre;
+      this.saldo_vacacional.empleado.apellidos = this.empleado.apellidos;
+      this.saldo_vacacional.empleado.genero = this.empleado.genero;
+      this.saldo_vacacional.empleado.fecha_contratacion = this.empleado.fecha_contratacion;
+      this.saldo_vacacional.año = actual.year(); 
+
+      this.superadService.createSaldoVacacional(this.saldo_vacacional)
     .subscribe({
       next: (res: SaldoVacacional)=> {
         if(res){

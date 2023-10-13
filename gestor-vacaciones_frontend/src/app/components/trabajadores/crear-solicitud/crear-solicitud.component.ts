@@ -246,10 +246,7 @@ export class CrearSolicitudComponent implements OnInit {
     this.trabajadorService.getMails().subscribe({
       next: (res: string[]) => {
         if (res) {
-          this.mail.destinatarios = [
-            'lovad28459@apxby.com',
-            'l18121471@morelia.tecnm.mx',
-          ];
+          this.mail.destinatarios = res
           this.trabajadorService.enviarMail(this.mail).subscribe({
             next: (res: boolean) => {
               if (res) {

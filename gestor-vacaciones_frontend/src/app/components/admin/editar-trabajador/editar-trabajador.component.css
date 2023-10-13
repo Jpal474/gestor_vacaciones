@@ -90,6 +90,11 @@
      height: 20px;
  }
  
+ .regresar {
+     width: 30px;
+     height: 30px;
+ }
+ 
  @media screen and (max-width: 500px) {
      .card {
          width: 75vw;

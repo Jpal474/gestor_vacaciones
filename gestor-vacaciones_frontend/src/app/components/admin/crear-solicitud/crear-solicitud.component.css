@@ -6,7 +6,7 @@
     margin: -25px 0 0 -25px;
     border-radius: 20px;
     backdrop-filter: blur(20px);
-    box-shadow: 0 0 0 5px #fadbb9;
+    box-shadow: 0 0 0 5px #00aec1;
     left: 10%
 }
 
@@ -83,6 +83,11 @@
     font-size: 1em;
     color: #fff;
     font-weight: 500;
+}
+
+.regresar {
+    width: 30px;
+    height: 30px;
 }
 
 @media screen and (max-width:600px) {

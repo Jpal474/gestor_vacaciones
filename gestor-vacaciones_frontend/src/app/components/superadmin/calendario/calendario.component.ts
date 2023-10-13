@@ -59,7 +59,7 @@ export class CalendarioComponent {
           next: (res: Solicitud[])=> {
            events = [
             ...events,
-           ...res.map( event => ({title: `Vacaciones ${event.empleado.nombre}`, start: moment(event.fecha_inicio, 'YYYY-MM-DD').format('YYYY-MM-DD'), end: moment( event.fecha_fin, 'YYYY-MM-DD').format('YYYY-MM-DD'), backgroundColor:'#378006'})),
+           ...res.map( event => ({title: `Vacaciones ${event.empleado.nombre}`, start: moment(event.fecha_inicio, 'YYYY-MM-DD').format('YYYY-MM-DD'), end: moment( event.fecha_fin, 'YYYY-MM-DD').add(1, 'days').format('YYYY-MM-DD'), backgroundColor:'#378006'})),
             ]; 
             console.log(events);
             

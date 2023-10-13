@@ -24,7 +24,8 @@
                 <tbody>
                     <tr *ngFor="let trabajador of trabajadores">
                         <th scope="row" style="background-color: #00aec1; color: white;">{{trabajador.nombre}} {{trabajador.apellidos}}</th>
-                        <td>{{trabajador.departamento.nombre}}</td>
+                        <td *ngIf="trabajador.departamento">{{trabajador.departamento.nombre}}</td>
+                        <td *ngIf="!trabajador.departamento">S/D</td>
                         <td>{{trabajador.usuario.correo}}</td>
                         <td>{{trabajador.genero}}</td>
                         <td>{{trabajador.usuario.nombre_usuario}}</td>

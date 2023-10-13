@@ -33,8 +33,7 @@ export class CalendarioComponent {
     events: [],
     eventClick: function(info) {
       alert('Event: ' + info.event.title);
-      alert('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
-      alert('View: ' + info.view.type);
+     
     }
   };
 
@@ -84,7 +83,7 @@ export class CalendarioComponent {
             
            events = [
             ...events,
-           ...res.map( event => ({title: `Vacaciones ${event.empleado.nombre}`, start: moment(event.fecha_inicio, '').format('YYYY-MM-DD'), end: moment( event.fecha_fin, 'YYYY-MM-DD').format('YYYY-MM-DD'), backgroundColor:'#378006'})),
+           ...res.map( event => ({title: `Vacaciones ${event.empleado.nombre}`, start: moment(event.fecha_inicio, '').format('YYYY-MM-DD'), end: moment( event.fecha_fin, 'YYYY-MM-DD').add(1, 'days').format('YYYY-MM-DD'), backgroundColor:'#378006'})),
             ]; 
             console.log(events);
             

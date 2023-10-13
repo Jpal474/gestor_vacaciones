@@ -4,6 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { SuperadService } from 'src/app/services/superad.service';
 import * as CryptoJS from 'crypto-js';
 import { AuthService } from 'src/app/services/auth.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-actualizar-contrasenia',
@@ -40,17 +41,32 @@ export class ActualizarContraseniaComponent {
     .subscribe({
       next: (res: boolean)=> {
         if(res){
-          console.log('cambio exitoso de contraseña');
+          Swal.fire({
+            icon: 'success',
+            title: 'Éxito',
+            text: 'Su contraseña ha sido actualizada',
+          }) 
           
         }
         else{
-          console.log('No se pudo cambiar la contraseña');
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Hubo un error al actualizar la contraseña',
+          }) 
+          
           
         }
         
       },
       error: (err)=>{
-        console.log('No se ha podido cambiar la contraseña');
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Hubo un error al actualizar la contraseña',
+        }) 
+        console.log(err);
+        
         
       }
     })

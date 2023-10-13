@@ -64,20 +64,20 @@
                         <div class="input-box ms-5">
                             <input type="password" formControlName="contraseña" [class.is-invalid]="contraseniaNoValido">
                             <label>Contraseña</label>
-                            <small class="text-danger" *ngIf="contraseniaNoValido"> El campo no puede estar vacío </small>
                             <span class="icon" (click)="toggleFieldTextType()"><img
                                 [src]="fieldTextType? '../../../../../assets/recursos/imagenes/superadmin/generales/ocultar.svg' : '../../../../../assets/recursos/imagenes/superadmin/generales/mostrar.svg' "
                                 width="20px" 
                                 height="20px"></span>
+                            <small class="text-danger" *ngIf="contraseniaNoValido"> El campo no puede estar vacío </small>
                         </div>
                         <div class="input-box ms-5">
                             <input type="password" formControlName="confirmar_contraseña" [class.is-invalid]="confirmarContraseniaNoValida">
                             <label>Confirmar Contraseña</label>
-                            <small class="text-danger" *ngIf="confirmarContraseniaNoValida"> Las contraseñas deben coincidir </small>
                             <span class="icon" (click)="toggleFieldTextType2()"><img
                                 [src]="fieldTextType2? '../../../../../assets/recursos/imagenes/superadmin/generales/ocultar.svg' : '../../../../../assets/recursos/imagenes/superadmin/generales/mostrar.svg' "
                                 width="20px" 
                                 height="20px"></span>
+                            <small class="text-danger" *ngIf="confirmarContraseniaNoValida"> Las contraseñas deben coincidir </small>
                         </div>
                     </div>
 

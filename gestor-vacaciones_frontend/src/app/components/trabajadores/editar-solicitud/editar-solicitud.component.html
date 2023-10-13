@@ -11,13 +11,13 @@
                 <div class="form-group">
                     <div class="row">
                         <div class="input-box ms-5">
-                            <input type="date" id="id" class="form-control shadow-none" formControlName="fecha_inicio">
+                            <input type="date" id="id" class="form-control shadow-none" formControlName="fecha_inicio" [class.is-invalid]="fechaInicioNoValida">
 
                             <label>Fecha Inicio<span>*</span></label>
                             <small *ngIf="fechaInicioNoValida" class="text-danger"><p> {{fechaInicioNoValida}} </p></small>
                         </div>
                         <div class="input-box ms-5">
-                            <input type="date" id="id" class="form-control shadow-none" formControlName="fecha_fin">
+                            <input type="date" id="id" class="form-control shadow-none" formControlName="fecha_fin" [class.is-invalid]="fechaFinNoValida">
 
                             <label>Fecha Fin<span>*</span></label>
                             <small *ngIf="fechaFinNoValida" class="text-danger">{{fechaFinNoValida}}</small>
@@ -25,9 +25,11 @@
                     </div>
                     <div class="row">
                         <div class="form-floating">
-                            <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px" formControlName="justificacion"></textarea>
+                            <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px" formControlName="justificacion" [class.is-invalidad]="justificacionNoValida"></textarea>
                             <label for="floatingTextarea2">Justificacion</label>
                         </div>
+                        <small *ngIf="justificacionNoValida" class="text-danger">{{justificacionNoValida}}</small>
+
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary mt-5" (click)="updateSolicitud()">Submit</button>

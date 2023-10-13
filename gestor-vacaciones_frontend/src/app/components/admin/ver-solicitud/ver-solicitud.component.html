@@ -35,7 +35,7 @@
                 <div *ngIf="solicitud.estado === 'PENDIENTE'">
                     <button type="button" class="btn btn-success mb-5" (click)="enviarMail()">Comentarios Adicionales</button>
                     <br>
-                    <button type="button" class="btn btn-success" (click)="aprobarSolicitud()">APROBAR</button>
+                    <button type="button" class="btn btn-success" (click)="getEmpleadosVacaciones()">APROBAR</button>
                     <button type="button" class="btn btn-danger ms-5" (click)="rechazarSolicitud()">RECHAZAR</button> </div>
 
                 <div *ngIf="solicitud.estado === 'ACEPTADO'">

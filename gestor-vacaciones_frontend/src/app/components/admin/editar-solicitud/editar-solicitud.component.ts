@@ -160,7 +160,7 @@ export class EditarSolicitudComponent {
     this.solicitud_formulario = this.fb.group({
      fecha_inicio: ['', [Validators.required, this.minDateValidator]],
      fecha_fin: ['', Validators.required],
-     justificacion: ['']
+     justificacion: ['', Validators.maxLength(150)]
     },{
     validators:[ this.maxDateValidator('fecha_inicio', 'fecha_fin')]
     });
@@ -257,4 +257,98 @@ export class EditarSolicitudComponent {
     return null;
     }
   }
+  
+  allowedDateValidator(control: AbstractControl) {
+    const fecha = moment(new Date(control.value), 'YYYY-MM-DD');
+    const hoy = moment(new Date(), 'YYYY-MM-DD');
+    if (hoy.year() + 1 === fecha.year()) {
+      if (hoy.month() != 12 || (hoy.date() <= 16 && hoy.month() === 12)) {
+        return { allowedDate: true };
+      } else {
+        return null;
+      }
+    } else {
+      return null;
+    }
+  }
+
+  rangeDateValidator(fecha_inicio: string, fecha_fin: string) {
+    let mensaje = '';
+    console.log('max.date');
+
+    return (formGroup: FormGroup) => {
+      const CONTROL = formGroup.controls[fecha_inicio];
+      const CONTROL2 = formGroup.controls[fecha_fin];
+      if (CONTROL.value === null || CONTROL2.value === null) {
+        return;
+      }
+      const fecha_inicio2 = moment(CONTROL.value, 'YYYY/MM/DD');
+      const fecha_fin2 = moment(CONTROL2.value, 'YYYY/MM/DD');
+
+      if (!fecha_inicio2.isValid() || !fecha_fin2.isValid()) {
+        return;
+      }
+
+      if (fecha_inicio2 && fecha_fin2 && fecha_inicio2 > fecha_fin2) {
+        return { dateRange: true };
+      }
+      return null;
+    };
+  }
+
+  get fechaInicioNoValida(): string {
+    this.mensaje = '';
+    if (
+      this.solicitud_formulario.get('fecha_inicio')?.errors?.['required'] &&
+      this.solicitud_formulario.get('fecha_inicio')?.touched
+    ) {
+      this.mensaje = 'El campo no puede estar vacío';
+    } else if (
+      this.solicitud_formulario.get('fecha_inicio')?.errors?.['minDate'] &&
+      this.solicitud_formulario.get('fecha_inicio')?.touched
+    ) {
+      this.mensaje = 'La soicitud debe hacerse con 2 semanas de anticipación';
+    } else if (
+      this.solicitud_formulario.get('fecha_inicio')?.errors?.['allowedDate'] &&
+      this.solicitud_formulario.get('fecha_inicio')?.touched
+    ) {
+      this.mensaje = 'Aún no puedes hacer una solicitud para el año siguiente';
+    }
+    return this.mensaje;
+  }
+
+  get fechaFinNoValida(): string {
+    this.mensaje = '';
+    if (
+      this.solicitud_formulario.get('fecha_fin')?.errors?.['required'] &&
+      this.solicitud_formulario.get('fecha_fin')?.touched
+    ) {
+      this.mensaje = 'El campo no puede estar vacío';
+    } else if (
+      this.solicitud_formulario.errors?.['maxDate'] &&
+      this.solicitud_formulario.get('fecha_fin')?.touched
+    ) {
+      this.mensaje = 'Los días de la solicitud sobrepasan sus días disponibles';
+    }
+    else if (
+      this.solicitud_formulario.errors?.['dateRange'] &&
+      this.solicitud_formulario.get('fecha_fin')?.touched
+    ) {
+      this.mensaje = 'La fecha de fin debe ser posterior a la de incio';
+    }
+    return this.mensaje;
+  }
+
+  get justificacionNoValida(){
+    this.mensaje='';
+    if (
+      this.solicitud_formulario.get('justificacion')?.invalid
+    ) {
+      return true;
+  }
+  else{
+    return false;
+  }
+
+}
 }

@@ -6,5 +6,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent {
-
+  toInfo(){
+    document.getElementById("info")?.scrollIntoView({behavior:"smooth"})
+  }
+  toTrabajo(){
+    document.getElementById("trabajo")?.scrollIntoView({behavior:"smooth"})
+  }
 }

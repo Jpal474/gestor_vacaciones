@@ -156,7 +156,6 @@ actualizarTrabajador(){
       this.trabajador.fecha_contratacion = this.trabajador_formulario.value['fecha_contratacion'];
       this.trabajador.usuario.nombre_usuario = this.trabajador_formulario.value['nombre_usuario'];
       this.trabajador.usuario.correo = this.trabajador_formulario.value['correo'];
-      this.trabajador.usuario.contraseña = this.pass;
       this.adminService.updateUsuario(this.trabajador.usuario, this.id_usuario!)
       .subscribe({
         next: (res: Usuario)=> {
@@ -208,6 +207,15 @@ actualizarTrabajador(){
 
     }
     
+  }
+  else{
+    return Object.values( this.trabajador_formulario.controls ).forEach( control => {
+      if ( control instanceof FormGroup ) {
+        Object.values( control.controls ).forEach( control => control.markAsTouched() );
+      } else {
+        control.markAsTouched();
+      }
+    });
   }
 }
 
@@ -274,11 +282,14 @@ this.adminService.updateSaldoVacacional(this.trabajador.id!,año, this.saldo_vac
         icon: 'success',
         title: 'Éxito',
         text: 'Los Datos Han Sido Actualizados Éxitosamente',
-      }) 
+      }),
+      setTimeout(() =>{
+        this.router.navigate([`/admin/trabajadores`]);
+     }, 2000);
   } 
   },
   error: (err)=> {
-    const cadena:string = 'unknown error'
+    const cadena:string = 'Unknown Error'
     if(cadena.includes(err)){
       Swal.fire({
         icon: 'error',

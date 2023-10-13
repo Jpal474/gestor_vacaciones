@@ -20,7 +20,7 @@
                     <tbody>
                         <tr class="tr" *ngFor="let departamento of departamentos">
                             <th scope="row" style="background-color: #00aec1;
-                            color: white;">{{departamento.nombre}}</th>
+                            color: white;">{{departamento.nombre | uppercase}}</th>
                             <td>
                                 <a type="button" class="btn button text-white td" (click)="borrarDepartamento(departamento.id)">Eliminar</a>
                             </td>

@@ -64,7 +64,7 @@ export class AuthController {
 
       const htmlContent = `
       <h1>Solicitud de Cambio de Contraseña</h1>
-      <p>Se ha solicitado un cambio de contraseña para su cuenta, para continuar, de clic en e botón de abajo</p>
+      <p>Se ha solicitado un cambio de contraseña para su cuenta, para continuar, de clic en el enlace de abajo</p>
       <a class = 'btn btn-primary' href='${this.URL}/cambiar_contra/${token}' > Cambiar Contraseña </a>
       <br>
        <p>En caso de no haber sido usted, ignore este correo</p>`;

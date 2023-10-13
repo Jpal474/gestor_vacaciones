@@ -169,6 +169,8 @@ this.empleado_formulario= this.fb.group({
       }
       else if (this.empleado_formulario.value['contraseña'].length === 0){
         console.log('empleado sin contraseña');
+        console.log(this.pass);
+        
         
            this.empleado.nombre = this.empleado_formulario.value['nombre'];
            this.empleado.apellidos = this.empleado_formulario.value['apellidos'];
@@ -176,8 +178,6 @@ this.empleado_formulario= this.fb.group({
            this.empleado.fecha_contratacion = this.empleado_formulario.value['fecha_contratacion'];
            this.empleado.usuario.nombre_usuario = this.empleado_formulario.value['nombre_usuario'];
            this.empleado.usuario.correo = this.empleado_formulario.value['correo'];
-           this.empleado.usuario.contraseña = this.pass;
-           console.log('id_empleado',this.empleado.usuario.id);
            
            this.superadService.updateUsuario(this.empleado.usuario, this.id_usuario!)
            .subscribe({
@@ -325,10 +325,10 @@ async actualizarSaldoVacacional(){
   const fecha_contratacion = moment(fecha_c, 'YYYY-MM-DD');
   const diferencia = actual.diff(fecha_contratacion, 'year');
   if (diferencia > 0) {
-    const { value: dias_tomados } = await Swal.fire({//ingresa el nombre del departamento
+    let { value: dias_tomados } = await Swal.fire({//ingresa el nombre del departamento
       title: 'Ingrese Los Dias Vacacionales Tomados Por Su Trabajador',
       input: 'text',
-      inputLabel: 'En caso de no tener, deje en blanco el espacio',
+      inputLabel: 'En caso de no tener, deje en blanco el espacio o escruba 0',
       inputPlaceholder: 'Ingrese Nombre del Departamento',
     });   
 
@@ -337,6 +337,11 @@ async actualizarSaldoVacacional(){
   }else if (dias_tomados && parseInt(dias_tomados) === 0){
     this.saldo_vacacional.dias_tomados = 0;
   }
+  else{
+    this.saldo_vacacional.dias_tomados =0;
+    dias_tomados=0;
+  }
+  
     
     if (diferencia === 1) { 
       this.saldo_vacacional.dias_disponibles = 12-dias_tomados;
@@ -366,6 +371,8 @@ async actualizarSaldoVacacional(){
   }
 
   if(this.empleado.id){
+    console.log(this.saldo_vacacional);
+    
 this.superadService.updateSaldoVacacional(this.empleado.id!,año, this.saldo_vacacional)
 .subscribe({
   next: (res: SaldoVacacional)=> {
@@ -374,18 +381,22 @@ this.superadService.updateSaldoVacacional(this.empleado.id!,año, this.saldo_vac
       icon: 'success',
       title: 'Éxito',
       text: 'Los Datos Han Sido Actualizados de Forma Éxitosa',
-    })
+    }),
+    setTimeout(() =>{
+      this.router.navigate([`/admin/trabajadores`]);
+   }, 2000);
   } 
   },
   error: (err)=> {
     Swal.fire({
       icon: 'error',
       title: 'Error',
-      text: 'Hubo un error al actualizar los datos',
+      text: err,
     }) 
   }
 })
 }
+
 }
 
 

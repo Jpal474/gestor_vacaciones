@@ -35,8 +35,10 @@ export class MisSolicitudesComponent {
               next: (res: { solicitudes: Solicitud[]; pages: number })=> {
                 this.solicitudes = res.solicitudes;
                 this.paginas = res.pages;
+                console.log(res);
+                
                 this.paginasArray = Array.from({ length: this.paginas }, (_, index) => index + 1);
-              if(!(this.solicitudes)){
+              if(this.solicitudes.length === 0){
                 Swal.fire({
                   icon: 'warning',
                   title: 'No Hay Solicitudes Por Mostrar',

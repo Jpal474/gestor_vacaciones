@@ -12,6 +12,7 @@ import { RechazarSolicitud } from '../interfaces/rechazar_solicitud.interface';
 import { SaldoVacacional } from '../interfaces/saldo_vacacional.interface';
 import { SaldoActualizado } from '../interfaces/actualizar_saldo-vacacional.interface';
 import { EmailObservacion } from '../interfaces/email_observacion.interface';
+import { Ceo } from '../interfaces/ceo.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -73,6 +74,15 @@ export class SuperadService {
     return this.httpClient.get<boolean>(`${this.BASE_URL}/empleado/vacaciones`)
   }
 
+  getCeoByUserId(id: string): Observable<Ceo>{
+    return this.httpClient.get<Ceo>(`${this.BASE_URL}/ceo/usuario/${id}`)
+  }
+  
+  
+  getCeoById(id: string): Observable<Ceo>{
+    return this.httpClient.get<Ceo>(`${this.BASE_URL}/ceo/${id}`)
+  }
+
 
   generarSaldos(){
     return this.httpClient.get(`${this.BASE_URL}/superad`)
@@ -116,6 +126,10 @@ export class SuperadService {
 
   updateUsuario(usuario: Usuario, id:string): Observable<Usuario>{
     return this.httpClient.put<Usuario>(`${this.BASE_URL}/usuario/${id}`, usuario);
+  }
+
+  updateCeo(ceo: Ceo, id:string): Observable<Ceo>{
+    return this.httpClient.put<Ceo>(`${this.BASE_URL}/ceo/${id}`, ceo)
   }
 
   updateAdministrador(administrador: Empleado, id:string): Observable<Empleado>{

@@ -143,7 +143,7 @@ export class EditarSolicitudComponent implements OnInit {
     this.solicitud_formulario = this.fb.group({
      fecha_inicio: ['', [Validators.required, this.minDateValidator, this.allowedDateValidator,]],
      fecha_fin: ['', Validators.required],
-     justificacion: ['']
+     justificacion: ['', Validators.maxLength(150)]
     },{
     validators:[ this.maxDateValidator('fecha_inicio', 'fecha_fin'), this.rangeDateValidator('fecha_inicio', 'fecha_fin')]
     });
@@ -306,6 +306,17 @@ export class EditarSolicitudComponent implements OnInit {
     }
     return this.mensaje;
   }
+
+  get justificacionNoValida(){
+    this.mensaje='';
+    if (
+      this.solicitud_formulario.get('fecha_fin')?.errors?.['maxlength'] &&
+      this.solicitud_formulario.get('fecha_fin')?.touched
+    ) {
+      this.mensaje = 'Máximo de caractere alcanzado';
+  }
+return this.mensaje;
+}
 
 }
 

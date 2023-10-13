@@ -97,13 +97,13 @@ constructor(private adminService: AdminService) {}
 
 borrarDepartamento(id: number | undefined){
   Swal.fire({
-    title: 'Are you sure?',
-    text: "You won't be able to revert this!",
+    title: '¿Estás seguro?',
+    text: "Los datos no son reversibles",
     icon: 'warning',
     showCancelButton: true,
     confirmButtonColor: '#3085d6',
     cancelButtonColor: '#d33',
-    confirmButtonText: 'Yes, delete it!'
+    confirmButtonText: 'Borrar'
   }).then((result) => {
     if (result.isConfirmed) {
       if(id){

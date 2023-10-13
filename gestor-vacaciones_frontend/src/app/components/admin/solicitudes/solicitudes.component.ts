@@ -25,7 +25,13 @@ export class SolicitudesComponent implements OnInit{
       next: (res: { solicitudes: Solicitud[]; pages: number })=> {
         this.solicitudes = res.solicitudes;
         this.paginas = res.pages;  
-        this.paginasArray = Array.from({ length: this.paginas }, (_, index) => index + 1);        
+        this.paginasArray = Array.from({ length: this.paginas }, (_, index) => index + 1);  
+        if(this.solicitudes.length === 0){
+          Swal.fire({
+            icon: 'warning',
+            title: 'No hay solcitudes por mostrar',
+          })
+        }      
       },
       error: (err)=> {
         const cadena:string = 'unknown error'

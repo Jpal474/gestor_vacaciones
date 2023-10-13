@@ -78,6 +78,8 @@ export class UsuarioController {
     @Body() updateUsuarioDto: UpdateUsuarioDto,
     @Param('id') id: string,
   ): Promise<Usuario> {
+    console.log(id);
+
     return this.usuarioService.updateUsuario(updateUsuarioDto, id);
   }
 
