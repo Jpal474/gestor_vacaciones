@@ -30,6 +30,7 @@ import { FestivosService } from 'src/app/services/festivos.service';
 })
 export class CrearSolicitudComponent implements OnInit {
   mensaje = '';
+  max_date = moment(new Date().getFullYear().toString() + '-12-31').format('YYYY-MM-DD');
   dias_festivos: string[] = [];
   reglas: string[] = [
     '01-01',
@@ -98,7 +99,14 @@ export class CrearSolicitudComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('entra onInit');
+    const fecha_actual = moment(new Date(), 'YYYY-MM-DD')
+    if(fecha_actual.month() === 12 && fecha_actual.date() >= 16){
+      const nuevo_año = new Date().getFullYear()+1;
+      this.max_date=moment(nuevo_año.toString() + '-12-31').format('YYYY-MM-DD');
+    }
+
+    console.log(this.max_date, 'fecha máxima');
+    
     const id_usuario = JSON.parse(atob(localStorage.getItem('id')!));
     if (id_usuario) {
       console.log(id_usuario);
@@ -157,7 +165,7 @@ export class CrearSolicitudComponent implements OnInit {
           ],
         ],
         fecha_fin: ['', Validators.required],
-        justificacion: ['', Validators.maxLength(300)],
+        justificacion: ['', Validators.maxLength(350)],
       },
       {
         validators: [this.maxDateValidator('fecha_inicio', 'fecha_fin'), this.rangeDateValidator('fecha_inicio', 'fecha_fin')],
@@ -399,11 +407,16 @@ export class CrearSolicitudComponent implements OnInit {
     return this.mensaje;
   }
 
-  get justificacionNoValida(): string{
+  get justificacionNoValida(){
     this.mensaje='';
-    if(this.solicitud_formulario.get('justificacion')?.errors?.['maxlength']){
-      this.mensaje = 'El total de caacteres debe ser menor a 300'
-    }
-    return this.mensaje;
+    if (
+      this.solicitud_formulario.get('justificacion')?.invalid
+    ) {
+      return true;
   }
+  else{
+    return false;
+  }
+}
+
 }

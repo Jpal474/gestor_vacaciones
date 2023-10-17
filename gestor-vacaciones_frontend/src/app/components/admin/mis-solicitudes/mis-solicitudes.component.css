@@ -17,3 +17,9 @@
     width: 30px;
     height: 30px;
 }
+
+@media screen and (max-width:900px) {
+    .btn {
+        margin-top: 5px;
+    }
+}

@@ -16,6 +16,7 @@ export class MisSolicitudesComponent {
   paginas = 0;
   paginasArray: number[]=[]; 
   empleado_id = '';
+  pagina_actual = 1
 
   constructor(private adminService: AdminService) {}
 
@@ -54,6 +55,7 @@ export class MisSolicitudesComponent {
   }
 
   getSolicitudes(pagina:number){
+    this.pagina_actual = pagina;
     this.adminService.getMisSolicitudes(this.empleado_id, 5,pagina)
            .subscribe({
               next: (res: { solicitudes: Solicitud[]; pages: number })=> {

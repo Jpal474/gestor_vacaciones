@@ -57,11 +57,29 @@
     }
     .row {
         height: 45vh;
+        width: 85vw;
     }
 }
 
-@media screen and (max-width:1500px) and (min-width:501px) {
+@media screen and (max-width:900px) and (min-width:501px) {
+    .row {
+        width: 85vw;
+        height: 55vh;
+    }
+    .card {
+        width: 10rem;
+        font-size: small;
+        margin-top: 8px;
+    }
+    .col img {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+@media screen and (max-width:2500px) and (min-width:1400px) {
     .card {
         margin-bottom: 10px;
+        width: 13.5rem;
     }
 }

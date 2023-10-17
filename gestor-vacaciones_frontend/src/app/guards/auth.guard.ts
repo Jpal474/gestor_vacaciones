@@ -18,7 +18,7 @@ class PermissionsToken {
       return true;
     }
     else{
-    this.router.navigate(['/login'])
+    this.router.navigate(['/iniciar_sesion'])
     Swal.fire({
       icon: 'warning',
       text: 'Su Sesión Ha Expirado, Inicie Sesión De Nuevo',

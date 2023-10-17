@@ -9,6 +9,8 @@ import { TrabajadoresService } from 'src/app/services/trabajadores.service';
 import * as moment from 'moment'; 
 import { SolicitudEditar } from 'src/app/interfaces/solicitud-editar.interface';
 import Swal from 'sweetalert2';
+import { DiasFeriados } from 'src/app/interfaces/dias_feriados.interface';
+import { FestivosService } from 'src/app/services/festivos.service';
 
 @Component({
   selector: 'app-editar-solicitud',
@@ -16,7 +18,10 @@ import Swal from 'sweetalert2';
   styleUrls: ['./editar-solicitud.component.css']
 })
 export class EditarSolicitudComponent implements OnInit {
+  max_date = moment(new Date().getFullYear().toString() + '-12-31').format('YYYY-MM-DD');
   id_solicitud = 0;
+  dias_festivos: string [] = [];
+  reglas: string [] = ["01-01", "1st monday in Frebruary", "3rd monday in March", "05-01","09-16", "3rd monday in November", "12-01 every 6 years since 1934", "12-25" ];
   solicitud_formulario!: FormGroup;
   mensaje = '';
   empleado: Empleado = {
@@ -60,12 +65,17 @@ export class EditarSolicitudComponent implements OnInit {
     private trabajadorService: TrabajadoresService,
     private router: Router,
     private activadedRoute: ActivatedRoute,
+    private festivosService: FestivosService
   ) {
     this.crearFormulario();
   }
 
   ngOnInit(): void {
-
+    const fecha_actual = moment(new Date(), 'YYYY-MM-DD')
+    if(fecha_actual.month() === 12 && fecha_actual.date() >= 16){
+      const nuevo_año = new Date().getFullYear()+1;
+      this.max_date=moment(nuevo_año.toString() + '-12-31').format('YYYY-MM-DD');
+    }
     const params = this.activadedRoute.snapshot.params;
     this.id_solicitud = params['id'];
     if(params){
@@ -105,6 +115,44 @@ export class EditarSolicitudComponent implements OnInit {
           title: 'Error',
           text: err,
         }) 
+      },
+      complete: ()=>{
+        this.festivosService.getDiasFeriados()
+        .subscribe({
+          next: (res: DiasFeriados[])=> {
+            let i = 0;
+            res.map(event =>{
+              if(event.type === 'public' && this.reglas.includes(event.rule)){
+               this.dias_festivos[i] = moment(event.date).format('YYYY-MM-DD')
+               i++;
+              }
+           }); 
+          },
+          error: (err)=> {
+            const cadena:string = 'Unknown Error'
+          if(cadena.includes(err)){
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Ha habido un error al completar la solicitud',
+            })
+          }
+          else if('unauthorized'.includes(err)){
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Debe iniciar sesión para completar la acción',
+            })
+          }
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: err,
+          })
+            
+          }
+        })
+        
       }
     })
           }
@@ -143,7 +191,7 @@ export class EditarSolicitudComponent implements OnInit {
     this.solicitud_formulario = this.fb.group({
      fecha_inicio: ['', [Validators.required, this.minDateValidator, this.allowedDateValidator,]],
      fecha_fin: ['', Validators.required],
-     justificacion: ['', Validators.maxLength(150)]
+     justificacion: ['', Validators.maxLength(350)]
     },{
     validators:[ this.maxDateValidator('fecha_inicio', 'fecha_fin'), this.rangeDateValidator('fecha_inicio', 'fecha_fin')]
     });
@@ -187,43 +235,46 @@ export class EditarSolicitudComponent implements OnInit {
     return null;
   }
 
-  maxDateValidator(fecha_inicio:string, fecha_fin:string) {
-    let mensaje=''
+  maxDateValidator(fecha_inicio: string, fecha_fin: string) {
+    let mensaje = '';
     console.log('max.date');
-    
+
     return (formGroup: FormGroup) => {
       const CONTROL = formGroup.controls[fecha_inicio];
       const CONTROL2 = formGroup.controls[fecha_fin];
-      if (CONTROL.value === null || CONTROL2.value === null ){
+      if (CONTROL.value === null || CONTROL2.value === null) {
         return;
-      } 
-       const fecha_inicio2 = moment(CONTROL.value, 'YYYY/MM/DD');
-       const fecha_fin2 = moment(CONTROL2.value, 'YYYY/MM/DD');
-      
+      }
+      const fecha_inicio2 = moment(CONTROL.value, 'YYYY/MM/DD');
+      const fecha_fin2 = moment(CONTROL2.value, 'YYYY/MM/DD');
+
       if (!fecha_inicio2.isValid() || !fecha_fin2.isValid()) {
         return;
       }
-      const fecha_actual= fecha_inicio2;
+      const fecha_actual = fecha_inicio2;
       let diferencia = 0;
-    while (fecha_actual.isSameOrBefore(fecha_fin2)) {
-      if (fecha_actual.day() !== 0 && fecha_actual.day() !== 6) {
-        // Si no es domingo (0) ni sábado (6), cuenta como día laborable
-        diferencia++;
+      while (fecha_actual.isSameOrBefore(fecha_fin2)) {
+        if (fecha_actual.day() !== 0 && fecha_actual.day() !== 6) {
+          // Si no es domingo (0) ni sábado (6), cuenta como día laborable
+          // Además, verifica si la fecha actual está en la lista de días festivos
+          const fechaActualString = fecha_actual.format('YYYY-MM-DD');
+          if (!this.dias_festivos.includes(fechaActualString)) {
+            diferencia++;
+          } else {
+            console.log('Día feriado');
+          }
+        }
+        fecha_actual.add(1, 'days'); // Avanza un día
       }
-      fecha_actual.add(1, 'days'); // Avanza un día
-    }
-     console.log(diferencia, 'diferencia');
-     
-    if (diferencia > this.saldo_vacacional.dias_disponibles){
-      console.log('dias disponibles', this.saldo_vacacional.dias_disponibles);
-      
-      console.log('demasiados dias');
-      
-      return { maxDate: true };
+      console.log(diferencia);
 
-    }
-    return null;
-    }
+      if (diferencia > this.saldo_vacacional.dias_disponibles) {
+        console.log('Demasiados días');
+
+        return { maxDate: true };
+      }
+      return null;
+    };
   }
 
   allowedDateValidator(control: AbstractControl) {
@@ -310,12 +361,14 @@ export class EditarSolicitudComponent implements OnInit {
   get justificacionNoValida(){
     this.mensaje='';
     if (
-      this.solicitud_formulario.get('fecha_fin')?.errors?.['maxlength'] &&
-      this.solicitud_formulario.get('fecha_fin')?.touched
+      this.solicitud_formulario.get('justificacion')?.invalid
     ) {
-      this.mensaje = 'Máximo de caractere alcanzado';
+      return true;
   }
-return this.mensaje;
+  else{
+    return false;
+  }
+
 }
 
 }

@@ -23,6 +23,7 @@ export class DepartamentosComponent implements OnInit{
       correo: '',
     }
   };
+  pagina_actual = 0;
 constructor(private adminService: AdminService) {}
 
  ngOnInit(): void {
@@ -30,6 +31,7 @@ constructor(private adminService: AdminService) {}
  }
 
  getDepartamentos(page: number){
+  this.pagina_actual=page;
   this.adminService.getDepartamentos(5, page)
   .subscribe({
     next: (res:{ departamentos: Departamento[], pages:number})=> {
@@ -101,8 +103,8 @@ borrarDepartamento(id: number | undefined){
     text: "Los datos no son reversibles",
     icon: 'warning',
     showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
+    confirmButtonColor: '#198754',
+    cancelButtonColor: '#8c0b0a',
     confirmButtonText: 'Borrar'
   }).then((result) => {
     if (result.isConfirmed) {

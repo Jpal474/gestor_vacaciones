@@ -15,6 +15,7 @@ export class SolicitudesComponent implements OnInit {
   empleado_id='';
   paginas = 0;
   paginasArray: number[]=[];
+  pagina_actual = 1;
 
   constructor(private trabajadorService: TrabajadoresService) {}
 
@@ -55,6 +56,7 @@ export class SolicitudesComponent implements OnInit {
   }
 
   getSolicitudes(pagina:number){
+    this.pagina_actual = pagina
     this.trabajadorService.getSolicitudes(this.empleado_id, 5,pagina)
            .subscribe({
               next: (res: { solicitudes: Solicitud[]; pages: number })=> {

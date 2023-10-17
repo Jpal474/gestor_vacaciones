@@ -26,7 +26,6 @@ section {
 @media screen and (max-height: 742px) {
     section {
         width: auto;
-        top: 0;
         transform: none;
         -webkit-animation: none !important;
         animation: none !important;

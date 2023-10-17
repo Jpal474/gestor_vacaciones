@@ -29,7 +29,6 @@ export class CalendarioComponent {
     events: [],
     eventClick: function(info) {
       alert('Event: ' + info.event.title);
-      alert('Fecha: ' + info.event.start + ',' + info.jsEvent.pageY);
     }
   };
 
@@ -46,7 +45,25 @@ export class CalendarioComponent {
         if(res){
           this.dias = res
           console.log(this.dias);
-          events = this.dias.map( event => ({title: event.name, date: event.date.toString().split(' ')[0]}));
+          events = this.dias.map( event => {
+            let color;
+            if (event.type === 'public' &&  event.name.includes('libre')) {
+              console.log('libre');
+              
+              color = '#007ad9'; // Set the color for events of Type1
+            } else if (event.type === 'bank') {
+              color = '#330036'; // Set the color for events of Type2
+            } else if (event.type === 'observance') {
+              color = '#2F4858'; // Set the color for events of Type3
+            }  else if (event.type === 'public'){
+              color = '#27a082'; // Set the color for events of Type3
+            } 
+            return {
+              title: event.name,
+              date: event.date.toString().split(' ')[0],
+              backgroundColor: color,
+            };
+          });
           
         }
       },

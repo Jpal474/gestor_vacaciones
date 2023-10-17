@@ -4,7 +4,7 @@ section {
     padding: 52px 24px 24px;
     text-align: center;
     border-radius: 24px;
-    position: fixed;
+    position: relative;
     top: 200px;
     left: calc(50vw - (912px / 2));
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
@@ -12,26 +12,26 @@ section {
 
 @media screen and (max-width: 572px) {
     section {
-        width: auto;
-        max-width: 100%;
+        width: 90vw;
         left: 0;
         top: 0;
         transform: none;
         -webkit-animation: none !important;
         animation: none !important;
-        margin: 132px 12px 12px;
+        margin: 162px 12px 12px;
     }
 }
 
 @media screen and (max-height: 742px) {
     section {
         width: 70vw;
-        top: 45px;
+        top: 0px;
         transform: none;
         -webkit-animation: none !important;
         animation: none !important;
-        margin-top: 96px;
+        margin-top: 166px;
         margin-bottom: 10px;
+        left: 10%;
     }
 }
 

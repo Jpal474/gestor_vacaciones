@@ -48,13 +48,13 @@ export class LoginComponent {
         localStorage.setItem('tipo', btoa(JSON.stringify(empleado.rol)));
         localStorage.setItem('correo', btoa(JSON.stringify(empleado.correo)));
         if(empleado.rol === 'SuperAdministrador'){
-          this.router.navigate(['/super/home']);
+          this.router.navigate(['/super/inicio']);
         }
         else if(empleado.rol === 'Administrador'){
-          this.router.navigate(['/admin/home']);
+          this.router.navigate(['/admin/inicio']);
         }
         else if(empleado.rol === 'Trabajador'){
-          this.router.navigate(['/trabajador/home'])
+          this.router.navigate(['/trabajador/inicio'])
         }
         console.log('bienvenido', empleado.nombre);
         
@@ -65,6 +65,9 @@ export class LoginComponent {
           },
           hideClass: {
             popup: 'animate__animated animate__fadeOutUp'
+          },
+          customClass: {
+            confirmButton: 'btn-sweet'
           }
         })
         

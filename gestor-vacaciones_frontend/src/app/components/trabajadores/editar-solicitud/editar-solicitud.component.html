@@ -1,9 +1,8 @@
-<app-navbar></app-navbar>
-<h1 class="text-center mt-5" style="color: #18020C;"> Editar Solicitud </h1>
-<a class="text-white" [routerLink]="['/trabajador/home']"> <img src="../../../../assets/recursos/imagenes/general/regresar.svg" class="regresar"> Regresar</a>
+<h1 class="text-center titulo"> Editar Solicitud </h1>
+<a class="link" [routerLink]="['/trabajador/inicio']"> <img src="../../../../assets/recursos/imagenes/general/regresar.svg" class="regresar"> Regresar</a>
 
 <div class="container ms-5">
-    <div class="card mt-5">
+    <div class="card mt-4">
         <div class="card-body">
             <h5 class="card-title text-center">Datos de la Solicitud</h5>
             <br>
@@ -25,14 +24,14 @@
                     </div>
                     <div class="row">
                         <div class="form-floating">
-                            <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px" formControlName="justificacion" [class.is-invalidad]="justificacionNoValida"></textarea>
+                            <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px" formControlName="justificacion" [class.is-invalid]="justificacionNoValida"></textarea>
                             <label for="floatingTextarea2">Justificacion</label>
                         </div>
-                        <small *ngIf="justificacionNoValida" class="text-danger">{{justificacionNoValida}}</small>
+                        <small *ngIf="justificacionNoValida" class="text-danger">Rango máximo de carácteres alcaznado</small>
 
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary mt-5" (click)="updateSolicitud()">Submit</button>
+                <button type="submit" class="btn btn-primary mt-5" (click)="updateSolicitud()">Guardar</button>
             </form>
         </div>
     </div>

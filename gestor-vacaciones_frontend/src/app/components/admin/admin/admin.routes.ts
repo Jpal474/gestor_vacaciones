@@ -16,7 +16,7 @@ import { CuentaComponent } from '../cuenta/cuenta.component';
 
 
 export const ADMIN_ROUTES: Routes = [
-    { path: 'home', component:HomeComponent},
+    { path: 'inicio', component:HomeComponent},
     {path: 'departamentos', component: DepartamentosComponent},
     {path: 'trabajadores', component: TrabajadoresComponent},
     {path: 'agregar_trabajador', component: AgregarTrabajadorComponent},

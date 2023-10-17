@@ -23,6 +23,7 @@ export class DepartamentosComponent implements OnInit {
       correo: '',
     }
   };
+  pagina_actual = 0;
 
   constructor(private superadService: SuperadService) {}
 
@@ -80,6 +81,7 @@ export class DepartamentosComponent implements OnInit {
 
 
   getDepartamentos(number:number){
+    this.pagina_actual = number
     this.superadService.getDepartamentos(5,number)
     .subscribe({
       next: (res:{ departamentos: Departamento[]; pages: number })=> {

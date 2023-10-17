@@ -12,6 +12,7 @@ export class TrabajadoresComponent implements OnInit{
   trabajadores: Empleado[] = [];
   paginasArray: number[]=[];
   paginas = 0;
+  pagina_actual =0;
 
   constructor(
     private adminService: AdminService) {}
@@ -21,6 +22,7 @@ export class TrabajadoresComponent implements OnInit{
   }
 
   getTrabajadores(page: number) {
+    this.pagina_actual = page
     this.adminService.getTrabajadores(5, page).subscribe({
       next: (res: { trabajadores: Empleado[]; pages: number }) => {
         this.trabajadores = res.trabajadores;  

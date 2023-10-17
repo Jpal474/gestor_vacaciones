@@ -12,7 +12,7 @@ import { EditarCuentaComponent } from '../editar-cuenta/editar-cuenta.component'
 
 
 export const SUPERADMIN_ROUTES: Routes = [
-    { path: 'home', component:HomeComponent},
+    { path: 'inicio', component:HomeComponent},
     { path: 'departamentos', component:DepartamentosComponent},
     {path: 'empleados', component: EmpleadosComponent},
     {path: 'agregar_empleado', component: AgregarEmpleadoComponent},
@@ -22,6 +22,6 @@ export const SUPERADMIN_ROUTES: Routes = [
     {path: 'calendario', component: CalendarioComponent},
     {path: 'cuenta', component: CuentaComponent},
     {path: 'editar_cuenta/:id', component: EditarCuentaComponent},
-    {path:'**', pathMatch:'full', redirectTo:'pagenotfound'},
+    {path:'**', pathMatch:'full', redirectTo:'paginanoencontrada'},
     
 ];

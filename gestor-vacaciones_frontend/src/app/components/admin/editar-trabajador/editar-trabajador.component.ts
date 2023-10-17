@@ -76,6 +76,15 @@ export class EditarTrabajadorComponent {
           this.rol = res.usuario.rol?.nombre!;
           this.aux_fecha = res.fecha_contratacion;
           console.log(this.usuario.contraseña);
+          let departamento
+          if(res.departamento === null){
+            departamento = {
+              id: 9,
+              nombre: 'sin departamento'
+            }
+          }else{
+            departamento = res.departamento;
+          }
           
           this.trabajador_formulario.patchValue({
             nombre: res.nombre,
@@ -83,7 +92,7 @@ export class EditarTrabajadorComponent {
             nombre_usuario: res.usuario.nombre_usuario,
             correo: res.usuario.correo,
             genero: res.genero,
-            departamento: res.departamento.nombre,
+            departamento: departamento.nombre,
             fecha_contratacion: res.fecha_contratacion,
             
           })

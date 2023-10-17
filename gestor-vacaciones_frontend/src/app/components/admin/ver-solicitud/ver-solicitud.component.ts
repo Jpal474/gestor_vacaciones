@@ -17,6 +17,8 @@ import { AprobarSolicitud } from 'src/app/interfaces/aprobar_solicitud.interface
 import { SaldoActualizado } from 'src/app/interfaces/actualizar_saldo-vacacional.interface';
 import { EmailObservacion } from 'src/app/interfaces/email_observacion.interface';
 import { SaldoVacacional } from 'src/app/interfaces/saldo_vacacional.interface';
+import { FestivosService } from 'src/app/services/festivos.service';
+import { DiasFeriados } from 'src/app/interfaces/dias_feriados.interface';
 @Component({
   selector: 'app-ver-solicitud',
   templateUrl: './ver-solicitud.component.html',
@@ -72,12 +74,16 @@ export class VerSolicitudComponent {
     destinatario: '',
     mensaje: '',
   }
+  dias_festivos: string [] = [];
+  reglas: string [] = ["01-01", "1st monday in Frebruary", "3rd monday in March", "05-01","09-16", "3rd monday in November", "12-01 every 6 years since 1934", "12-25" ];
+
 
 
   constructor(
     private adminService: AdminService,
     private activadedRoute: ActivatedRoute,
     private router: Router,
+    private festivosService: FestivosService
   ) {}
   ngOnInit(): void {
     const params = this.activadedRoute.snapshot.params;
@@ -86,19 +92,40 @@ export class VerSolicitudComponent {
         next: (res: Solicitud) => {
           this.solicitud = res;
           console.log(this.solicitud);
-          this.getDias(this.solicitud.fecha_inicio, this.solicitud.fecha_fin);          
         },
+        error: (err)=>{
+          console.log(err);
+        },
+        complete: ()=>{
+          this.festivosService.getDiasFeriados()
+          .subscribe({
+            next: (res: DiasFeriados[])=> {
+              let i = 0;
+              if(res){
+                 res.map(event =>{
+                   if(event.type === 'public' && this.reglas.includes(event.rule)){
+                    this.dias_festivos[i] = moment(event.date).format('YYYY-MM-DD')
+                    i++;
+                   }
+                }); 
+                console.log(this.dias_festivos);
+                this.getDias(this.solicitud.fecha_inicio, this.solicitud.fecha_fin);
+                
+              }
+            },
+            error: (err)=> {
+              console.log(err);
+              
+            }
+          }) 
+        }
       });
     }
   }
 
-  getDias(fecha_inicio: string, fecha_fin: string) { 
-    console.log('---------');
-       
+  getDias(fecha_inicio: string, fecha_fin: string) {
     const fechaInicio = moment(fecha_inicio, 'YYYY-MM-DD');
     const fechaFinal = moment(fecha_fin, 'YYYY-MM-DD');
-    console.log(fechaInicio, 'inicio');
-    console.log(fechaFinal, 'final');
     const anio = fechaInicio.year();
     const anio2 = fechaFinal.year();
     
@@ -109,28 +136,35 @@ export class VerSolicitudComponent {
       // Verificar si el día actual no es sábado (6) ni domingo (0)
       console.log(i);
       if (fecha_actual.day() !== 6 && fecha_actual.day() !== 0) {
+        const fechaActualString = fecha_actual.format('YYYY-MM-DD');
+        console.log(this.dias_festivos, 'dias festivos')
+        console.log(fechaActualString, '-----------',this.dias_festivos.includes(fechaActualString));
         
-        if(i<0){
-        this.dias.push(fecha_actual.date());
-        console.log('entra al while');
+        if (!this.dias_festivos.includes(fechaActualString)) {
+          if(i<1){
+            this.dias.push(fecha_actual.date());
+            console.log('entra al while');
+            }
+          else{
+            if (
+              fecha_actual.date() == 1 &&
+              (fechaInicio.month() < fechaFinal.month() ||
+                (fecha_actual.date() == 2 &&
+                  fechaInicio.month() < fechaFinal.month()))
+            ){
+              this.dias2.push(fecha_actual.date())
+              this.band = true;
+            }
+            else if (!this.band) {
+                this.dias.push(fecha_actual.date())
+            }
+            else{
+              this.dias2.push(fecha_actual.date())
+            }
+          }
+        } else {
+          console.log('Día feriado');
         }
-      else{
-        if (
-          fecha_actual.date() == 1 &&
-          (fechaInicio.month() < fechaFinal.month() ||
-            (fecha_actual.date() == 2 &&
-              fechaInicio.month() < fechaFinal.month()))
-        ){
-          this.dias2.push(fecha_actual.date())
-          this.band = true;
-        }
-        else if (!this.band) {
-            this.dias.push(fecha_actual.date())
-        }
-        else{
-          this.dias2.push(fecha_actual.date())
-        }
-      }
       }
       i+=1;
       // Avanzar al siguiente día
@@ -149,31 +183,26 @@ export class VerSolicitudComponent {
        this.fechas.anio2 = anio2.toString();
        const DATEMOMENT = moment(fechaInicio, 'YYYY-MM-DD').format('MMMM')
        const DATEMOMENT2 = moment(fechaFinal, 'YYYY-MM-DD').format('MMMM');
-       console.log('traducir mes');
-       
        this.fechas.mes = this.traducirMes(DATEMOMENT);
        this.fechas.mes2 = this.traducirMes(DATEMOMENT2);
     }
-    else if (this.band){
-      console.log('traducir mes2');
+    else if (this.dias2.length > 0){
+      console.log('entra 2 meses');
+      
       this.fechas.anio = anio.toString()
       const DATEMOMENT = moment(fechaInicio, 'YYYY-MM-DD').format('MMMM')
       this.fechas.mes = this.traducirMes(DATEMOMENT);
-      const DATEMOMENT2 = moment(fechaInicio, 'YYYY-MM-DD').format('MMMM')
+      const DATEMOMENT2 = moment(fecha_fin, 'YYYY-MM-DD').format('MMMM')
       this.fechas.mes2 = this.traducirMes(DATEMOMENT2);
     }
     else{
-      console.log('traducir mes3');
       this.fechas.anio = anio.toString();
       const DATEMOMENT = moment(fechaInicio, 'YYYY-MM-DD').format('MMMM')
       this.fechas.mes = this.traducirMes(DATEMOMENT);
     }
-    console.log(this.fechas, 'fechas');
-    console.log(this.dias, 'dias');
-    console.log(this.dias2);
-    
-    
-    
+    console.log(this.fechas);
+    console.log(this.dias);
+    console.log(this.dias2, 'dias 2');  
   }
 
   traducirMes(mes: string): string{
@@ -469,7 +498,7 @@ pdf.add(
 )
 pdf.add(
   new Txt([
-    new Txt(`En la medida de lo posible dese disfrutar de un periodo vacacional correspondiente a `).end,
+    new Txt(`En la medida de lo posible deseo disfrutar de un periodo vacacional correspondiente a `).end,
     new Txt(`${total_dias} días`).bold().end,
     new Txt(` comprendidos entre el `).end,
     new Txt(` ${moment(this.solicitud.fecha_inicio).date()} de ${mes1} del ${año}`).bold().end,

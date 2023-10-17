@@ -1,10 +1,3 @@
-full-calendar {
-    position: absolute;
-    top: 8%;
-    width: 70vw;
-    height: 90vh;
-}
-
 @media screen and (max-width: 500px) {
     full-calendar {
         position: fixed;
@@ -12,7 +5,23 @@ full-calendar {
         left: 50%;
         transform: translate(-50%, -50%);
         width: 95vw;
-        margin-top: 20px;
+        height: 85vh;
+        margin-top: 30px;
         font-size: small;
+        color: black;
+    }
+}
+
+@media screen and (max-width: 900px) and (min-width:501px) {
+    full-calendar {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 95vw;
+        margin-top: 2.5rem;
+        font-size: small;
+        color: black;
+        height: 85vh;
     }
 }

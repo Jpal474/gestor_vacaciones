@@ -12,6 +12,7 @@ export class SolicitudesComponent implements OnInit {
   solicitudes: Solicitud[] = []
   paginas = 0;
   paginasArray: number[]=[];
+  pagina_actual = 0;
   constructor(private superadService: SuperadService) {}
 
   ngOnInit(): void {
@@ -19,6 +20,7 @@ export class SolicitudesComponent implements OnInit {
   }
 
   getSolicitudes(page:number){
+    this.pagina_actual = page;
     this.superadService.getAllSolicitudes(5,page)
     .subscribe({
       next: (res:{ solicitudes: Solicitud[]; pages: number })=> {

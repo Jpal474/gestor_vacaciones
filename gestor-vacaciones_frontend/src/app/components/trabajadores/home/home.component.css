@@ -3,6 +3,7 @@
     background-image: url(../../../../assets/recursos/imagenes/general/login/fondo_playa.jpg);
     background-size: cover;
     background-repeat: no-repeat;
+    overflow-x: hidden;
 }
 
 .row {
@@ -52,15 +53,23 @@
     }
     .row {
         height: 45vh;
+        width: 85vw;
     }
 }
 
 @media screen and (max-width:900px) and (min-width:501px) {
+    .row {
+        width: 85vw;
+        height: 55vh;
+    }
     .card {
-        margin-bottom: 10px;
-        align-items: center;
-        position: relative;
-        left: 20%;
+        width: 10rem;
+        font-size: small;
+        margin-top: 8px;
+    }
+    .col img {
+        width: 40px;
+        height: 40px;
     }
 }
 

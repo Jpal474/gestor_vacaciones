@@ -17,15 +17,15 @@ import { RecuperarContraseniaComponent } from './components/general/recuperar-co
 import { ActualizarContraseniaComponent } from './components/general/actualizar-contrasenia/actualizar-contrasenia.component';
 
 const routes: Routes = [
-  { path: 'login', component: LoginComponent },
-  {path:'landing', component: LandingComponent,},
+  { path: 'iniciar_sesion', component: LoginComponent },
+  {path:'inicio', component: LandingComponent,},
   {path:'admin', component:AdminComponent, canActivate:[authGuard, adminGuard], children:ADMIN_ROUTES},
   {path:'super', component:SuperadminComponent,canActivate:[authGuard, superGuard], children:SUPERADMIN_ROUTES},
   {path:'trabajador', component:TrabajadorComponent, canActivate:[authGuard, trabajadorGuard] ,children:TRABAJADOR_ROUTES},
   {path:'confirmar_cambio_contraseña', component:RecuperarContraseniaComponent},
   {path:'cambiar_contra/:token', component:ActualizarContraseniaComponent},
-  {path: 'pagenotfound', component: PagenotfoundComponent},
-  {path:'**', pathMatch:'full', redirectTo:'landing'},
+  {path: 'paginanoencontrada', component: PagenotfoundComponent},
+  {path:'**', pathMatch:'full', redirectTo:'paginanoencontrada'},
 
 ];
 

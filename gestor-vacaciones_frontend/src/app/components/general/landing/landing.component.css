@@ -1,6 +1,24 @@
-.carousel-item img {
-    width: 600px;
-    height: 400px;
+.carousel-item {
+    background-size: cover;
+    /* Ensures the background image covers the entire item */
+    background-repeat: no-repeat;
+    /* Prevents the image from repeating */
+    background-position: center center;
+    /* Centers the image horizontally and vertically */
+    min-height: 130vh;
+    /* Adjust this as needed for the desired height */
+}
+
+.slide-1 {
+    background-image: url("../../../../assets/recursos/imagenes/general/carousel/idc.brightspotcdn.jpeg");
+}
+
+.slide-2 {
+    background-image: url("../../../../assets/recursos/imagenes/general/carousel/istockphoto-1157293038-612x612.jpg");
+}
+
+.slide-3 {
+    background-image: url("../../../../assets/recursos/imagenes/general/carousel/LeaveWizard2.jpg");
 }
 
 .carousel-control-prev-icon,
@@ -14,11 +32,12 @@
 
 #info {
     background-color: #00aec1;
+    height: 100vh;
 }
 
 #trabajo {
     background-color: #fadbb9;
-    height: 30vh;
+    height: 35vh;
 }
 
 .img-pagos {
@@ -26,9 +45,12 @@
     height: 150px;
 }
 
-@media screen and (max-width:600px) {
+@media screen and (max-width:700px) {
     #trabajo {
         background-color: #fadbb9;
         height: 50vh;
+    }
+    #info {
+        height: 185vh;
     }
 }

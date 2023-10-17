@@ -23,10 +23,21 @@ td {
     height: 30px;
 }
 
+.page-link {
+    background-color: black;
+    color: white;
+}
+
+.active {
+    background-color: #fadbb9;
+    color: black;
+}
+
 @media screen and (max-width: 750px) {
     table {
         width: 20vw;
         font-size: small;
+        height: auto;
     }
     .btn {
         margin-bottom: 10px;

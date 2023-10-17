@@ -12,7 +12,7 @@ export class EmpleadosComponent implements OnInit {
   empleados: Empleado[] = [];
   paginas = 0;
   paginasArray: number[]=[];
-  pagina_actual=1;
+  pagina_actual=0;
   constructor(private superadService: SuperadService) {}
 
   ngOnInit(): void {
@@ -20,7 +20,7 @@ export class EmpleadosComponent implements OnInit {
   }
 
   getEmpleados(pagina: number) {
-    this.pagina_actual++;
+    this.pagina_actual = pagina;
     this.superadService.getEmpleados(5,pagina).subscribe({
       next: (res: { empleados: Empleado[], pages:number}) => {
         if(res){

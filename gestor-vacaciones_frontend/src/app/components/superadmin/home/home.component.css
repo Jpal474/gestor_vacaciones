@@ -26,6 +26,11 @@
     box-shadow: 0 50px 70px -20px rgba(0, 0, 0, 0.85);
 }
 
+.col img {
+    width: 100px;
+    height: 100px;
+}
+
 .solicitudes {
     position: absolute;
     top: -5%;
@@ -52,12 +57,29 @@
     }
     .row {
         height: 45vh;
+        width: 85vw;
     }
 }
 
-@media screen and (max-width:2500px) and (min-width:501px) {
+@media screen and (max-width:900px) and (min-width:501px) {
+    .row {
+        width: 85vw;
+        height: 55vh;
+    }
+    .card {
+        width: 10rem;
+        font-size: small;
+        margin-top: 8px;
+    }
+    .col img {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+@media screen and (max-width:2500px) and (min-width:1400px) {
     .card {
         margin-bottom: 10px;
-        width: 10rem;
+        width: 13.5rem;
     }
 }

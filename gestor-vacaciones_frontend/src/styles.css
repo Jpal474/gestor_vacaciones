@@ -1,1 +1,23 @@
-/* You can add global styles to this file, and also import other style files */
+.titulo {
+    color: white;
+    margin-top: 5rem;
+}
+
+.link {
+    color: #FFFEE7;
+}
+
+full-calendar {
+    position: absolute;
+    top: 8%;
+    width: 70vw;
+    height: 85vh;
+    color: white;
+    margin-top: 2rem;
+}
+
+@media screen and (max-width:700px) {
+    .titulo {
+        color: black;
+    }
+}

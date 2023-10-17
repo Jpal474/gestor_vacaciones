@@ -15,6 +15,7 @@ import Swal from 'sweetalert2';
   styleUrls: ['./editar-solicitud.component.css']
 })
 export class EditarSolicitudComponent {
+  max_date = moment(new Date().getFullYear().toString() + '-12-31').format('YYYY-MM-DD');
   id_solicitud = 0;
   solicitud_formulario!: FormGroup;
   mensaje = '';
@@ -64,7 +65,11 @@ export class EditarSolicitudComponent {
   }
 
   ngOnInit(): void {
-
+    const fecha_actual = moment(new Date(), 'YYYY-MM-DD')
+    if(fecha_actual.month() === 12 && fecha_actual.date() >= 16){
+      const nuevo_año = new Date().getFullYear()+1;
+      this.max_date=moment(nuevo_año.toString() + '-12-31').format('YYYY-MM-DD');
+    }
     const params = this.activadedRoute.snapshot.params;
     this.id_solicitud = params['id'];
     if(params){
@@ -131,7 +136,7 @@ export class EditarSolicitudComponent {
         }
       }, 
       error: (err)=> {
-        const cadena:string = 'unknown error'
+        const cadena:string = 'Unknown Error'
           if(cadena.includes(err)){
             Swal.fire({
               icon: 'error',
@@ -160,7 +165,7 @@ export class EditarSolicitudComponent {
     this.solicitud_formulario = this.fb.group({
      fecha_inicio: ['', [Validators.required, this.minDateValidator]],
      fecha_fin: ['', Validators.required],
-     justificacion: ['', Validators.maxLength(150)]
+     justificacion: ['', Validators.maxLength(350)]
     },{
     validators:[ this.maxDateValidator('fecha_inicio', 'fecha_fin')]
     });

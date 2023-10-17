@@ -4,7 +4,7 @@ section {
     padding: 52px 24px 24px;
     text-align: center;
     border-radius: 24px;
-    position: fixed;
+    position: relative;
     top: 200px;
     left: calc(50vw - (912px / 2));
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
@@ -25,13 +25,15 @@ section {
 
 @media screen and (max-height: 742px) {
     section {
-        width: 70vw;
+        width: 75vw;
         top: 45px;
         transform: none;
         -webkit-animation: none !important;
         animation: none !important;
-        margin-top: 96px;
+        margin-top: 115px;
         margin-bottom: 10px;
+        left: 15%;
+        height: auto;
     }
 }
 

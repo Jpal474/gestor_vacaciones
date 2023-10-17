@@ -1,9 +1,8 @@
-<app-navbar></app-navbar>
-<h1 class="text-center mt-5" style="color: #18020C;"> Trabajadores </h1>
+<h1 class="text-center titulo"> Trabajadores </h1>
 <div class="d-grid gap-2 col-6 mx-auto justify-content-md-end">
     <a class="btn btn-success text-white" [routerLink]="['/admin/agregar_trabajador']">AGREGAR TRABAJADOR</a>
 </div>
-<a class="text-white" [routerLink]="['/admin/home']"> <img src="../../../../assets/recursos/imagenes/general/regresar.svg" class="regresar"> Regresar</a>
+<a class="text-white" [routerLink]="['/admin/inicio']"> <img src="../../../../assets/recursos/imagenes/general/regresar.svg" class="regresar"> Regresar</a>
 
 <div class="row justify-content-center mt-5">
     <div class="col">
@@ -33,8 +32,8 @@
                             style="font-size: 0.9rem;">{{trabajador.estado}}</td>
                         <td>
                             <a type="button" class="btn button text-white ms-4" [routerLink]="['/admin/editar_trabajador',trabajador.id]">Editar</a>
-                            <a type="button" class="btn button-red text-white ms-4" (click)="eliminarTrabajador(trabajador.usuario.id)">Eliminar</a>
-                            <a type="button" class="btn button-red text-white ms-4" (click)="cambiarEstado(trabajador.id, trabajador.estado)">Cambiar Estado</a>
+                            <a type="button" class="btn button-red text-white ms-2" (click)="eliminarTrabajador(trabajador.usuario.id)">Eliminar</a>
+                            <a type="button" class="btn button-red text-white ms-2" (click)="cambiarEstado(trabajador.id, trabajador.estado)">Cambiar Estado</a>
 
                         </td>
                     </tr>
@@ -47,7 +46,7 @@
 <div class="d-flex justify-content-center">
     <nav aria-label="Page navigation example">
         <ul class="pagination">
-            <li class="page-item" *ngFor="let i of paginasArray"><a class="page-link" (click)="getTrabajadores(i)">{{i}}</a></li>
+            <li class="page-item" *ngFor="let i of paginasArray"><a class="page-link" [ngStyle]="pagina_actual === i ? {'background-color': '#fadbb9', 'color': 'black'} : {'background-color': '#00aec1', 'color': 'white'}" (click)="getTrabajadores(i)">{{i}}</a></li>
 
         </ul>
     </nav>

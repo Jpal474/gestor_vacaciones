@@ -10,7 +10,7 @@ import { CalendarioComponent } from '../calendario/calendario.component';
 
 
 export const TRABAJADOR_ROUTES: Routes = [
-    { path: 'home', component:HomeComponent},
+    { path: 'inicio', component:HomeComponent},
     {path: 'solicitudes', component: SolicitudesComponent},
     {path: 'crear_solicitud', component: CrearSolicitudComponent},
     {path: 'solicitud', component: VerSolicitudComponent},
@@ -18,7 +18,7 @@ export const TRABAJADOR_ROUTES: Routes = [
     {path: 'editar_solicitud/:id', component: EditarSolicitudComponent},
     {path: 'solicitud/:id', component: VerSolicitudComponent},
     {path: 'calendario', component: CalendarioComponent},
-    {path:'**', pathMatch:'full', redirectTo:'pagenotfound'},
+    {path:'**', pathMatch:'full', redirectTo:'paginanoencontrada'},
     //{ path: 'path/:routeParam', component: MyComponent },
     //{ path: 'staticPath', component: ... },
     //{ path: '**', component: ... },
