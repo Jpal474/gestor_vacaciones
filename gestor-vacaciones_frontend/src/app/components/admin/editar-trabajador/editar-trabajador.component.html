@@ -14,7 +14,7 @@
             <form autocomplete="off" [formGroup]="trabajador_formulario">
                 <div class="form-group">
                     <div class="row">
-                        <div class="input-box me-5 ms-5">
+                        <div class="input-box me-3 ms-5">
                             <span class="icon"></span>
                             <input type="text" formControlName="nombre" [class.is-invalid]="nombreNoValido" required>
                             <label>Nombre</label>
@@ -28,7 +28,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="input-box me-5 ms-5">
+                        <div class="input-box me-3 ms-5">
                             <span class="icon"></span>
                             <input type="text" formControlName="nombre_usuario" required>
                             <label>Nombre de Usuario</label>
@@ -64,7 +64,7 @@
                         <select class="form-select" aria-label="Default select example" formControlName="departamento" [class.is-invalid]="departamentoNoValido">
                         <option selected disabled>-Elija Un Departamento-</option>
                         <option *ngFor="let departamento of departamentos" [ngStyle]="{
-                            'display': departamento.nombre === 'sin departamento' ? 'none' : 'block'}" value={{departamento.id}}>{{departamento.nombre}}</option>
+                            'display': departamento.nombre === 'sin departamento' ? 'none' : 'block'}" value={{departamento.id}}>{{departamento.nombre | uppercase}}</option>
                       </select>
                         <small class="text-danger" *ngIf="departamentoNoValido"> {{departamentoNoValido}} </small>
                     </div>

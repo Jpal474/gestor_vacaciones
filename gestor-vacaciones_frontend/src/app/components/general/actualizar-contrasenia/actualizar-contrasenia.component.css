@@ -1,6 +1,8 @@
 .home {
     height: 100vh;
-    background-image: url(../../../../assets/recursos/imagenes/general/login/fondo-app.jpg);
+    background-image: url(../../../../assets/recursos/imagenes/general/login/fondo_playa.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 
 .card {
@@ -76,4 +78,33 @@
     font-size: 1em;
     color: #fff;
     font-weight: 500;
+}
+
+@media screen and (max-width:700px) {
+    .card {
+        left: 3%;
+    }
+    .text-danger {
+        margin-bottom: 20%;
+        font-size: 0.55rem;
+    }
+    .input-box {
+        width: 60%;
+    }
+    .input-box label {
+        font-size: small;
+    }
+    .home {
+        overflow-x: hidden;
+    }
+    .btn {
+        margin-top: 10%;
+    }
+    #confirmar {
+        margin-top: 10%;
+    }
+    .img-small {
+        width: 12px;
+        height: 12px;
+    }
 }

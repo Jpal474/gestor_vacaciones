@@ -15,6 +15,7 @@
                         <th class="th" scope="col">Nombre</th>
                         <th class="th" scope="col">Departamento</th>
                         <th class="th" scope="col">Correo</th>
+                        <th class="th" scope="col">Días disponibles/tomados</th>
                         <th class="th" scope="col">Genero</th>
                         <th class="th" scope="col">Nombre Usuario</th>
                         <th class="th" scope="col">Estado</th>
@@ -24,9 +25,10 @@
                 <tbody>
                     <tr *ngFor="let empleado of empleados">
                         <th scope="row" style="background-color: #00aec1; color: white;">{{empleado.nombre}} {{empleado.apellidos}}</th>
-                        <td *ngIf="empleado.departamento">{{empleado.departamento.nombre}}</td>
+                        <td *ngIf="empleado.departamento">{{empleado.departamento.nombre | uppercase}}</td>
                         <td *ngIf="!empleado.departamento">S/D</td>
                         <td>{{empleado.usuario.correo}}</td>
+                        <td class="text-center">{{empleado.saldo_vacacional?.[0]?.dias_disponibles}}/{{empleado.saldo_vacacional?.[0]?.dias_tomados}}</td>
                         <td>{{empleado.genero}}</td>
                         <td>{{empleado.usuario.nombre_usuario}}</td>
                         <td [ngStyle]="{'background-color': empleado.estado === 'ACTIVO' ? 'green' : (empleado.estado === 'DE VACACIONES' ? 'yellow' : 'red'), 'color': empleado.estado === 'ACTIVO' ? 'white' : (empleado.estado === 'DE VACACIONES' ? 'black' : 'white')}" style="font-size: 0.9rem;">{{empleado.estado}}</td>

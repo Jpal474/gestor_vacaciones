@@ -45,6 +45,7 @@ export class ActualizarContraseniaComponent {
             icon: 'success',
             title: 'Éxito',
             text: 'Su contraseña ha sido actualizada',
+            confirmButtonColor:'#198754',
           }) 
           
         }
@@ -53,6 +54,7 @@ export class ActualizarContraseniaComponent {
             icon: 'error',
             title: 'Error',
             text: 'Hubo un error al actualizar la contraseña',
+            confirmButtonColor:'#198754',
           }) 
           
           
@@ -64,6 +66,7 @@ export class ActualizarContraseniaComponent {
           icon: 'error',
           title: 'Error',
           text: 'Hubo un error al actualizar la contraseña',
+          confirmButtonColor:'#198754',
         }) 
         console.log(err);
         

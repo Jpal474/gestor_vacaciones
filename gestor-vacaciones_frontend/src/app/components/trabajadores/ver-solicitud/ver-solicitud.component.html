@@ -42,9 +42,10 @@
                 <h6 class="card-title text-center" style="color: #818ea2;">Justificacion</h6>
                 <p class="fs-6">{{solicitud.justificacion}}</p>
                 <br>
-                <div class="card warning" style="background-color: #ffc107; font-weight:bold ;">
+                <div class="card warning" style="font-weight:bold ;" [ngStyle]="{ 'background-color': solicitud.estado==='ACEPTADO' ? 'green' : (solicitud.estado==='RECHAZADO' ? 'red' : '#ffc107'), 'color': solicitud.estado==='ACEPTADO' ? 'white' : (solicitud.estado==='RECHAZADO' ? 'white'
+                : 'black')} ">
                     <div class="card-body">
-                        PENDIENTE
+                        {{solicitud.estado}}
                     </div>
                 </div>
             </nav>

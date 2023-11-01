@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-recuperar-contrasenia',
@@ -35,9 +36,20 @@ export class RecuperarContraseniaComponent {
   this.authService.enviarMail(this.destinatario)
   .subscribe({
     next: (res: boolean)=>{
-      console.log('correo enviado');
+      Swal.fire({
+        icon:'success',
+        title:'Éxito',
+        text:'El correo ha sido enviado con éxito',
+        confirmButtonColor:'#198754',
+      })
     },
     error: (err)=>{
+      Swal.fire({
+        icon:'error',
+        title:'Error',
+        text:'Hubo un error al enviar el correo',
+        confirmButtonColor:'#198754',
+      })
       console.log(`correo no enviado: ${err}`);
       
     }

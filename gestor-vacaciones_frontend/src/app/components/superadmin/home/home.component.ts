@@ -32,6 +32,7 @@ async generarSaldoVacacional(){
         icon: 'success',
         title: 'Éxito',
         text: 'El Saldo Ha Sido Actualizado',
+        confirmButtonColor:'#198754',
       }) 
 
     }

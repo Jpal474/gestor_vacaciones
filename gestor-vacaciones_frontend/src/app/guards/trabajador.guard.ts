@@ -1,5 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
+import { StorageService } from '../storage.service';
 
 @Injectable({
   providedIn:'root'
@@ -7,11 +8,12 @@ import { CanActivateFn, Router } from '@angular/router';
 class PermissionsToken {
   constructor(
     private router: Router,
+    private storageService: StorageService
     ){
 
   }
   canActivate(): boolean {
-    const tipo = JSON.parse(atob(localStorage.getItem('tipo')!));
+    let tipo = this.storageService.getLocalStorageItem('tipo') + '';
 
     if(tipo && tipo === 'Trabajador'){
       return true;

@@ -60,6 +60,7 @@ export class AdminService {
       admin.apellidos = updateAdministradorDto.apellidos;
       admin.genero = updateAdministradorDto.genero;
       admin.fecha_contratacion = updateAdministradorDto.fecha_contratacion;
+      admin.departamento = updateAdministradorDto.departamento;
       await this.empleadoRepository.save(admin);
       return admin;
     } catch (error) {

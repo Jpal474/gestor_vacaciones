@@ -1,4 +1,5 @@
 import { Departamento } from "./departamento.interface";
+import { SaldoVacacional } from "./saldo_vacacional.interface";
 import { Usuario } from "./usuario.interface";
 
 export interface Empleado{
@@ -9,7 +10,8 @@ export interface Empleado{
     fecha_contratacion: string,
     usuario: Usuario,
     departamento: Departamento,
-    estado?:EmpleadoEstado
+    estado?:EmpleadoEstado,
+    saldo_vacacional?:SaldoVacacional[];
 }
 
 export enum EmpleadoGenero{

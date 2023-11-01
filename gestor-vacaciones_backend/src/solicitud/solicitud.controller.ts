@@ -105,20 +105,45 @@ export class SolicitudController {
     return this.solicitudService.getSolicitudesAprobadasByEmpleado(id);
   }
 
-  @Get('/:size/:number')
+  @Get('/:size/:number/:op')
   @ApiOperation({ summary: 'Listar Solicitudes' })
+  @ApiParam({
+    name: 'Size',
+    description: 'Tamaño de registros a mostrar en front',
+  })
+  @ApiParam({
+    name: 'Number',
+    description: 'Número de página a mostrar en front',
+  })
+  @ApiParam({
+    name: 'Op',
+    description: 'Opción para forma de orndenar los datos',
+  })
   getSolicitudes(
     @Param('size') size: number,
     @Param('number') number: number,
+    @Param('op') op: number,
   ): Promise<{ solicitudes: Solicitud[]; pages: number }> {
-    return this.solicitudService.getAllSolicitudes(size, number);
+    return this.solicitudService.getAllSolicitudes(size, number, op);
   }
 
-  @Get('empleados/:id/:size/:number')
+  @Get('empleados/:id/:size/:number/:op')
   @ApiOperation({
     summary: 'Obtener todas las solicitudes de un empleado en específico',
   })
   @ApiParam({ name: 'id', description: 'ID del Empleado' })
+  @ApiParam({
+    name: 'Size',
+    description: 'Tamaño de registros a mostrar en front',
+  })
+  @ApiParam({
+    name: 'Number',
+    description: 'Número de página a mostrar en front',
+  })
+  @ApiParam({
+    name: 'Op',
+    description: 'Opción para forma de orndenar los datos',
+  })
   @ApiResponse({
     status: 200,
     description:
@@ -130,17 +155,31 @@ export class SolicitudController {
     @Param('id') id: string,
     @Param('size') size: number,
     @Param('number') number: number,
+    @Param('op') op: number,
   ): Promise<{ solicitudes: Solicitud[]; pages: number }> {
-    return this.solicitudService.getSolicitudesByEmpleado(id, size, number);
+    return this.solicitudService.getSolicitudesByEmpleado(id, size, number, op);
   }
 
-  @Get('trabajadores/:size/:number')
+  @Get('trabajadores/:size/:number/:op')
   @ApiOperation({ summary: 'Listar Solicitudes' })
+  @ApiParam({
+    name: 'Size',
+    description: 'Tamaño de registros a mostrar en front',
+  })
+  @ApiParam({
+    name: 'Number',
+    description: 'Número de página a mostrar en front',
+  })
+  @ApiParam({
+    name: 'Op',
+    description: 'Opción para forma de orndenar los datos',
+  })
   getSolicitudesTrabajadores(
     @Param('size') size: number,
     @Param('number') number: number,
+    @Param('op') op: number,
   ): Promise<{ solicitudes: Solicitud[]; pages: number }> {
-    return this.solicitudService.getSolicitudesTrabajadores(size, number);
+    return this.solicitudService.getSolicitudesTrabajadores(size, number, op);
   }
 
   @Post()
@@ -157,6 +196,7 @@ export class SolicitudController {
 
   @Put('/aprobar/:id')
   @ApiOperation({ summary: 'Aprobar Solicitud' })
+  @ApiParam({ name: 'ID', description: 'ID de la Solicitud aprobada' })
   @ApiBody({
     description: 'Nombre de usuario de la persona quién aprobó la solicitud',
     type: String,
@@ -180,6 +220,7 @@ export class SolicitudController {
 
   @Put('/denegar/:id')
   @ApiOperation({ summary: 'Denegar Solicitud' })
+  @ApiParam({ name: 'ID', description: 'ID de la solicitud a rechazar' })
   @ApiBody({
     description: 'Nombre de usuario de la persona quién rechazó la solicitud',
     type: String,
@@ -204,6 +245,10 @@ export class SolicitudController {
 
   @Put('/:id')
   @ApiOperation({ summary: 'Editar Solicitud' })
+  @ApiParam({
+    name: 'ID',
+    description: 'ID de la Solicitud a Editar',
+  })
   @ApiBody({
     description: 'Datos Actualizados de la Solicitud',
     type: UpdateSolicitudDto,

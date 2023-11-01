@@ -178,8 +178,11 @@ export class AgregarEmpleadoComponent implements OnInit {
                         Swal.fire({
                           icon: 'error',
                           title: 'Error',
-                          text: err,
+                          text: 'Hubo un error al generar el Saldo Vacacional del empleado',
+                          confirmButtonColor:'#198754',
                         });
+                        console.log(err);
+                        
                       },
                     });
                 } else {
@@ -245,7 +248,8 @@ export class AgregarEmpleadoComponent implements OnInit {
         title: 'Ingrese Los Dias Vacacionales Tomados Por Su Trabajador',
         input: 'text',
         inputLabel: 'En caso de no tener, deje en blanco el espacio',
-        inputPlaceholder: 'Ingrese Nombre del Departamento',
+        inputPlaceholder: 'Días Tomados',
+        confirmButtonColor:'#198754',
       });        
 
       this.saldo_vacacional.empleado.nombre = this.empleado.nombre;
@@ -290,10 +294,7 @@ export class AgregarEmpleadoComponent implements OnInit {
       this.saldo_vacacional.dias_disponibles = 30-dias_tomados;
     } else if (diferencia >= 31 || diferencia <= 35) {
       this.saldo_vacacional.dias_disponibles = 32-dias_tomados;
-    }
-    console.log('saldo vacacional',this.saldo_vacacional);
-    
-       
+    }       
     this.superadService.createSaldoVacacional(this.saldo_vacacional)
     .subscribe({
       next: (res: SaldoVacacional)=> {
@@ -302,6 +303,7 @@ export class AgregarEmpleadoComponent implements OnInit {
           icon: 'success',
           title: 'Éxito',
           text: 'El Empleado ha sido guardado con éxito',
+          confirmButtonColor:'#198754',
         });
         setTimeout(() =>{
           this.router.navigate([`/super/empleados`]);
@@ -312,7 +314,8 @@ export class AgregarEmpleadoComponent implements OnInit {
         Swal.fire({
           icon: 'error',
           title: 'Error',
-          text: err,
+          text: 'Hubo un error al generar el Saldo Vacacional del empleado',
+          confirmButtonColor:'#198754',
         })
       }
     })
@@ -332,6 +335,7 @@ export class AgregarEmpleadoComponent implements OnInit {
           icon: 'success',
           title: 'Éxito',
           text: 'El Empleado ha sido guardado con éxito',
+          confirmButtonColor:'#198754',
         });
         setTimeout(() =>{
           this.router.navigate([`/super/empleados`]);
@@ -342,7 +346,8 @@ export class AgregarEmpleadoComponent implements OnInit {
         Swal.fire({
           icon: 'error',
           title: 'Error',
-          text: err,
+          text: 'Hubo un error al generar el Saldo Vacacional del empleado',
+          confirmButtonColor:'#198754',
         })
       }
     })

@@ -11,6 +11,7 @@ import { SolicitudEditar } from 'src/app/interfaces/solicitud-editar.interface';
 import Swal from 'sweetalert2';
 import { DiasFeriados } from 'src/app/interfaces/dias_feriados.interface';
 import { FestivosService } from 'src/app/services/festivos.service';
+import { StorageService } from 'src/app/storage.service';
 
 @Component({
   selector: 'app-editar-solicitud',
@@ -19,6 +20,9 @@ import { FestivosService } from 'src/app/services/festivos.service';
 })
 export class EditarSolicitudComponent implements OnInit {
   max_date = moment(new Date().getFullYear().toString() + '-12-31').format('YYYY-MM-DD');
+  min_date = moment(new Date()).add(14, 'days').format(
+    'YYYY-MM-DD'
+  );
   id_solicitud = 0;
   dias_festivos: string [] = [];
   reglas: string [] = ["01-01", "1st monday in Frebruary", "3rd monday in March", "05-01","09-16", "3rd monday in November", "12-01 every 6 years since 1934", "12-25" ];
@@ -65,7 +69,8 @@ export class EditarSolicitudComponent implements OnInit {
     private trabajadorService: TrabajadoresService,
     private router: Router,
     private activadedRoute: ActivatedRoute,
-    private festivosService: FestivosService
+    private festivosService: FestivosService,
+    private storageService: StorageService
   ) {
     this.crearFormulario();
   }
@@ -76,13 +81,14 @@ export class EditarSolicitudComponent implements OnInit {
       const nuevo_año = new Date().getFullYear()+1;
       this.max_date=moment(nuevo_año.toString() + '-12-31').format('YYYY-MM-DD');
     }
-    const params = this.activadedRoute.snapshot.params;
-    this.id_solicitud = params['id'];
-    if(params){
-      this.trabajadorService.getSolicitudById(params['id'])
+    this.id_solicitud = +this.storageService.getLocalStorageItem('id_solicitud')!
+    if(this.id_solicitud){
+      this.trabajadorService.getSolicitudById(this.id_solicitud)
       .subscribe({
         next: (res: Solicitud)=> {
           if(res){
+            console.log(res, 'solicitud');
+            
             this.solicitud_formulario.patchValue({
               fecha_inicio: res.fecha_inicio,
               fecha_fin : res.fecha_fin,
@@ -91,11 +97,12 @@ export class EditarSolicitudComponent implements OnInit {
           }
         },
         error: (err)=> {
+console.log(err);
 
         },
         complete: ()=> {
-          const id_usuario= JSON.parse(atob(localStorage.getItem('id')!))
-    if(id_usuario){
+          const id_usuario = this.storageService.getLocalStorageItem('id') + '';
+      if(id_usuario){
       console.log(id_usuario);
       
     this.trabajadorService.getEmpleadoByUserId(id_usuario)
@@ -113,7 +120,8 @@ export class EditarSolicitudComponent implements OnInit {
         Swal.fire({
           icon: 'error',
           title: 'Error',
-          text: err,
+          text: 'Hubo un error al obtener los datos',
+          confirmButtonColor:'#198754',
         }) 
       },
       complete: ()=>{
@@ -129,25 +137,11 @@ export class EditarSolicitudComponent implements OnInit {
            }); 
           },
           error: (err)=> {
-            const cadena:string = 'Unknown Error'
-          if(cadena.includes(err)){
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: 'Ha habido un error al completar la solicitud',
-            })
-          }
-          else if('unauthorized'.includes(err)){
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: 'Debe iniciar sesión para completar la acción',
-            })
-          }
           Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: err,
+            text: 'Hubo un error al obtener los días feriados',
+            confirmButtonColor:'#198754',
           })
             
           }
@@ -208,6 +202,7 @@ export class EditarSolicitudComponent implements OnInit {
             icon: 'success',
             title: 'Éxito',
             text: 'La Solicitud Ha Sido Actualizada!',
+            confirmButtonColor:'#198754',
           }) 
         }
         },
@@ -215,11 +210,169 @@ export class EditarSolicitudComponent implements OnInit {
           Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: err,
+            text: 'Hubo un error al actualizar la Solicitud',
+            confirmButtonColor:'#198754',
           }) 
         }
       })
     }
+    else{
+      return Object.values( this.solicitud_formulario.controls ).forEach( control => {
+        if ( control instanceof FormGroup ) {
+          Object.values( control.controls ).forEach( control => control.markAsTouched() );
+        } else {
+          control.markAsTouched();
+        }
+      });
+    }
+  }
+
+  async crearSolicitudPorDias() {
+    let justificacion = '';
+    const a = 5;
+    const { value: formValues } = await Swal.fire({
+      title: 'Datos de la Solicitud',
+      html:
+        '<label >Fecha de Inicio</label>' +
+        '<br>' + //creamos un label para la fecha inicial
+        `<input id="swal-input1" class="swal2-input" type="date" max="${this.max_date}" min="${this.min_date}" required>` +
+        '<br>' + //creamos un input para la fecha de inicio
+        '<label for="swal-input2">Cantidad de Días</label>' + //label para cantidad de dias
+        '<input id="swal-input2" pattern="[0-9]{2}" title="Ingrese un número menor o igual a 2 digitos" class="swal2-input"> <br>'+
+        'ó <br> <input type="radio" id="todos_dias"> Seleccionar Todos',
+          //en el input de arriba se valida que se ingrese un numero de 2 digitos o menos
+        focusConfirm: false,
+      preConfirm: () => {
+        const input1 = document.getElementById(
+          'swal-input1'
+        ) as HTMLInputElement;
+        const input2 = document.getElementById(
+          'swal-input2'
+        ) as HTMLInputElement;
+        const miCheckbox = document.getElementById('todos_dias') as HTMLInputElement;
+ 
+        console.log(miCheckbox.checked)
+        console.log(input1.value);
+        
+
+        if (input1.value && input2.value) {
+          return [input1.value, input2.value];
+        }
+        else if (input1.value && miCheckbox.checked){
+          console.log('entra el if i 1 y cb');
+          
+          input2.value = this.saldo_vacacional.dias_disponibles.toString();
+          return [input1.value, input2.value];
+        }
+        else {
+          // Handle the case where one or both elements are not found in the DOM
+          // Return an array with default or error values
+          return []; //retornamos un array vacío en caso de que no se agreguen valores
+        }
+
+      },
+    });
+
+    console.log(JSON.stringify(formValues));
+    
+    
+    if (formValues && (parseInt(formValues[1]) <= this.saldo_vacacional.dias_disponibles)) {
+      console.log('entra al if');
+      
+      //validamos en el if que formValues tenga valores y que la posición 1 que corresponde a los días solicitados sea menor o igual a sus días disponibles
+      Swal.fire({
+        title: '¿Desea añadir Justificación?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#198754',
+        cancelButtonColor: '#d33',
+        cancelButtonText: 'No',
+        confirmButtonText: 'Sí',
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          const { value: text } = await Swal.fire({
+            input: 'textarea',
+            inputLabel: 'Justificacion',
+            inputPlaceholder:
+              'Digite su mensaje menor o igual a 300 caracteres aquí',
+            inputAttributes: {
+              'aria-label': 'Type your message here',
+            },
+            confirmButtonColor: '#198754',
+            cancelButtonColor: '#d33',
+            showCancelButton: true,
+            cancelButtonText: 'Cancelar'
+          });
+          if (text && text.length <= 300) {
+            justificacion = text;
+            this.guardarSolicitudPorDias(formValues, justificacion);
+          } else if (text.length > 300) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Su justificación debe ser menor o igual a 300 carácteres',
+              confirmButtonColor:'#198754',
+            });
+          }
+        }else{
+
+          this.guardarSolicitudPorDias(formValues, justificacion);
+        }
+      });
+      
+    }
+  }
+
+  guardarSolicitudPorDias(formValues: string[], justificacion: string) {
+    const fecha_inicio = moment(formValues[0], 'YYYY/MM/DD')
+    let fecha_actual = fecha_inicio;
+    let i = 0;
+
+    console.log('---fecha de incio al entrar a guardar---', fecha_inicio);
+    
+
+    while(i < parseInt(formValues[1])){
+     if(fecha_actual.day() !== 6 && fecha_actual.day() !== 0){
+      if(! this.dias_festivos.includes(fecha_actual.format('YYYY/MM/DD'))){
+        i++
+      }
+     }
+     fecha_actual.add(1, 'days');
+    }
+
+    console.log('---fecha de incio al salir del while---', fecha_inicio);
+
+    this.solicitud.fecha_inicio = moment(formValues[0], 'YYYY-MM-DD').format('YYYY-MM-DD')
+    this.solicitud.fecha_fin = fecha_actual.format('YYYY-MM-DD');
+      this.solicitud.justificacion = justificacion;
+    
+    
+   
+    console.log(this.solicitud);
+    
+    this.trabajadorService.updateSolicitud(this.id_solicitud,this.solicitud).subscribe({
+      next: (res: Solicitud) => {
+        if (res) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Éxito',
+            text: 'La Solicitud Ha Sido Actualizada con Éxito',
+            confirmButtonColor:'#198754',
+          }),
+
+          setTimeout(() => {
+            this.router.navigate(['/trabajador/inicio']);
+          }, 3000);
+        }
+      },
+      error: (err) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Hubo un error al actualizar la solicitud',
+        });
+      },
+    });    
   }
 
   minDateValidator(control: AbstractControl) {
@@ -326,7 +479,7 @@ export class EditarSolicitudComponent implements OnInit {
       this.solicitud_formulario.get('fecha_inicio')?.errors?.['minDate'] &&
       this.solicitud_formulario.get('fecha_inicio')?.touched
     ) {
-      this.mensaje = 'La soicitud debe hacerse con 2 semanas de anticipación';
+      this.mensaje = 'La solicitud debe hacerse 2 semanas posterior a la fecha de hoy';
     } else if (
       this.solicitud_formulario.get('fecha_inicio')?.errors?.['allowedDate'] &&
       this.solicitud_formulario.get('fecha_inicio')?.touched

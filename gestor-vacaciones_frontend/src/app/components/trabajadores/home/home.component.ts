@@ -1,24 +1,23 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent {
-  private scrollY = 0;
-
+export class HomeComponent implements OnInit{
+  vacaciones = false;
+ngOnInit(): void {
+  this.generarAlerta();
   
-  @HostListener('window:scroll', ['$event'])
-  onScroll(event: Event): void {
-    this.scrollY = window.scrollY;
-    this.updateParallax();
-  }
+}
 
-  private updateParallax(): void {
-    const parallaxImage = document.querySelector('.parallax-image') as HTMLElement;
-    if (parallaxImage) {
-      parallaxImage.style.transform = `translateY(-${this.scrollY * 0.5}px)`;
-    }
+  generarAlerta(){
+    const fecha = moment(new Date()).format('YYYY-MM-DD').split('-')
+    const dia = parseInt(fecha[2]);
+    const mes = fecha[1];
+    if(mes== '12' && (dia>= 10 && dia<=31))
+    this.vacaciones = true
   }
 }

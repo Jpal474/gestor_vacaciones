@@ -135,74 +135,83 @@ getDepartamentos(){
                           }
                         },
                         error(err) {
-                          const cadena:string = 'unknown error'
-                          if(cadena.includes(err)){
+                          const cadena:string = 'Unknown Error'
+                          if(err.includes(cadena)){
                             Swal.fire({
                               icon: 'error',
                               title: 'Error',
                               text: 'Ha habido un error al completar la solicitud',
+                              confirmButtonColor:'#198754',
                             })
                           }
-                          else if('unauthorized'.includes(err)){
+                          else if(err.includes('Unauthorized')){
                             Swal.fire({
                               icon: 'error',
                               title: 'Error',
                               text: 'Debe iniciar sesión para completar la acción',
+                              confirmButtonColor:'#198754',
                             })
                           }
                           Swal.fire({
                             icon: 'error',
                             title: 'Error',
-                            text: err,
+                            text: 'Ha habido un error al completar la solicitud',
+                            confirmButtonColor:'#198754',
                           })
                           
                         },
                       })
                   },
                   error(err) {                
-                    const cadena:string = 'unknown error'
-                    if(cadena.includes(err)){
+                    const cadena:string = 'Unknown Error'
+                    if(err.includes(cadena)){
                       Swal.fire({
                         icon: 'error',
                         title: 'Error',
                         text: 'Ha habido un error al completar la solicitud',
+                        confirmButtonColor:'#198754'
                       })
                     }
-                    else if('unauthorized'.includes(err)){
+                    else if(err.includes('Unauthorized')){
                       Swal.fire({
                         icon: 'error',
                         title: 'Error',
                         text: 'Debe iniciar sesión para completar la acción',
+                        confirmButtonColor:'#198754',
                       })
                     }
                     Swal.fire({
                       icon: 'error',
                       title: 'Error',
-                      text: err,
+                      text: 'Hubo un error el procesar la solicitud',
+                      confirmButtonColor:'#198754',
                     })
                   },
                 })//cierre subscribe de obtener departamento 
               },
               error(err) {
-                const cadena:string = 'unknown error'
-                if(cadena.includes(err)){
+                const cadena:string = 'Unknown Error'
+                if(err.includes(cadena)){
                   Swal.fire({
                     icon: 'error',
                     title: 'Error',
                     text: 'Ha habido un error al completar la solicitud',
+                    confirmButtonColor:'#198754',
                   })
                 }
-                else if('unauthorized'.includes(err)){
+                else if(err.includes('Unauthorized')){
                   Swal.fire({
                     icon: 'error',
                     title: 'Error',
                     text: 'Debe iniciar sesión para completar la acción',
+                    confirmButtonColor:'#198754'
                   })
                 }
                 Swal.fire({
                   icon: 'error',
                   title: 'Error',
-                  text: err,
+                  text: 'Hubo un error al completar el registro',
+                  confirmButtonColor:'#198754',
                 })    
               },
              })
@@ -293,32 +302,36 @@ getDepartamentos(){
             icon: 'success',
             title: 'Éxito',
             text: 'El Empleado ha sido guardado con éxito',
+            confirmButtonColor:'#198754'
           });
           setTimeout(() =>{
-            this.router.navigate([`/admin/trabajadores`]);
+            this.router.navigate([`admin/trabajadores`]);
          }, 2000);
         }
         },
         error: (err)=> {
-          const cadena:string = 'unknown error'
-          if(cadena.includes(err)){
+          const cadena:string = 'Unknown Error'
+          if(err.includes(cadena)){
             Swal.fire({
               icon: 'error',
               title: 'Error',
               text: 'Ha habido un error al completar la solicitud',
+              confirmButtonColor:'#198754',
             })
           }
-          else if('unauthorized'.includes(err)){
+          else if(err.includes('Unauthorized')){
             Swal.fire({
               icon: 'error',
               title: 'Error',
               text: 'Debe iniciar sesión para completar la acción',
+              confirmButtonColor:'#198754'
             })
           }
           Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: err,
+            text: 'Hubo un error al crear el saldo vacacional del empleado',
+            confirmButtonColor:'#198754'
           })
         }
       })
@@ -338,9 +351,10 @@ getDepartamentos(){
             icon: 'success',
             title: 'Éxito',
             text: 'El Empleado ha sido guardado con éxito',
+            confirmButtonColor:'#198754',
           });
           setTimeout(() =>{
-            this.router.navigate([`/super/empleados`]);
+            this.router.navigate([`/admin/trabajadores`]);
          }, 2000);
         }
         },
@@ -349,6 +363,7 @@ getDepartamentos(){
             icon: 'error',
             title: 'Error',
             text: err,
+            confirmButtonColor: '',
           })
         }
       })

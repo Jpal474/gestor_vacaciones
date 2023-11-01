@@ -24,6 +24,8 @@ export class EmpleadosComponent implements OnInit {
     this.superadService.getEmpleados(5,pagina).subscribe({
       next: (res: { empleados: Empleado[], pages:number}) => {
         if(res){
+          console.log(res);
+          
           this.empleados = res.empleados;
           this.paginas = res.pages;
           this.paginasArray = Array.from({ length: this.paginas }, (_, index) => index + 1);
@@ -39,8 +41,9 @@ export class EmpleadosComponent implements OnInit {
       text: "Los cambios no son reversibles",
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#007a00',
+      confirmButtonColor: '#198754',
       cancelButtonColor: '#d33',
+      cancelButtonText: 'Cancelar',
       confirmButtonText: 'Borrar'
     }).then((result) => {
       if (result.isConfirmed) {
@@ -52,6 +55,7 @@ export class EmpleadosComponent implements OnInit {
                 icon: 'success',
                 title: 'Éxito',
                 text: 'El Empleado ha sido borrado con éxito',
+                confirmButtonColor:'#198754',
               }),
               setTimeout(function(){
                 window.location.reload();
@@ -61,7 +65,8 @@ export class EmpleadosComponent implements OnInit {
               Swal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: `No se pudo eliminar al empleado, codigo de error ${err.code}`,
+                text: `No se pudo eliminar al empleado`,
+                confirmButtonColor:'#198754',
               }) 
             }
           })
@@ -83,6 +88,7 @@ this.superadService.updateEmpleadoStatus(id!, opcion)
         icon: 'success',
         title: 'Éxito',
         text: 'El Estado del Trabajador ha sido cambiado con éxito',
+        confirmButtonColor:'#198754',
       }),
       setTimeout(function(){
         window.location.reload();

@@ -61,7 +61,7 @@
     }
 }
 
-@media screen and (max-width:900px) and (min-width:501px) {
+@media screen and (max-width:1000px) and (min-width:501px) {
     .row {
         width: 85vw;
         height: 55vh;

@@ -11,6 +11,8 @@ import { FestivosService } from 'src/app/services/festivos.service';
 import { Solicitud } from 'src/app/interfaces/solicitud.interface';
 import * as moment from 'moment';
 import { Empleado } from 'src/app/interfaces/empleados.interface';
+import { StorageService } from 'src/app/storage.service';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -20,6 +22,7 @@ import { Empleado } from 'src/app/interfaces/empleados.interface';
 })
 export class CalendarioComponent implements OnInit{
   dias: DiasFeriados[]=[]
+  fecha = moment(new Date(), 'YYYY-MM-DD');
   calendarOptions: CalendarOptions = {
     initialView: 'dayGridMonth',
     plugins: [dayGridPlugin, timeGridPlugin, interactionGridPlugin],
@@ -33,12 +36,17 @@ export class CalendarioComponent implements OnInit{
     events: [],
     eventClick: function(info) {
       alert(info.event.title);
+    },
+    validRange:{
+      start: `${this.fecha.year()}-01-01`,
+      end:`${this.fecha.year() + 1}-01-01`
     }
   };
 
   constructor(
     private trabajadorService: TrabajadoresService,
-    private festivoService: FestivosService
+    private festivoService: FestivosService,
+    private storageService: StorageService,
     ) {}
 
   ngOnInit(): void {
@@ -51,12 +59,16 @@ export class CalendarioComponent implements OnInit{
           console.log(this.dias);
           events = this.dias.map(event => {
             let color;
-            if (event.type === 'public') {
+            if (event.type === 'public' &&  event.name.includes('libre')) {
+              console.log('libre');
+              
               color = '#007ad9'; // Set the color for events of Type1
             } else if (event.type === 'bank') {
               color = '#330036'; // Set the color for events of Type2
             } else if (event.type === 'observance') {
               color = '#2F4858'; // Set the color for events of Type3
+            }  else if (event.type === 'public'){
+              color = '#27a082'; // Set the color for events of Type3
             } 
             return {
               title: event.name,
@@ -67,10 +79,15 @@ export class CalendarioComponent implements OnInit{
         }
       },
       error(err) {
+        Swal.fire({
+          icon:'error',
+          title:'Error',
+          text:'Hubo un error al cargar los días feriados'
+        })
         console.log(err);
       },
       complete: () => {
-        const id_trabajador = JSON.parse(atob(localStorage.getItem('id')!))
+        const id_trabajador = this.storageService.getLocalStorageItem('id') + '';
         if(id_trabajador)
         this.trabajadorService.getEmpleadoByUserId(id_trabajador)
       .subscribe({
@@ -91,12 +108,23 @@ export class CalendarioComponent implements OnInit{
               }
             },
             error:(err:string)=>{
+              Swal.fire({
+                icon:'error',
+                title:'Error',
+                text:'Hubo un error al obtener los días de vacaciones',
+                confirmButtonColor:'#198754',
+              })
               console.log(err);
               
             }
           })
         },
         error: (err)=>{
+          Swal.fire({
+            icon:'error',
+            title:'Error',
+            confirmButtonColor:'#198754',
+          })
           console.log(err);
           
         }

@@ -1,27 +1,92 @@
-@media screen and (max-width: 500px) {
+.legend-container {
+    margin-top: 80px;
+}
+
+.legend-box {
+    border: 1px solid #ccc;
+    width: 150px;
+    padding: 10px;
+    margin: 10px;
+    position: relative;
+    top: 10%;
+    background-color: white;
+}
+
+.color-box {
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.red-box {
+    background-color: #007ad9;
+}
+
+.blue-box {
+    background-color: #330036;
+}
+
+.green-box {
+    background-color: #2F4858;
+}
+
+.yellow-box {
+    background-color: #27a082
+}
+
+.purple-box {
+    background-color: #378006;
+}
+
+.box-title {
+    font-size: 0.9rem;
+}
+
+@media screen and (max-width: 750px) {
     full-calendar {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 95vw;
-        height: 85vh;
-        margin-top: 30px;
+        top: 10%;
+        transform: translate(5%, -182%);
+        width: 85vw;
+        height: 60vh;
         font-size: small;
+        margin-top: 4.5rem;
         color: black;
+        position: relative;
+    }
+    .legend-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-end;
+        min-height: 100vh;
+        margin-top: 80px;
+        overflow-y: hidden;
+    }
+    .legend-box {
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin: 10px;
+        text-align: center;
+        width: 80vw;
+        height: 30vh;
+    }
+    .color-box {
+        width: 20px;
+        height: 20px;
+        position: relative;
+        display: block;
+        margin-right: 10px;
+    }
+    .box-title {
+        font-size: 0.9rem;
+        position: relative;
+        left: 0;
     }
 }
 
-@media screen and (max-width: 900px) and (min-width:501px) {
+@media screen and (max-width: 1500px) and (min-width: 751px) {
     full-calendar {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 95vw;
-        margin-top: 2.5rem;
-        font-size: small;
-        color: black;
-        height: 85vh;
+        margin-left: 6.5rem;
     }
 }

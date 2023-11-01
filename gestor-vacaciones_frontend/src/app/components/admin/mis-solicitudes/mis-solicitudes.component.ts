@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { Empleado } from 'src/app/interfaces/empleados.interface';
 import { SolicitudEmpleado } from 'src/app/interfaces/solicitud-empleado';
 import { Solicitud } from 'src/app/interfaces/solicitud.interface';
 import { AdminService } from 'src/app/services/admin.service';
+import { StorageService } from 'src/app/storage.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -16,14 +18,16 @@ export class MisSolicitudesComponent {
   paginas = 0;
   paginasArray: number[]=[]; 
   empleado_id = '';
-  pagina_actual = 1
+  pagina_actual = 1;
+  opcion=1;
 
-  constructor(private adminService: AdminService) {}
+  constructor(
+    private adminService: AdminService,
+    private storageService: StorageService,
+    private router: Router) {}
 
   ngOnInit(): void {
-    let id = JSON.parse(atob(localStorage.getItem('id')!));
-    console.log(id);
-    
+    let id = this.storageService.getLocalStorageItem('id') + '';
     if (id){
       this.adminService.getEmpleadoByUserId(id)
       .subscribe({
@@ -31,7 +35,7 @@ export class MisSolicitudesComponent {
           if(res.id){
             this.empleado_id = res.id;
             console.log(res);
-           this.adminService.getMisSolicitudes(res.id, 5,1)
+           this.adminService.getMisSolicitudes(res.id, 5,1, this.opcion)
            .subscribe({
               next: (res: { solicitudes: Solicitud[]; pages: number })=> {
                 this.solicitudes = res.solicitudes;
@@ -56,7 +60,7 @@ export class MisSolicitudesComponent {
 
   getSolicitudes(pagina:number){
     this.pagina_actual = pagina;
-    this.adminService.getMisSolicitudes(this.empleado_id, 5,pagina)
+    this.adminService.getMisSolicitudes(this.empleado_id, 5,pagina, this.opcion)
            .subscribe({
               next: (res: { solicitudes: Solicitud[]; pages: number })=> {
                 this.solicitudes = res.solicitudes;
@@ -70,29 +74,49 @@ export class MisSolicitudesComponent {
               }
               },
               error: (err)=>{
-                const cadena:string = 'unknown error'
-          if(cadena.includes(err)){
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: 'Ha habido un error al completar la solicitud',
-            })
-          }
-          else if('unauthorized'.includes(err)){
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: 'Debe iniciar sesión para completar la acción',
-            })
-          }
           Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: err,
+            text: 'Hubo un error al traer sus solicitudes',
           })
         
           
               }
            })
+  }
+
+  colocarIdSolicitud(id: number |undefined, opcion: number){
+this.storageService.setLocalStorageItem('id_solicitud', id!)
+
+    if(opcion===1){
+      this.router.navigate([`/admin/mi_solicitud`]);
+    }
+    else if(opcion === 2){
+      this.router.navigate([`/admin/editar_solicitud`]);
+    }
+
+  }
+
+  actualizarFiltro(opcion: string){
+    this.opcion = parseInt(opcion)
+    this.adminService.getMisSolicitudes(this.empleado_id,5,1,parseInt(opcion))
+    .subscribe({
+      next: (res:{ solicitudes: Solicitud[]; pages: number })=> {
+        console.log(res);
+        
+        this.solicitudes=res.solicitudes;
+        this.paginas = res.pages;
+          this.paginasArray = Array.from({ length: this.paginas }, (_, index) => index + 1);
+      },
+      error(err) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Hubo un error al obtener sus solicitudes',
+        })  
+       console.log(err);
+       
+      },
+    })
   }
 }

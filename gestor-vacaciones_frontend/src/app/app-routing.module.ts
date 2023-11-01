@@ -15,14 +15,15 @@ import { trabajadorGuard } from './guards/trabajador.guard';
 import { PagenotfoundComponent } from './components/general/pagenotfound/pagenotfound.component';
 import { RecuperarContraseniaComponent } from './components/general/recuperar-contrasenia/recuperar-contrasenia.component';
 import { ActualizarContraseniaComponent } from './components/general/actualizar-contrasenia/actualizar-contrasenia.component';
+import { sesionGuard } from './guards/sesion.guard';
 
 const routes: Routes = [
+  {path:'inicio', component: LandingComponent, canActivate: [sesionGuard]},
   { path: 'iniciar_sesion', component: LoginComponent },
-  {path:'inicio', component: LandingComponent,},
   {path:'admin', component:AdminComponent, canActivate:[authGuard, adminGuard], children:ADMIN_ROUTES},
   {path:'super', component:SuperadminComponent,canActivate:[authGuard, superGuard], children:SUPERADMIN_ROUTES},
   {path:'trabajador', component:TrabajadorComponent, canActivate:[authGuard, trabajadorGuard] ,children:TRABAJADOR_ROUTES},
-  {path:'confirmar_cambio_contraseña', component:RecuperarContraseniaComponent},
+  {path:'confirmar_cambio_contrasenia', component:RecuperarContraseniaComponent},
   {path:'cambiar_contra/:token', component:ActualizarContraseniaComponent},
   {path: 'paginanoencontrada', component: PagenotfoundComponent},
   {path:'**', pathMatch:'full', redirectTo:'paginanoencontrada'},

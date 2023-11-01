@@ -44,6 +44,7 @@ constructor(private adminService: AdminService) {}
         icon: 'error',
         title: 'Error',
         text: e,
+        confirmButtonColor:'#198754'
       })
     }
   })
@@ -56,6 +57,7 @@ constructor(private adminService: AdminService) {}
     input: 'text',
     inputLabel: 'Nombre',
     inputPlaceholder: 'Ingrese Nombre del Departamento',
+    confirmButtonColor:'#198754',
   });
   if(departamento && !(specialCharactersRegex.test(departamento))){//verifica si existe un dea
     let result=true
@@ -71,6 +73,7 @@ constructor(private adminService: AdminService) {}
           icon: 'error',
           title: 'Error',
           text: 'No puedes registrar dos Departamentos con el mismo nombre',
+          confirmButtonColor:'#198754',
         })
         result=false;
         break;
@@ -105,6 +108,7 @@ borrarDepartamento(id: number | undefined){
     showCancelButton: true,
     confirmButtonColor: '#198754',
     cancelButtonColor: '#8c0b0a',
+    cancelButtonText: 'Cancelar',
     confirmButtonText: 'Borrar'
   }).then((result) => {
     if (result.isConfirmed) {
@@ -117,6 +121,7 @@ borrarDepartamento(id: number | undefined){
              icon: 'success',
              title: 'Éxito',
              text: 'El departamento ha sido borrado con éxito',
+             confirmButtonColor:'#198754',
            }),
            setTimeout(function(){
             window.location.reload();
@@ -127,6 +132,7 @@ borrarDepartamento(id: number | undefined){
              icon: 'error',
              title: 'Error',
              text: 'No se ha podido eliminar el departamento',
+             confirmButtonColor:'#198754'
            })
          }
          },
@@ -135,6 +141,7 @@ borrarDepartamento(id: number | undefined){
              icon: 'error',
              title: 'Error',
              text: 'No se ha podido eliminar el departamento',
+             confirmButtonColor:'#198754'
            }), 
            console.log(err);
            

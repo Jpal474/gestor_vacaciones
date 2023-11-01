@@ -19,6 +19,7 @@ import { EmailObservacion } from 'src/app/interfaces/email_observacion.interface
 import { SaldoVacacional } from 'src/app/interfaces/saldo_vacacional.interface';
 import { FestivosService } from 'src/app/services/festivos.service';
 import { DiasFeriados } from 'src/app/interfaces/dias_feriados.interface';
+import { StorageService } from 'src/app/storage.service';
 @Component({
   selector: 'app-ver-solicitud',
   templateUrl: './ver-solicitud.component.html',
@@ -83,12 +84,14 @@ export class VerSolicitudComponent {
     private adminService: AdminService,
     private activadedRoute: ActivatedRoute,
     private router: Router,
-    private festivosService: FestivosService
+    private festivosService: FestivosService,
+    private storageService: StorageService,
   ) {}
   ngOnInit(): void {
-    const params = this.activadedRoute.snapshot.params;
-    if (params) {
-      this.adminService.getSolicitudById(params['id']).subscribe({
+    const id_solicitud = +this.storageService.getLocalStorageItem('id_solicitud')!
+
+    if (id_solicitud) {
+      this.adminService.getSolicitudById(id_solicitud).subscribe({
         next: (res: Solicitud) => {
           this.solicitud = res;
           console.log(this.solicitud);
@@ -255,12 +258,14 @@ export class VerSolicitudComponent {
   async enviarMail() {
     const { value: text } = await Swal.fire({
       input: 'textarea',
-      inputLabel: 'Message',
-      inputPlaceholder: 'Type your message here...',
+      inputLabel: 'Mensaje',
+      inputPlaceholder: 'Escriba su mensaje',
       inputAttributes: {
         'aria-label': 'Type your message here',
       },
       showCancelButton: true,
+      cancelButtonText: 'cancelar',
+      confirmButtonColor:'#198754',
     });
 
     if (text && text-length <= 250) {
@@ -285,6 +290,7 @@ export class VerSolicitudComponent {
             icon: 'error',
             title: 'Error',
             text: 'Ocurrió un Error al Enviar el Mail',
+            confirmButtonColor:'#198754',
           })
         }
       })
@@ -294,13 +300,14 @@ export class VerSolicitudComponent {
         icon: 'error',
         title: 'Error',
         text: 'La cantidad de caracteres debe ser menor o igual a 250',
+        confirmButtonColor:'#198754',
       }) 
       
     }
   }
 
   rechazarSolicitud(){
-    let nombre_usuario = JSON.parse(atob(localStorage.getItem('usuario')!));
+    let nombre_usuario = this.storageService.getLocalStorageItem('usuario') + ''
     if(nombre_usuario && this.solicitud.id)
     this.nombre_rechazar.nombre = nombre_usuario
     this.adminService.rechazarSolicitud(this.nombre_rechazar, this.solicitud.id!)
@@ -311,7 +318,7 @@ export class VerSolicitudComponent {
             .subscribe({
               next: (res: boolean)=>{
                 if(res){
-                  this.router.navigate([`/admin/home`]);
+                  this.router.navigate([`/admin/inicio`]);
                 }
               }
             })
@@ -319,6 +326,7 @@ export class VerSolicitudComponent {
               icon: 'success',
               title: 'Éxito',
               text: 'La solicitud ha sido rechaza!',
+              confirmButtonColor:'#198754',
             })
           }
           else{
@@ -326,6 +334,7 @@ export class VerSolicitudComponent {
               icon: 'error',
               title: 'Error',
               text: 'No se ha podido rechazar la solicitud',
+              confirmButtonColor:'#198754',
             }) 
           }
       },
@@ -333,14 +342,17 @@ export class VerSolicitudComponent {
         Swal.fire({
           icon: 'error',
           title: 'Error',
-          text: err,
+          text: 'Hubo un error al rechazar la solicitud',
         }) 
+        console.log(err);
+        
       }
     })
   }
 
   aprobarSolicitud(){
-    let nombre_usuario = JSON.parse(atob(localStorage.getItem('usuario')!));
+    let nombre_usuario = this.storageService.getLocalStorageItem('usuario') + '';
+  
     if(nombre_usuario && this.solicitud.id)
     this.nombre_aceptar.nombre = nombre_usuario
     return this.adminService.aprobarSolicitud(this.nombre_aceptar, this.solicitud.id!)
@@ -351,6 +363,7 @@ export class VerSolicitudComponent {
               icon: 'success',
               title: 'Éxito',
               text: 'La solicitud ha sido aprobada!',
+              confirmButtonColor:'#198754',
             }),
             this.obtenerSaldoVacacional();
             this.generarPDF();
@@ -361,6 +374,7 @@ export class VerSolicitudComponent {
               icon: 'error',
               title: 'Error',
               text: 'No se ha podido aprobar la solicitud',
+              confirmButtonColor:'#198754',
             }) 
           }
       },
@@ -368,8 +382,10 @@ export class VerSolicitudComponent {
         Swal.fire({
           icon: 'error',
           title: 'Error',
-          text: err,
+          text: 'Hubo un error al aceptar la solicitud',
         }) 
+        console.log(err);
+        
       }
     })
   }
@@ -384,8 +400,9 @@ export class VerSolicitudComponent {
             text: "¿Estás Seguro de Aprobar Esta Solicitud",
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#3085d6',
+            confirmButtonColor: '#198754',
             cancelButtonColor: '#d33',
+            cancelButtonText: 'Cancelar',
             confirmButtonText: 'Aprobar'
           }).then((result) => {
             if (result.isConfirmed) {
@@ -418,13 +435,19 @@ export class VerSolicitudComponent {
         .subscribe({
           next: (res: boolean)=> {
             if(res){
-              this.router.navigate([`/admin/home`]);
+              this.router.navigate([`/admin/inicio`]);
             }
           }
         })
       }
       },
       error(err) {
+        Swal.fire({
+          icon:'error',
+          title:'Error',
+          text:'Hubo un error al enviar el mail',
+          confirmButtonColor:'#198754',
+        })
         console.log(err);
         
       },

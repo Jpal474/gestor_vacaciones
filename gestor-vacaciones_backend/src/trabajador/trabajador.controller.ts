@@ -38,6 +38,14 @@ export class TrabajadorController {
 
   @Get('/:size/:number')
   @ApiOperation({ summary: 'Obtener lista de Trabajadores' })
+  @ApiParam({
+    name: 'Size',
+    description: 'Tamaño de registros a mostrar en front',
+  })
+  @ApiParam({
+    name: 'Number',
+    description: 'Número de página a mostrar en front',
+  })
   @ApiResponse({
     status: 200,
     description: 'Regresa un Array de Trabajadores',
@@ -48,7 +56,13 @@ export class TrabajadorController {
     @Param('size') size: number,
     @Param('number') number: number,
   ): Promise<{ trabajadores: Empleado[]; pages: number }> {
-    return this.trabajadorService.getTrabajadores('Trabajador', size, number);
+    const anio = new Date().getFullYear();
+    return this.trabajadorService.getTrabajadores(
+      'Trabajador',
+      size,
+      number,
+      anio,
+    );
   }
 
   @Post()
@@ -70,6 +84,13 @@ export class TrabajadorController {
   }
 
   @Post('email')
+  @ApiOperation({
+    summary: 'Envio de mail de notificación de solicitud creada',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'El Mail ha sido enviado de forma éxitosamente',
+  })
   async enviarMail(@Body() mail: EmailSolicitudEmpleado) {
     try {
       const htmlContent = `

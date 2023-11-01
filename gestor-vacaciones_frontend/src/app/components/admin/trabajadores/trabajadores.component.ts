@@ -29,6 +29,16 @@ export class TrabajadoresComponent implements OnInit{
         this.paginas = res.pages;  
         this.paginasArray = Array.from({ length: this.paginas }, (_, index) => index + 1);
       },
+      error: (err)=>{
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Ha habido un error al procesar la solicitud',
+          confirmButtonColor:'#198754'
+        }),
+        console.log(err);
+        
+      }
     });
   }
 
@@ -41,18 +51,20 @@ export class TrabajadoresComponent implements OnInit{
           icon: 'success',
           title: 'Éxito',
           text: 'El Trabajador ha sido eliminado con éxito',
+          confirmButtonColor: ''
         }),
         setTimeout(function(){
           window.location.reload();
        }, 2000);
       },
       error: (err)=> {
-        const cadena:string = 'unknown error'
-        if(cadena.includes(err)){
+        const cadena:string = 'Unknown Error'
+        if(err.includes(cadena)){
           Swal.fire({
             icon: 'error',
             title: 'Error',
             text: 'Ha habido un error al completar la solicitud',
+            confirmButtonColor:'#198754'
           })
         }
         else if('unauthorized'.includes(err)){
@@ -60,13 +72,17 @@ export class TrabajadoresComponent implements OnInit{
             icon: 'error',
             title: 'Error',
             text: 'Debe iniciar sesión para completar la acción',
+            confirmButtonColor:'#198754'
           })
         }
         Swal.fire({
           icon: 'error',
           title: 'Error',
-          text: err,
+          text: 'Ha habido un error al eliminar al trabajador',
+          confirmButtonColor:'#198754'
         }),
+        console.log(err);
+        
         setTimeout(function(){
           window.location.reload();
        }, 2000); 
@@ -88,6 +104,7 @@ this.adminService.updateEmpleadoStatus(id!, opcion)
         icon: 'success',
         title: 'Éxito',
         text: 'El Estado del Trabajador ha sido cambiado con éxito',
+        confirmButtonColor: ''
       }),
       setTimeout(function(){
         window.location.reload();
@@ -95,26 +112,31 @@ this.adminService.updateEmpleadoStatus(id!, opcion)
     }
   },
   error: (err)=> {
-    const cadena:string = 'unknown error'
-          if(cadena.includes(err)){
+    const cadena:string = 'Unknown Error'
+          if(err.includes(cadena)){
             Swal.fire({
               icon: 'error',
               title: 'Error',
               text: 'Ha habido un error al completar la solicitud',
+              confirmButtonColor: ''
             })
           }
-          else if('unauthorized'.includes(err)){
+          else if(err.includes('Unauthorized')){
             Swal.fire({
               icon: 'error',
               title: 'Error',
               text: 'Debe iniciar sesión para completar la acción',
+              confirmButtonColor:'#198754',
             })
           }
           Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: err,
+            text: 'Hubo un error al cambiar el estado',
+            confirmButtonColor:'#198754',
           })
+          console.log(err);
+          
   },
 })
 }

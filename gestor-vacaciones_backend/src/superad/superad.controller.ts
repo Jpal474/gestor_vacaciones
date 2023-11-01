@@ -3,6 +3,7 @@ import {
   ApiBearerAuth,
   ApiBody,
   ApiOperation,
+  ApiParam,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -52,6 +53,8 @@ export class SuperadController {
   }
 
   @Post('email')
+  @ApiOperation({ summary: 'Enviar mail sobre observaciones de la solicitud' })
+  @ApiBody({ description: 'Destinatario y mensaje a enviar' })
   async enviarMail(@Body() mail: EnviarMailDto) {
     try {
       const htmlContent = `
@@ -74,6 +77,14 @@ export class SuperadController {
   }
 
   @Post('email/rechazar/:destinatario')
+  @ApiOperation({ summary: 'Enviar mail de solicitud rechazada' })
+  @ApiParam({ name: 'Mail del empleado quién creó la solicitud' })
+  @ApiResponse({
+    status: 200,
+    description: 'Mail enviado éxitosamente',
+    type: Boolean,
+    isArray: false,
+  })
   async enviarMailRechazada(@Param('destinatario') destinatario: string) {
     try {
       const htmlContent = `
@@ -96,6 +107,14 @@ export class SuperadController {
   }
 
   @Post('email/aprobar/:destinatario')
+  @ApiOperation({ summary: 'Enviar mail de solicitud aprobada' })
+  @ApiParam({ name: 'Mail del empleado quién creó la solicitud' })
+  @ApiResponse({
+    status: 200,
+    description: 'Mail enviado éxitosamente',
+    type: Boolean,
+    isArray: false,
+  })
   async enviarMailAprobada(@Param('destinatario') destinatario: string) {
     try {
       const htmlContent = `

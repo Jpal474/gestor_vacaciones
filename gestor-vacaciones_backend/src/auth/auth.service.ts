@@ -25,7 +25,7 @@ export class AuthService {
     console.log('pass mail', process.env.PASS_MAIL);
 
     
-    const { correo, contraseña } = authCredentialsDto;
+    const { correo, contrasenia } = authCredentialsDto;
     const user = await this.usuarioRepository.findOne({
       relations: ['rol'],
       where: { correo: correo },
@@ -33,7 +33,7 @@ export class AuthService {
     const id = user.id;
     const rol = user.rol.nombre;
     const nombre = user.nombre_usuario;
-    if (user && (await bcrypt.compare(contraseña, user.contraseña))) {
+    if (user && (await bcrypt.compare(contrasenia, user.contraseña))) {
       console.log('entra access token');
       
       const payload: JwtPayload = { id, correo, rol, nombre };

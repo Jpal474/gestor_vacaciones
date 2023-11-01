@@ -17,10 +17,14 @@ export class AuthService {
     private router: Router
     ) { }
 
-  getAuth(correo:string, contraseña:string): Observable<Login> {
-      return this.httpClient.post<Login>(`${this.BASE_URL}/auth/signin`, { correo, contraseña });
+  getAuth(correo:string, contrasenia:string): Observable<Login> {
+    const body = { correo, contrasenia };
+    console.log('peticion', correo, contrasenia);
+    
+      return this.httpClient.post<Login>(`${this.BASE_URL}/auth/signin`, body);
       
     }
+
   decodeUserFromToken(token: string) {
       return this.jwtHelper.decodeToken(token);
     }

@@ -1,5 +1,9 @@
 <app-navbar></app-navbar>
 <div class="home">
+    <div class="alert alert-warning alert-dismissible fade show mb-5 mt-5" role="alert" *ngIf="vacaciones">
+        El año está por terminar, si no ha tomado sus vacaciones hágalo ahora o las perderá, si ya lo ha hecho, ignore este mensaje
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
     <div class="position-absolute top-50 start-50 translate-middle">
         <div class="row">
             <div class="col">
@@ -8,7 +12,7 @@
                         <div class="card-body d-flex justify-content-center">
                             <img src="../../../../assets/recursos/imagenes/trabajador/permiso.png" class="card-img-top" alt="...">
                         </div>
-                        <p class="text-center">Mis solcitudes</p>
+                        <p class="text-center">Mis solicitudes</p>
                     </div>
                 </a>
             </div>
@@ -18,7 +22,7 @@
                         <div class="card-body d-flex justify-content-center">
                             <img src="../../../../assets/recursos/imagenes/trabajador/anadir.png" class="card-img-top" alt="...">
                         </div>
-                        <p class="text-center">Crear Solcitud</p>
+                        <p class="text-center">Crear Solicitud</p>
                     </div>
                 </a>
             </div>

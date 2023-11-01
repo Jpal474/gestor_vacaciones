@@ -107,7 +107,7 @@ this.empleado_formulario= this.fb.group({
             nombre_usuario: res.usuario.nombre_usuario,
             correo: res.usuario.correo,
             genero: res.genero,
-            departamento: departamento.nombre,
+            departamento: departamento.id,
             fecha_contratacion: res.fecha_contratacion,
             
           })
@@ -142,8 +142,9 @@ this.empleado_formulario= this.fb.group({
         text: "Los cambios no son reversibles",
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#008000',
+        confirmButtonColor: '#198754',
         cancelButtonColor: '#d33',
+        cancelButtonText: 'Cancelar',
         confirmButtonText: 'Guardar'
       }).then((result) => {
         if (result.isConfirmed) {
@@ -173,24 +174,30 @@ this.empleado_formulario= this.fb.group({
           icon: 'error',
           title: 'Error',
           text: 'La contraseña no puede consistir sólo en espacios en blanco',
+          confirmButtonColor:'#198754',
         })
       }
-      else if (this.empleado_formulario.value['contraseña'].length === 0){
-        console.log('empleado sin contraseña');
-        console.log(this.pass);
-        
-        
+      else{
            this.empleado.nombre = this.empleado_formulario.value['nombre'];
            this.empleado.apellidos = this.empleado_formulario.value['apellidos'];
            this.empleado.genero = this.empleado_formulario.value['genero'];
            this.empleado.fecha_contratacion = this.empleado_formulario.value['fecha_contratacion'];
            this.empleado.usuario.nombre_usuario = this.empleado_formulario.value['nombre_usuario'];
            this.empleado.usuario.correo = this.empleado_formulario.value['correo'];
+           this.actualizarDepartamento();
+           if(this.empleado_formulario.value['contraseña'].length > 0){
+            this.empleado.usuario.contraseña = this.empleado_formulario.value['contraseña']
+           }
+
+           console.log('empleado', this.empleado);
+           
            
            this.superadService.updateUsuario(this.empleado.usuario, this.id_usuario!)
            .subscribe({
             next: (res:Usuario)=> {
               this.empleado.usuario = res;
+              console.log(this.empleado, 'empleado antes de actualizar');
+              
               if(this.rol === 'Administrador'){
                this.superadService.updateAdministrador(this.empleado, this.id_empleado!)
                .subscribe({
@@ -203,14 +210,19 @@ this.empleado_formulario= this.fb.group({
                       icon: 'success',
                       title: 'Éxito',
                       text: 'El Administrador ha sido guardado con éxito',
-                    })
+                      confirmButtonColor:'#198754',
+                    }),
+                    setTimeout(() =>{
+                      this.router.navigate([`/super/empleados`]);
+                   }, 2000);
                   } 
                 },
                 error(err) {
                   Swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: err,
+                    text: 'No se ha podido actualizar al Administrador',
+                    confirmButtonColor:'#198754'
                   }) 
                   
                 },
@@ -227,8 +239,12 @@ this.empleado_formulario= this.fb.group({
                       Swal.fire({
                         icon: 'success',
                         title: 'Éxito',
-                        text: 'El Administrador ha sido guardado con éxito',
-                      })
+                        text: 'El Trabajador ha sido guardado con éxito',
+                        confirmButtonColor:'#198754',
+                      }),
+                      setTimeout(() =>{
+                        this.router.navigate([`/super/empleados`]);
+                     }, 2000);
                     }
                     
                   },
@@ -246,77 +262,32 @@ this.empleado_formulario= this.fb.group({
            })
            
       }
-      else{
-        this.empleado.usuario.nombre_usuario = this.empleado_formulario.value['nombre_usuario'];
-        this.empleado.usuario.correo = this.empleado_formulario.value['correo'];
-        this.empleado.usuario.contraseña = this.empleado_formulario.value['contraseña'];
-        this.superadService.updateUsuario(this.empleado.usuario, this.id_usuario!)
-        .subscribe({
-          next: (res: Usuario)=> {
-            if(this.rol === 'Administrador'){
-              this.superadService.updateAdministrador(this.empleado, this.id_empleado!)
-              .subscribe({
-               next: (res: Empleado)=> {
-                 if(res && this.aux_fecha !== this.empleado_formulario.value['fecha_contratacion']){
-                   this.actualizarSaldoVacacional();
-                 }
-                 else if (res){
-                   Swal.fire({
-                     icon: 'success',
-                     title: 'Éxito',
-                     text: 'El Administrador ha sido guardado con éxito',
-                   })
-                 } 
-               },
-               error(err) {
-                 Swal.fire({
-                   icon: 'error',
-                   title: 'Error',
-                   text: err,
-                 }) 
-                 
-               },
-              })
-             }
-             else{
-               this.superadService.updateTrabajador(this.empleado, this.id_empleado!)
-               .subscribe({
-                 next: (res: Empleado)=> {
-                   if(res && this.aux_fecha !== this.empleado_formulario.value['fecha_contratacion']){
-                     this.actualizarSaldoVacacional();
-                   }
-                   else if (res){
-                     Swal.fire({
-                       icon: 'success',
-                       title: 'Éxito',
-                       text: 'El Trabajador ha sido guardado con éxito',
-                     })
-                   }
-                   
-                 },
-                 error(err) {
-                   console.log('error',err);
-                   
-                 },
-               })
-             }
-
-          }
-        })
-
-        this.empleado = this.empleado_formulario.value;
-        
-        
-      }
-      
-      console.log(this.empleado_formulario.value['contraseña'].length);
-      
-      
+            
     } else {
       console.log(this.empleado_formulario);
-      
+      return Object.values(this.empleado_formulario.controls).forEach(
+        (control) => {
+          if (control instanceof FormGroup) {
+            Object.values(control.controls).forEach((control) =>
+              control.markAsTouched()
+            );
+          } else {
+            control.markAsTouched();
+          }
+        }
+      );
     }
     
+  }
+
+  actualizarDepartamento(){    
+    let id_departamento = this.empleado_formulario.value['departamento']
+    console.log('id_departamento', id_departamento);
+    for (let j = 0; j < this.departamentos.length; j++){
+      if(this.departamentos[j].id == parseInt(id_departamento)){        
+        this.empleado.departamento = this.departamentos[j]
+      }
+    }
   }
 
 async actualizarSaldoVacacional(){
@@ -337,7 +308,8 @@ async actualizarSaldoVacacional(){
       title: 'Ingrese Los Dias Vacacionales Tomados Por Su Trabajador',
       input: 'text',
       inputLabel: 'En caso de no tener, deje en blanco el espacio o escruba 0',
-      inputPlaceholder: 'Ingrese Nombre del Departamento',
+      inputPlaceholder: 'Días Tomados',
+      confirmButtonColor: '#198754'
     });   
 
     if(dias_tomados && parseInt(dias_tomados)>0){
@@ -389,6 +361,7 @@ this.superadService.updateSaldoVacacional(this.empleado.id!,año, this.saldo_vac
       icon: 'success',
       title: 'Éxito',
       text: 'Los Datos Han Sido Actualizados de Forma Éxitosa',
+      confirmButtonColor:'#198754',
     }),
     setTimeout(() =>{
       this.router.navigate([`/admin/trabajadores`]);
@@ -399,8 +372,11 @@ this.superadService.updateSaldoVacacional(this.empleado.id!,año, this.saldo_vac
     Swal.fire({
       icon: 'error',
       title: 'Error',
-      text: err,
+      text: 'Hubo un error al actualizar los datos',
+      confirmButtonColor:'#198754',
     }) 
+    console.log(err);
+    
   }
 })
 }

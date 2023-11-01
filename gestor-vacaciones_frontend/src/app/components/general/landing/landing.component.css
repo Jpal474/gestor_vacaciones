@@ -30,6 +30,10 @@
     background-color: black;
 }
 
+.container {
+    font-size: large;
+}
+
 #info {
     background-color: #00aec1;
     height: 100vh;
@@ -45,12 +49,30 @@
     height: 150px;
 }
 
-@media screen and (max-width:700px) {
+@media screen and (max-width:700px)and (min-width:520px) {
     #trabajo {
         background-color: #fadbb9;
         height: 50vh;
     }
     #info {
         height: 185vh;
+    }
+}
+
+@media screen and (max-width:519px) {
+    .container {
+        font-size: small;
+    }
+    #trabajo {
+        height: 50vh;
+    }
+    #info {
+        height: 150vh;
+    }
+}
+
+@media screen and (max-width:4500px) and (min-width:1500px) {
+    .container {
+        font-size: 1.7rem;
     }
 }

@@ -30,6 +30,11 @@ export class SaldoVacacionalController {
 
   @Get(':id/:anio')
   @ApiOperation({ summary: 'Obtener Saldo Vacacionales del Empleado' })
+  @ApiParam({ name: 'ID', description: 'ID del Empleado a obtener' })
+  @ApiParam({
+    name: 'Anio',
+    description: 'Año del Saldo Vacacional a actualizar para el empleado',
+  })
   @ApiResponse({
     status: 200,
     description:

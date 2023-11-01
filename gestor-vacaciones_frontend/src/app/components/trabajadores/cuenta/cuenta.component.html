@@ -8,7 +8,8 @@
     <h1>{{empleado.nombre}} {{empleado.apellidos}}</h1>
 
     <div id="info-box">
-        <p>{{empleado.departamento.nombre}}</p>
+        <p *ngIf="empleado.departamento.nombre">{{empleado.departamento.nombre | uppercase}}</p>
+        <p *ngIf="!empleado.departamento.nombre">S/D</p>
     </div>
 
     <div class="row justify-content-around">
@@ -17,7 +18,7 @@
             <p>{{this.saldo_vacacional.dias_disponibles}}</p>
         </div>
         <div class="col-4">
-            <p>Días Tomados:</p>
+            <p>Días de Vacaciones Tomados:</p>
             <p>{{this.saldo_vacacional.dias_tomados}}</p>
         </div>
     </div><br>

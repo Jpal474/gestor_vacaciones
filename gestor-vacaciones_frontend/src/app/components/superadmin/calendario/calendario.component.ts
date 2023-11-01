@@ -9,6 +9,7 @@ import { DiasFeriados } from 'src/app/interfaces/dias_feriados.interface';
 import { FestivosService } from 'src/app/services/festivos.service';
 import { Solicitud } from 'src/app/interfaces/solicitud.interface';
 import * as moment from 'moment';
+import Swal from 'sweetalert2';
 @Component({
   selector: 'app-calendario',
   templateUrl: './calendario.component.html',
@@ -16,6 +17,7 @@ import * as moment from 'moment';
 })
 export class CalendarioComponent {
   dias: DiasFeriados[]=[]
+  fecha = moment(new Date(), 'YYYY-MM-DD');
   calendarOptions: CalendarOptions = {
     initialView: 'dayGridMonth',
     plugins: [dayGridPlugin, timeGridPlugin, interactionGridPlugin],
@@ -28,7 +30,11 @@ export class CalendarioComponent {
 
     events: [],
     eventClick: function(info) {
-      alert('Event: ' + info.event.title);
+      alert('Evento: ' + info.event.title);
+    },
+    validRange:{
+      start: `${this.fecha.year()}-01-01`,
+      end:`${this.fecha.year() + 1}-01-01`
     }
   };
 
@@ -68,7 +74,12 @@ export class CalendarioComponent {
         }
       },
       error: (err) => {
-
+        Swal.fire({
+          icon:'error',
+          title:'Error',
+          text:'Hubo un error al obtener los días feriados',
+          confirmButtonColor:'#198754',
+        })
       },
       complete: () => {
         this.superadService.getSolicitudesAprobadas()

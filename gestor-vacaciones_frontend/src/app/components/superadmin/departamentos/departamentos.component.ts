@@ -38,6 +38,7 @@ export class DepartamentosComponent implements OnInit {
       input: 'text',
       inputLabel: 'Nombre',
       inputPlaceholder: 'Ingrese Nombre del Departamento',
+      confirmButtonColor:'#198754',
     });
     if(departamento && !(specialCharactersRegex.test(departamento))){//verifica si existe un dea
       let result=true
@@ -53,6 +54,7 @@ export class DepartamentosComponent implements OnInit {
             icon: 'error',
             title: 'Error',
             text: 'No puedes registrar dos Departamentos con el mismo nombre',
+            confirmButtonColor:'#198754',
           })
           result=false;
           break;
@@ -95,8 +97,10 @@ export class DepartamentosComponent implements OnInit {
         Swal.fire({
           icon: 'error',
           title: 'Error',
-          text: e,
+          text: 'Hubo un error al obtener los departamentos',
         })
+        console.log(e);
+        
       }
     })
   }
@@ -107,8 +111,9 @@ export class DepartamentosComponent implements OnInit {
       text: "Los cambios no son reversibles",
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
+      confirmButtonColor: '#198754',
       cancelButtonColor: '#d33',
+      cancelButtonText: 'Cancelar',
       confirmButtonText: 'Borrar'
     }).then((result) => {
       if (result.isConfirmed) {
@@ -121,6 +126,7 @@ export class DepartamentosComponent implements OnInit {
                icon: 'success',
                title: 'Éxito',
                text: 'El departamento ha sido borrado con éxito',
+               confirmButtonColor:'#198754',
              })  
            }
            else{
@@ -128,6 +134,7 @@ export class DepartamentosComponent implements OnInit {
                icon: 'error',
                title: 'Error',
                text: 'No se ha podido eliminar el departamento',
+               confirmButtonColor:'#198754',
              })
            }
            },
@@ -136,6 +143,7 @@ export class DepartamentosComponent implements OnInit {
                icon: 'error',
                title: 'Error',
                text: 'Se ha producito en error al eliminar el departamento',
+               confirmButtonColor:'#198754',
              })
            },
           })

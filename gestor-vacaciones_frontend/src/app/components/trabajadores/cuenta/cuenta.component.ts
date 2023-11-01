@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Empleado, EmpleadoGenero } from 'src/app/interfaces/empleados.interface';
 import { SaldoVacacional } from 'src/app/interfaces/saldo_vacacional.interface';
 import { TrabajadoresService } from 'src/app/services/trabajadores.service';
+import { StorageService } from 'src/app/storage.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-cuenta',
@@ -26,18 +28,37 @@ export class CuentaComponent implements OnInit {
       nombre: ''
     }}
 saldo_vacacional = {} as SaldoVacacional
-constructor(private trabajadorService: TrabajadoresService) {}
+constructor(
+  private trabajadorService: TrabajadoresService,
+  private storageService: StorageService,
+  ) {}
 
  ngOnInit(): void {
 
-  const id = JSON.parse(atob(localStorage.getItem('id')!))
-  if(id){
+  const id = this.storageService.getLocalStorageItem('id') + '';
+    if(id){
     this.trabajadorService.getEmpleadoByUserId(id)
     .subscribe({
        next: (res: Empleado)=> {
         this.empleado = res;
+        if (this.empleado.departamento == null){
+          this.empleado.departamento = {
+            id: 9,
+            nombre: 'Sin Departamento'
+          }
+        }
         console.log(res);
         this.getSaldoVacacional()
+        
+       },
+       error:(err)=> {
+        Swal.fire({
+          icon:'error',
+          title:'Error',
+          text:'Hubo un error el obtener sus datos',
+          confirmButtonColor:'#198754',
+        })
+        console.log(err);
         
        }
     })

@@ -36,44 +36,100 @@ export class SolicitudService {
   async getAllSolicitudes(
     pageSize: number,
     pageNumber: number,
+    opcion: number,
   ): Promise<{ solicitudes: Solicitud[]; pages: number }> {
-    const all_solicitudes = await this.solicitudRepository
-      .createQueryBuilder('solicitud')
-      .innerJoinAndSelect('solicitud.empleado', 'empleado')
-      .innerJoin('empleado.usuario', 'usuario')
-      .getMany();
-    const pages = Math.ceil(all_solicitudes.length / pageSize);
-    const solicitudes = all_solicitudes.slice(
-      (pageNumber - 1) * pageSize,
-      pageNumber * pageSize,
-    );
-    return { solicitudes, pages };
+    try {
+      let all_solicitudes;
+      if (Number(opcion) === 1) {
+        all_solicitudes = await this.solicitudRepository
+          .createQueryBuilder('solicitud')
+          .innerJoinAndSelect('solicitud.empleado', 'empleado')
+          .innerJoin('empleado.usuario', 'usuario')
+          .addOrderBy('solicitud.estado', 'ASC')
+          .getMany();
+      } else if (Number(opcion) === 2) {
+        all_solicitudes = await this.solicitudRepository
+          .createQueryBuilder('solicitud')
+          .innerJoinAndSelect('solicitud.empleado', 'empleado')
+          .innerJoin('empleado.usuario', 'usuario')
+          .addOrderBy('solicitud.fecha_inicio', 'DESC')
+          .getMany();
+      } else if (Number(opcion) === 3) {
+        all_solicitudes = await this.solicitudRepository
+          .createQueryBuilder('solicitud')
+          .innerJoinAndSelect('solicitud.empleado', 'empleado')
+          .innerJoin('empleado.usuario', 'usuario')
+          .addOrderBy('solicitud.empleado', 'ASC')
+          .getMany();
+      }
+
+      if (!all_solicitudes) {
+        throw new NotFoundException(`No Se Han Encontrado Solicitudes`);
+      }
+      const pages = Math.ceil(all_solicitudes.length / pageSize);
+      const solicitudes = all_solicitudes.slice(
+        (pageNumber - 1) * pageSize,
+        pageNumber * pageSize,
+      );
+      return { solicitudes, pages };
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async getSolicitudesTrabajadores(
     pageSize: number,
     pageNumber: number,
+    opcion: number,
   ): Promise<{ solicitudes: Solicitud[]; pages: number }> {
-    const all_solicitudes = await this.solicitudRepository
-      .createQueryBuilder('solicitud')
-      .innerJoinAndSelect('solicitud.empleado', 'empleado')
-      .innerJoin('empleado.usuario', 'usuario')
-      .innerJoin('usuario.rol', 'rol', 'rol.nombre = :rolName', {
-        rolName: 'Trabajador',
-      })
-      .getMany();
+    try {
+      let all_solicitudes;
+      if (Number(opcion) === 1) {
+        all_solicitudes = await this.solicitudRepository
+          .createQueryBuilder('solicitud')
+          .innerJoinAndSelect('solicitud.empleado', 'empleado')
+          .innerJoin('empleado.usuario', 'usuario')
+          .innerJoin('usuario.rol', 'rol', 'rol.nombre = :rolName', {
+            rolName: 'Trabajador',
+          })
+          .addOrderBy('solicitud.estado', 'ASC')
+          .getMany();
+      } else if (Number(opcion) === 2) {
+        all_solicitudes = await this.solicitudRepository
+          .createQueryBuilder('solicitud')
+          .innerJoinAndSelect('solicitud.empleado', 'empleado')
+          .innerJoin('empleado.usuario', 'usuario')
+          .innerJoin('usuario.rol', 'rol', 'rol.nombre = :rolName', {
+            rolName: 'Trabajador',
+          })
+          .addOrderBy('solicitud.fecha_inicio', 'DESC')
+          .getMany();
+      } else if (Number(opcion) === 3) {
+        all_solicitudes = await this.solicitudRepository
+          .createQueryBuilder('solicitud')
+          .innerJoinAndSelect('solicitud.empleado', 'empleado')
+          .innerJoin('empleado.usuario', 'usuario')
+          .innerJoin('usuario.rol', 'rol', 'rol.nombre = :rolName', {
+            rolName: 'Trabajador',
+          })
+          .addOrderBy('solicitud.empleado', 'ASC')
+          .getMany();
+      }
 
-    if (!all_solicitudes) {
-      throw new NotFoundException(
-        'No Se Han Encontrado Solicitudes Para Trabajadores',
+      if (!all_solicitudes) {
+        throw new NotFoundException(
+          'No Se Han Encontrado Solicitudes Para Trabajadores',
+        );
+      }
+      const pages = Math.ceil(all_solicitudes.length / pageSize);
+      const solicitudes = all_solicitudes.slice(
+        (pageNumber - 1) * pageSize,
+        pageNumber * pageSize,
       );
+      return { solicitudes, pages };
+    } catch (error) {
+      console.log(error);
     }
-    const pages = Math.ceil(all_solicitudes.length / pageSize);
-    const solicitudes = all_solicitudes.slice(
-      (pageNumber - 1) * pageSize,
-      pageNumber * pageSize,
-    );
-    return { solicitudes, pages };
   }
 
   async createSolicitud(
@@ -172,14 +228,31 @@ export class SolicitudService {
     id: string,
     pageSize: number,
     pageNumber: number,
+    opcion: number,
   ): Promise<{ solicitudes: Solicitud[]; pages: number }> {
     try {
-      const found = await this.solicitudRepository.find({
-        relations: ['empleado'],
-        where: {
-          empleado: { id: id },
-        },
-      });
+      let found;
+      if (Number(opcion) === 1) {
+        found = await this.solicitudRepository.find({
+          relations: ['empleado'],
+          where: {
+            empleado: { id: id },
+          },
+          order: {
+            estado: 'ASC',
+          },
+        });
+      } else if (Number(opcion) === 2) {
+        found = await this.solicitudRepository.find({
+          relations: ['empleado'],
+          where: {
+            empleado: { id: id },
+          },
+          order: {
+            fecha_inicio: 'DESC',
+          },
+        });
+      }
       if (!found) {
         throw new NotFoundException(
           `No se han encontrado solicitudes para este empleado`,

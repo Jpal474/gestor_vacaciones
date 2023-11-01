@@ -15,7 +15,7 @@ export class UpdateSolicitudDto {
   @ApiProperty()
   fecha_fin: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   @ApiProperty()
   justificacion: string;

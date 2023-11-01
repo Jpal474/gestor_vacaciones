@@ -22,7 +22,7 @@ section {
     }
 }
 
-@media screen and (max-height: 742px) {
+@media screen and (max-height: 1000px) {
     section {
         width: 70vw;
         top: 0px;

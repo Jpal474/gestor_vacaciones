@@ -41,6 +41,7 @@ export class DepartamentoController {
 
   @Get('/:id')
   @ApiOperation({ summary: 'Obtener Departamento a partir de su ID' })
+  @ApiParam({ name: 'ID', description: 'ID del Departamento a buscar' })
   @ApiResponse({
     status: 200,
     description: 'Regresa un objeto con los datos del Departamento encontrado',
@@ -50,8 +51,17 @@ export class DepartamentoController {
   getDepartamentoById(@Param('id') id: number): Promise<Departamento> {
     return this.departamentosService.getDepartamentoById(id);
   }
+
   @Get('/:size/:number')
   @ApiOperation({ summary: 'Obtener todos los departamentos' })
+  @ApiParam({
+    name: 'Size',
+    description: 'Numero de elementos a mostrar en el front',
+  })
+  @ApiParam({
+    name: 'Number',
+    description: 'Numero de página a obtener para mostrar en front',
+  })
   @ApiResponse({
     status: 200,
     description: 'Regresa un arreglo con los datos de los departamentos',
@@ -64,6 +74,7 @@ export class DepartamentoController {
   ): Promise<{ departamentos: Departamento[]; pages: number }> {
     return this.departamentosService.getDepartamentos(size, number);
   }
+
   @Post()
   @ApiOperation({ summary: 'Crear Departamento' })
   @ApiBody({

@@ -1,3 +1,9 @@
+.alert {
+    width: 30vw;
+    position: absolute;
+    right: 0;
+}
+
 .card {
     height: auto;
     width: 80vw;
@@ -90,12 +96,21 @@
     height: 30px;
 }
 
-@media screen and (max-width:600px) {
+@media screen and (max-width:700px) {
     .card {
         left: 4%;
     }
     .input-box {
         width: auto;
         height: 50px;
+    }
+    .alert {
+        width: 55vw;
+        font-size: small;
+        position: relative;
+        right: 0;
+    }
+    .btn {
+        font-size: small;
     }
 }

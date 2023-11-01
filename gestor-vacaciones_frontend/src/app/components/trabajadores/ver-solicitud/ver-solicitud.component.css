@@ -6,15 +6,15 @@ section {
     border-radius: 24px;
     position: fixed;
     top: 164px;
-    left: calc(50vw - (900px / 2));
+    left: calc(45vw - (900px / 2));
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
 }
 
 @media screen and (max-width: 572px) {
     section {
         width: auto;
-        left: 0;
-        top: 0;
+        left: 8%;
+        top: 20%;
         transform: none;
         -webkit-animation: none !important;
         animation: none !important;
@@ -22,10 +22,10 @@ section {
     }
 }
 
-@media screen and (max-height: 742px) {
+@media screen and (max-height: 700px) {
     section {
-        width: 65vw;
-        top: 40px;
+        width: 70vw;
+        top: 70px;
         transform: none;
         -webkit-animation: none !important;
         animation: none !important;
@@ -114,4 +114,10 @@ a {
 
 a:hover {
     text-decoration: underline;
+}
+
+@media screen and (max-width:3500px) and (min-width: 3000px) {
+    section {
+        left: calc(45vw - (900px / 2));
+    }
 }

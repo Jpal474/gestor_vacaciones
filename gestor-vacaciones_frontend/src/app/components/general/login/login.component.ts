@@ -6,6 +6,7 @@ import { Login } from 'src/app/interfaces/login.interface';
 import { AdminService } from 'src/app/services/admin.service';
 import { AuthService } from 'src/app/services/auth.service';
 import Swal from 'sweetalert2';
+import { StorageService } from 'src/app/storage.service';
 
 @Component({
   selector: 'app-login',
@@ -13,10 +14,17 @@ import Swal from 'sweetalert2';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
+  private SECRETKEY = 'LMkjo~Xw]FEn9]BIvls05A4nlV%mUzV{Q6s35RTd~h3(m-6'
   login_formulario!: FormGroup;
   usuarioNotFound!:string
   passwordInvalid!:string
-  constructor(private fb: FormBuilder, private authService: AuthService, private router:Router, private adminService:AdminService) {
+  constructor(
+    private fb: FormBuilder, 
+    private authService: AuthService, 
+    private router:Router, 
+    private adminService:AdminService,
+    private storageService: StorageService,
+    ) {
   }
 
   ngOnInit(): void {
@@ -30,7 +38,7 @@ export class LoginComponent {
   }
 
   login(){
-    console.log('entra');
+    console.log('entra',this.login_formulario.value.correo, this.login_formulario.value.contraseña);
     
     this.authService.getAuth(this.login_formulario.value.correo, this.login_formulario.value.contraseña)
     .subscribe({
@@ -39,14 +47,12 @@ export class LoginComponent {
         
         this.usuarioNotFound = '';
         this.passwordInvalid = '';
-        const tokenCodificado = btoa(JSON.stringify(login.accessToken))
-        localStorage.setItem('token', tokenCodificado);
+        this.storageService.setLocalStorageItem('token', login.accessToken)
         const empleado = this.authService.decodeUserFromToken(login.accessToken);
-        console.log('empleado',empleado);
-        localStorage.setItem('usuario', btoa(JSON.stringify(empleado.nombre)));
-        localStorage.setItem('id', btoa(JSON.stringify(empleado.id)));
-        localStorage.setItem('tipo', btoa(JSON.stringify(empleado.rol)));
-        localStorage.setItem('correo', btoa(JSON.stringify(empleado.correo)));
+        this.storageService.setLocalStorageItem('usuario', empleado.nombre)
+        this.storageService.setLocalStorageItem('id', empleado.id)
+        this.storageService.setLocalStorageItem('tipo', empleado.rol)
+        this.storageService.setLocalStorageItem('correo', empleado.correo)
         if(empleado.rol === 'SuperAdministrador'){
           this.router.navigate(['/super/inicio']);
         }
@@ -66,9 +72,8 @@ export class LoginComponent {
           hideClass: {
             popup: 'animate__animated animate__fadeOutUp'
           },
-          customClass: {
-            confirmButton: 'btn-sweet'
-          }
+          confirmButtonColor:'#198754'
+          
         })
         
       },
@@ -76,7 +81,8 @@ export class LoginComponent {
         Swal.fire({
           icon: 'error',
           title: 'Error',
-          text: 'Hubo un error al iniciar sesion, revise su credenciales y si el error persiste, pongase en contacto con la página',
+          text: 'Hubo un error al iniciar sesión, revise sus credenciales y si el error persiste, contacte al sopote de la página',
+          confirmButtonColor: '#198754'
         })
       }
     })

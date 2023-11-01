@@ -17,3 +17,11 @@
     width: 30px;
     height: 30px;
 }
+
+.filtro {
+    /* 2 píxeles de ancho, estilo discontinuo (dashed), color azul */
+    padding: 10px;
+    display: inline-block;
+    background-color: #00aec1;
+    color: white;
+}

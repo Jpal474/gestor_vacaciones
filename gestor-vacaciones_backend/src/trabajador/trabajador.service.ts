@@ -18,6 +18,7 @@ export class TrabajadorService {
     nombre: string,
     pageSize: number,
     pageNumber: number,
+    anio: number,
   ): Promise<{ trabajadores: Empleado[]; pages: number }> {
     try {
       const all_trabajadores = await this.empleadoRepository
@@ -25,7 +26,9 @@ export class TrabajadorService {
         .leftJoinAndSelect('empleado.usuario', 'usuario')
         .leftJoinAndSelect('usuario.rol', 'rol')
         .leftJoinAndSelect('empleado.departamento', 'departamento') // Add this line
+        .leftJoinAndSelect('empleado.saldo_vacacional', 'saldo_vacacional') //
         .where('rol.nombre = :nombre', { nombre })
+        .andWhere('saldo_vacacional.año = :anio', { anio })
         .getMany();
 
       const pages = Math.ceil(all_trabajadores.length / pageSize);
@@ -76,9 +79,11 @@ export class TrabajadorService {
       trabajador.apellidos = updateTrabajadorDto.apellidos;
       trabajador.genero = updateTrabajadorDto.genero;
       trabajador.fecha_contratacion = updateTrabajadorDto.fecha_contratacion;
+      trabajador.departamento = updateTrabajadorDto.departamento;
       this.empleadoRepository.save(trabajador);
       return trabajador;
     } catch (error) {
+      console.log('error en actualizar trabajador');
       throw new Error(error);
     }
   }

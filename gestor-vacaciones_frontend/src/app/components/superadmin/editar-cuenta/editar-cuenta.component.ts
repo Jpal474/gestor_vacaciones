@@ -91,8 +91,9 @@ export class EditarCuentaComponent {
             text: "Los cambios no son reversibles",
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#008000',
+            confirmButtonColor: '#198754',
             cancelButtonColor: '#d33',
+            cancelButtonText: 'Cancelar',
             confirmButtonText: 'Guardar'
           }).then((result) => {
             if (result.isConfirmed) {
@@ -154,6 +155,7 @@ export class EditarCuentaComponent {
                   icon: 'error',
                   title: 'Error',
                   text: 'Hubo un error al actualizar sus datos',
+                  confirmButtonColor:'#198754',
                 })
                 console.log(err);
                 
@@ -165,8 +167,18 @@ export class EditarCuentaComponent {
               icon: 'error',
               title: 'Error',
               text: 'La contraseña no puede consistir sólo de espacios en blanco',
+              confirmButtonColor:'#198754',
             }) 
           }
+        }
+        else{
+          return Object.values( this.ceo_formulario.controls ).forEach( control => {
+            if ( control instanceof FormGroup ) {
+              Object.values( control.controls ).forEach( control => control.markAsTouched() );
+            } else {
+              control.markAsTouched();
+            }
+          });
         }
       }
 
@@ -186,6 +198,7 @@ export class EditarCuentaComponent {
                   icon: 'success',
                   title: 'Éxito',
                   text: 'Edición Completada, sus datos han sido actualizados',
+                  confirmButtonColor:'#198754',
                 }),
                 setTimeout(() =>{
                   this.router.navigate([`/super/cuenta`]);
@@ -197,6 +210,7 @@ export class EditarCuentaComponent {
                 icon: 'error',
                 title: 'Error',
                 text: 'Hubo un error al actualizar sus datos',
+                confirmButtonColor:'#198754',
               })
             }
           })

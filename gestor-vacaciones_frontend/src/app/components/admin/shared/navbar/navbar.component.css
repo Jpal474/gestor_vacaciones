@@ -13,3 +13,13 @@
 .nav-item {
     cursor: pointer;
 }
+
+@media screen and (max-width:500px) {
+    .navbar-brand {
+        font-size: small;
+    }
+    .img-nav {
+        width: 25px;
+        height: 25px;
+    }
+}

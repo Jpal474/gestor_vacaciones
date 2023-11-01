@@ -18,7 +18,7 @@ export const SUPERADMIN_ROUTES: Routes = [
     {path: 'agregar_empleado', component: AgregarEmpleadoComponent},
     {path: 'editar_empleado/:id', component: EditarEmpleadoComponent},
     {path: 'solicitudes', component: SolicitudesComponent },
-    {path: 'solicitud/:id', component: VerSolicitudComponent},
+    {path: 'solicitud', component: VerSolicitudComponent},
     {path: 'calendario', component: CalendarioComponent},
     {path: 'cuenta', component: CuentaComponent},
     {path: 'editar_cuenta/:id', component: EditarCuentaComponent},

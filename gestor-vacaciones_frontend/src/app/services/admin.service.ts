@@ -41,16 +41,16 @@ export class AdminService {
     return this.httpClient.get<{ trabajadores: Empleado[]; pages: number }>(`${this.BASE_URL}/trabajador/${size}/${page}`)
   }
 
-  getSolicitudesTrabajadores(size: number, page:number): Observable<{ solicitudes: Solicitud[]; pages: number }>{
-    return this.httpClient.get<{ solicitudes: Solicitud[]; pages: number }>(`${this.BASE_URL}/solicitud/trabajadores/${size}/${page}`);
+  getSolicitudesTrabajadores(size: number, page:number, opcion: number): Observable<{ solicitudes: Solicitud[]; pages: number }>{
+    return this.httpClient.get<{ solicitudes: Solicitud[]; pages: number }>(`${this.BASE_URL}/solicitud/trabajadores/${size}/${page}/${opcion}`);
   }
 
   getSolicitudesAprobadas(): Observable<Solicitud[]>{
     return this.httpClient.get<Solicitud[]>(`${this.BASE_URL}/solicitud/aprobadas`)
   }
 
-  getMisSolicitudes(id: string, size:number, page:number): Observable<{ solicitudes: Solicitud[]; pages: number }>{
-   return this.httpClient.get<{ solicitudes: Solicitud[]; pages: number }>(`${this.BASE_URL}/solicitud/empleados/${id}/${size}/${page}`)
+  getMisSolicitudes(id: string, size:number, page:number, opcion: number): Observable<{ solicitudes: Solicitud[]; pages: number }>{
+   return this.httpClient.get<{ solicitudes: Solicitud[]; pages: number }>(`${this.BASE_URL}/solicitud/empleados/${id}/${size}/${page}/${opcion}`)
    }
 
   getDepartamentoById(id: number): Observable<Departamento>{

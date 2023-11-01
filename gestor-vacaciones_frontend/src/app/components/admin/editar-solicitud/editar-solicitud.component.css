@@ -1,3 +1,14 @@
+.alert {
+    width: 30vw;
+    position: absolute;
+    right: 0;
+}
+
+.regresar {
+    width: 30px;
+    height: 30px;
+}
+
 .card {
     height: auto;
     width: 80vw;
@@ -97,5 +108,9 @@
     .input-box {
         width: auto;
         height: 50px;
+    }
+    .alert {
+        width: 50vw;
+        font-size: small;
     }
 }

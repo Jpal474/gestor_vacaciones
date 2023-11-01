@@ -20,6 +20,7 @@ import Swal from 'sweetalert2';
 })
 export class CalendarioComponent {
   dias: DiasFeriados[]=[]
+  fecha = moment(new Date(), 'YYYY-MM-DD');
   calendarOptions: CalendarOptions = {
     initialView: 'dayGridMonth',
     plugins: [dayGridPlugin, timeGridPlugin, interactionGridPlugin],
@@ -32,8 +33,12 @@ export class CalendarioComponent {
 
     events: [],
     eventClick: function(info) {
-      alert('Event: ' + info.event.title);
+      alert(info.event.title);
      
+    },
+    validRange:{
+      start: `${this.fecha.year()}-01-01`,
+      end:`${this.fecha.year() + 1}-01-01`
     }
   };
 
@@ -80,6 +85,7 @@ export class CalendarioComponent {
             icon: 'error',
             title: 'Error',
             text: 'Ha habido un error al completar la solicitud',
+            confirmButtonColor: '',
           })
         }
         else if('unauthorized'.includes(err)){
@@ -87,12 +93,14 @@ export class CalendarioComponent {
             icon: 'error',
             title: 'Error',
             text: 'Debe iniciar sesión para completar la acción',
+            confirmButtonColor:'#198754',
           })
         }
         Swal.fire({
           icon: 'error',
           title: 'Error',
           text: err,
+          confirmButtonColor:'#198754'
         })
       },
       complete: () => {
@@ -119,6 +127,7 @@ export class CalendarioComponent {
               icon: 'error',
               title: 'Error',
               text: 'Ha habido un error al completar la solicitud',
+              confirmButtonColor:'#198754',
             })
           }
           else if('unauthorized'.includes(err)){
@@ -126,12 +135,14 @@ export class CalendarioComponent {
               icon: 'error',
               title: 'Error',
               text: 'Debe iniciar sesión para completar la acción',
+              confirmButtonColor:'#198754'
             })
           }
           Swal.fire({
             icon: 'error',
             title: 'Error',
             text: err,
+            confirmButtonColor:'#198754'
           })
           },
         })
@@ -139,6 +150,7 @@ export class CalendarioComponent {
     })
     
   }
+
   }
 
 

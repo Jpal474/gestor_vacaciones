@@ -18,7 +18,7 @@
                                 <small class="text-danger" *ngIf="contraseniaNoValido"> {{contraseniaNoValido}} </small>
 
                             </div>
-                            <div class="input-box ms-5">
+                            <div class="input-box ms-5" id="confirmar">
                                 <span class="icon" (click)="toggleFieldTextType2()"><img
                                 [src]="fieldTextType2? '../../../../../assets/recursos/imagenes/superadmin/generales/ocultar.svg' : '../../../../../assets/recursos/imagenes/superadmin/generales/mostrar.svg' "
                                 class="img-small"></span>
@@ -29,7 +29,7 @@
                         </div>
 
                     </div>
-                    <button type="submit" class="btn" (click)=" guardar() ">Guardar</button>
+                    <button type="submit" class="btn" (click)="guardar()">Guardar</button>
                 </form>
             </div>
         </div>

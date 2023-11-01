@@ -148,8 +148,8 @@ export class SuperadService {
     return this.httpClient.put<boolean>(`${this.BASE_URL}/empleado/${id}/${opcion}`, {});
   }
 
-  getAllSolicitudes(size:number, page:number): Observable<{ solicitudes: Solicitud[]; pages: number }>{
-    return this.httpClient.get<{ solicitudes: Solicitud[]; pages: number }>(`${this.BASE_URL}/solicitud/${size}/${page}`);
+  getAllSolicitudes(size:number, page:number, opcion: number): Observable<{ solicitudes: Solicitud[]; pages: number }>{
+    return this.httpClient.get<{ solicitudes: Solicitud[]; pages: number }>(`${this.BASE_URL}/solicitud/${size}/${page}/${opcion}`);
   }
   getSolicitudesTrabajadores(): Observable<{ solicitudes: Solicitud[]; pages: number }>{
     return this.httpClient.get<{ solicitudes: Solicitud[]; pages: number }>(`${this.BASE_URL}/solicitud/trabajadores`);

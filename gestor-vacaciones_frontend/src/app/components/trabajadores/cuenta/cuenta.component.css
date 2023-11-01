@@ -4,7 +4,7 @@ section {
     padding: 52px 24px 24px;
     text-align: center;
     border-radius: 24px;
-    position: fixed;
+    position: relative;
     top: 164px;
     left: calc(50vw - (512px / 2));
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);

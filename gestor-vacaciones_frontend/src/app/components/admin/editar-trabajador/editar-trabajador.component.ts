@@ -67,7 +67,7 @@ export class EditarTrabajadorComponent {
       this.adminService.getEmpleadoById(params['id'])
       .subscribe({
         next: (res: Empleado)=> {
-          console.log(res);
+          console.log(res, 'departamentos');
           this.id_usuario= res.usuario.id!;
           this.id_empleado=res.id!;
           this.trabajador.id=res.id;
@@ -92,7 +92,7 @@ export class EditarTrabajadorComponent {
             nombre_usuario: res.usuario.nombre_usuario,
             correo: res.usuario.correo,
             genero: res.genero,
-            departamento: departamento.nombre,
+            departamento: departamento.id,
             fecha_contratacion: res.fecha_contratacion,
             
           })
@@ -139,8 +139,9 @@ confirmarActualizacion(){
     text: "Los cambios no son reversibles",
     icon: 'warning',
     showCancelButton: true,
-    confirmButtonColor: '#007a00',
+    confirmButtonColor: '#198754',
     cancelButtonColor: '#d33',
+    cancelButtonText:'Cancelar',
     confirmButtonText: 'Guardar'
   }).then((result) => {
     if (result.isConfirmed) {
@@ -156,15 +157,21 @@ actualizarTrabajador(){
         icon: 'error',
         title: 'Error',
         text: 'La contraseña no puede consistir sólo en espacios en blanco',
+        confirmButtonColor:'#198754',
       })
     }
-    else if (this.trabajador_formulario.value['contraseña'].length === 0){
+    else{
       this.trabajador.nombre = this.trabajador_formulario.value['nombre'];
       this.trabajador.apellidos = this.trabajador_formulario.value['apellidos'];
       this.trabajador.genero = this.trabajador_formulario.value['genero'];
       this.trabajador.fecha_contratacion = this.trabajador_formulario.value['fecha_contratacion'];
       this.trabajador.usuario.nombre_usuario = this.trabajador_formulario.value['nombre_usuario'];
       this.trabajador.usuario.correo = this.trabajador_formulario.value['correo'];
+      this.actualizarDepartamento();
+      if (this.trabajador_formulario.value['contraseña'].length > 0){
+        this.trabajador.usuario.contraseña = this.trabajador_formulario.value['contraseña']
+      }
+
       this.adminService.updateUsuario(this.trabajador.usuario, this.id_usuario!)
       .subscribe({
         next: (res: Usuario)=> {
@@ -178,6 +185,7 @@ actualizarTrabajador(){
                 icon: 'success',
                 title: 'Éxito',
                 text: 'El Trabajador ha sido guardado con éxito',
+                confirmButtonColor:'#198754'
               }),
               setTimeout(() =>{
                 this.router.navigate([`/admin/trabajadores`]);
@@ -187,26 +195,14 @@ actualizarTrabajador(){
            })
         },
         error: (err)=>{
-          const cadena:string = 'unknown error'
-          if(cadena.includes(err)){
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: 'Ha habido un error al completar la solicitud',
-            })
-          }
-          else if('unauthorized'.includes(err)){
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: 'Debe iniciar sesión para completar la acción',
-            })
-          }
           Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: err,
+            text: 'Hubo un problema al guardar el trabajador',
+            confirmButtonColor:'#198754',
           }),
+          console.log(err);
+          
           setTimeout(function(){
             window.location.reload();
          }, 2000);
@@ -228,6 +224,16 @@ actualizarTrabajador(){
   }
 }
 
+actualizarDepartamento(){
+  let id_departamento = this.trabajador_formulario.value['departamento']
+  for (let j = 0; j < this.departamentos.length; j++){
+    if(this.departamentos[j].id === id_departamento){
+      this.trabajador.departamento = this.departamentos[j]
+    }
+  }
+}
+
+
 async actualizarSaldoVacacional(){
   const año = new Date().getFullYear();
   const fechaFormateada = new Date().toISOString().split('T')[0];
@@ -245,6 +251,7 @@ async actualizarSaldoVacacional(){
       input: 'text',
       inputLabel: 'En caso de no tener, deje en blanco el espacio',
       inputPlaceholder: 'Ingrese Nombre del Departamento',
+      confirmButtonColor: '#198754'
     });   
 
     if(dias_tomados && parseInt(dias_tomados)>0){

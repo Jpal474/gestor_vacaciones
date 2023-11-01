@@ -8,6 +8,7 @@ import { RechazarSolicitud } from 'src/app/interfaces/rechazar_solicitud.interfa
 import { Solicitud, SolicitudEstado } from 'src/app/interfaces/solicitud.interface';
 import { FestivosService } from 'src/app/services/festivos.service';
 import { TrabajadoresService } from 'src/app/services/trabajadores.service';
+import { StorageService } from 'src/app/storage.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -63,37 +64,27 @@ export class VerMisolicitudComponent {
     private trabajadorService: TrabajadoresService,
     private activadedRoute: ActivatedRoute,
     private festivosService: FestivosService,
+    private storageService: StorageService
     ) {}
 
   ngOnInit(): void {
-    const params = this.activadedRoute.snapshot.params;
-    if (params) {
-      this.trabajadorService.getSolicitudById(params['id']).subscribe({
+    const id_solicitud = +this.storageService.getLocalStorageItem('id_solicitud')!
+    
+    if (id_solicitud) {
+      this.trabajadorService.getSolicitudById(id_solicitud).subscribe({
         next: (res: Solicitud) => {
           this.solicitud = res;
           console.log(this.solicitud);
         },
         error: (err)=> {
-          const cadena:string = 'unknown error'
-          if(cadena.includes(err)){
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: 'Ha habido un error al completar la solicitud',
-            })
-          }
-          else if('unauthorized'.includes(err)){
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: 'Debe iniciar sesión para completar la acción',
-            })
-          }
           Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: err,
+            text: 'Hubo un error al cargar la solicitud',
+            confirmButtonColor:'#198754',
           })
+          console.log(err);
+          
         },
         complete: ()=>{
           this.festivosService.getDiasFeriados()
@@ -113,26 +104,14 @@ export class VerMisolicitudComponent {
               }
             },
             error: (err)=> {
-              const cadena:string = 'unknown error'
-          if(cadena.includes(err)){
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: 'Ha habido un error al completar la solicitud',
-            })
-          }
-          else if('unauthorized'.includes(err)){
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: 'Debe iniciar sesión para completar la acción',
-            })
-          }
           Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: err,
+            text: 'Hubo un error al obtener los días festivos',
+            confirmButtonColor:'#198754'
           })
+          console.log(err);
+          
               
             }
           }) 

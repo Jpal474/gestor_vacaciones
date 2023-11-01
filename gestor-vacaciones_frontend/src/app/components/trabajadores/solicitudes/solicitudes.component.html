@@ -1,7 +1,16 @@
 <h1 class="titulo text-center"> Solicitudes </h1>
-<div class="d-grid gap-2 col-6 mx-auto justify-content-md-end">
+<div class="d-grid gap-2 col-8 mx-auto justify-content-md-end">
     <a class="btn btn-success text-white" [routerLink]="['/trabajador/crear_solicitud']">CREAR SOLICITUD</a>
 </div>
+
+<div class="d-grid gap-2 col-8 mx-auto justify-content-md-end mt-3">
+    <label class="filtro text-center">Filtrar Por:</label>
+    <select class=" form-select w-100 " aria-label="Default select example " #item (change)="actualizarFiltro(item.value)">
+        <option value=1 selected>Estado</option>
+        <option value=2>Fecha</option>
+      </select>
+</div>
+
 <a class="text-white" [routerLink]="['/trabajador/inicio']"> <img src="../../../../assets/recursos/imagenes/general/regresar.svg" class="regresar"> Regresar</a>
 <div class="row justify-content-center mt-5">
     <div class="col">
@@ -28,8 +37,8 @@
                         <td style="background-color: #00aec1; color: white;">{{solicitud.aprobada_por}}</td>
                         <td style="background-color: #00aec1; color: white;">{{solicitud.denegada_por}}</td>
                         <td style="background-color: #00aec1; color: white;">
-                            <a type="button" class="btn button text-white ms-4" [routerLink]="['/trabajador/solicitud', solicitud.id]">Ver</a>
-                            <a type="button" class="btn button text-white ms-4" *ngIf="solicitud.estado === 'PENDIENTE'" [routerLink]="['/trabajador/editar_solicitud', solicitud.id]">Editar</a>
+                            <a type="button" class="btn button text-white ms-4" (click)="colocarIdSolicitud(solicitud.id, 1)">Ver</a>
+                            <a type="button" class="btn button text-white ms-4" *ngIf="solicitud.estado === 'PENDIENTE'" (click)="(colocarIdSolicitud(solicitud.id, 2))">Editar</a>
 
                         </td>
                     </tr>

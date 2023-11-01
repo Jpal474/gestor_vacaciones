@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import * as moment from 'moment';
 import { AdminService } from 'src/app/services/admin.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-home',
@@ -18,6 +19,15 @@ export class HomeComponent {
       next: (res: Number)=> {
         this.numero_solicitudes=res;
         this.generarAlerta()
+      },
+      error: (err)=> {
+        Swal.fire({
+          icon:'error',
+          title: 'Error',
+          text: 'Hubo un error al obtener el numero de solicitudes pendientes'
+        }),
+        console.log(err);
+        
       }
     })
   }

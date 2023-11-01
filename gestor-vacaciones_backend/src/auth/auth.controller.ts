@@ -41,6 +41,15 @@ export class AuthController {
     return this.userService.signIn(authCredentialsDto);
   }
 
+  @ApiOperation({ summary: 'Cambio de contraseña' })
+  @ApiBody({
+    description: 'Contraseña nueva',
+    type: TokenDto,
+  })
+  @ApiParam({
+    name: 'ID',
+    description: 'ID del usuario al cual cambiar la contraseña',
+  })
   @Post('password/:id')
   changePassword(
     @Param('id') id: string,
@@ -49,6 +58,16 @@ export class AuthController {
     return this.userService.changePassword(id, token);
   }
 
+  @ApiOperation({ summary: 'Enviar correo para cambiar contraseña' })
+  @ApiParam({
+    name: 'Destinatario',
+    description: 'Correo del usuario que ha pedido el cambio de vacaciones ',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'El mail ha sido enviado de forma correcta',
+    type: Boolean,
+  })
   @Post('email/:destinatario')
   async enviarMail(@Param('destinatario') destinatario: string) {
     try {

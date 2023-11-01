@@ -17,6 +17,7 @@ import { Canvas, Img, Line, PdfMakeWrapper, Txt } from 'pdfmake-wrapper';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts'; // fonts provided for pdfmake
 import { FestivosService } from 'src/app/services/festivos.service';
 import { DiasFeriados } from 'src/app/interfaces/dias_feriados.interface';
+import { StorageService } from 'src/app/storage.service';
 
 @Component({
   selector: 'app-ver-solicitud',
@@ -81,12 +82,15 @@ export class VerSolicitudComponent {
     private superadService: SuperadService,
     private activadedRoute: ActivatedRoute,
     private router: Router,
-    private festivosService: FestivosService
+    private festivosService: FestivosService,
+    private storageService: StorageService,
   ) {}
   ngOnInit(): void {
-    const params = this.activadedRoute.snapshot.params;
-    if (params) {
-      this.superadService.getSolicitudById(params['id']).subscribe({
+    let id_solicitud = + this.storageService.getLocalStorageItem('id_solicitud')!;
+    
+
+    if (id_solicitud) {
+      this.superadService.getSolicitudById(id_solicitud).subscribe({
         next: (res: Solicitud) => {
           this.solicitud = res;
         },
@@ -252,12 +256,13 @@ export class VerSolicitudComponent {
   async enviarMail() {
     const { value: text } = await Swal.fire({
       input: 'textarea',
-      inputLabel: 'Message',
-      inputPlaceholder: 'Type your message here...',
+      inputLabel: 'Mensaje',
+      inputPlaceholder: 'Escriba su mensaje aquí',
       inputAttributes: {
         'aria-label': 'Type your message here',
       },
       showCancelButton: true,
+      cancelButtonText: 'Cancelar'
     });
 
     if (text && text.length < 250) {
@@ -280,7 +285,8 @@ export class VerSolicitudComponent {
           Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: err,
+            text: 'Hubo un error al enviar el mail',
+            confirmButtonColor:'#198754',
           });
         },
       });
@@ -289,12 +295,14 @@ export class VerSolicitudComponent {
         icon: 'error',
         title: 'Error',
         text: 'El máximo de caracteres debe ser menor a 250',
+        confirmButtonColor:'#198754',
       });
     }
   }
 
   rechazarSolicitud() {
-    let nombre_usuario = JSON.parse(atob(localStorage.getItem('usuario')!));
+    let nombre_usuario = this.storageService.getLocalStorageItem('usuario') + '';
+    
     if (nombre_usuario && this.solicitud.id)
       this.nombre_rechazar.nombre = nombre_usuario;
     this.superadService
@@ -306,13 +314,14 @@ export class VerSolicitudComponent {
               icon: 'success',
               title: 'Éxito',
               text: 'La solicitud ha sido rechaza!',
+              confirmButtonColor:'#198754',
             });
             this.superadService
               .enviarMailRechazada(this.solicitud.empleado.usuario.correo)
               .subscribe({
                 next: (res: boolean) => {
                   if (res) {
-                    this.router.navigate([`/super/home`]);
+                    this.router.navigate([`/super/inicio`]);
                   }
                 },
               });
@@ -321,6 +330,7 @@ export class VerSolicitudComponent {
               icon: 'error',
               title: 'Error',
               text: 'No se ha podido rechazar la solicitud',
+              confirmButtonColor:'#198754',
             });
           }
         },
@@ -328,14 +338,16 @@ export class VerSolicitudComponent {
           Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: err,
+            text: 'Hubo un error al rechazar la solicitud',
+            confirmButtonColor:'#198754',
           });
         },
       });
   }
 
   aprobarSolicitud() {
-    let nombre_usuario = JSON.parse(atob(localStorage.getItem('usuario')!));
+    let nombre_usuario = this.storageService.getLocalStorageItem('usuario') + '';
+
     if (nombre_usuario && this.solicitud.id)
       this.nombre_aceptar.nombre = nombre_usuario;
     return this.superadService
@@ -347,6 +359,7 @@ export class VerSolicitudComponent {
               icon: 'success',
               title: 'Éxito',
               text: 'La solicitud ha sido aprobada!',
+              confirmButtonColor:'#198754',
             });
             this.obtenerSaldoVacacional();
             this.generarPDF();
@@ -355,6 +368,7 @@ export class VerSolicitudComponent {
               icon: 'error',
               title: 'Error',
               text: 'No se ha podido aprobar la solicitud',
+              confirmButtonColor:'#198754',
             });
           }
         },
@@ -362,7 +376,8 @@ export class VerSolicitudComponent {
           Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: err,
+            text: 'Hubo un error al aprobar la solicitud',
+            confirmButtonColor:'#198754',
           });
         },
       });
@@ -379,8 +394,9 @@ export class VerSolicitudComponent {
             text: '¿Estás Seguro de Aprobar Esta Solicitud',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#3085d6',
+            confirmButtonColor: '#198754',
             cancelButtonColor: '#d33',
+            cancelButtonText: 'Cancelar',
             confirmButtonText: 'Aprobar',
           }).then((result) => {
             if (result.isConfirmed) {
@@ -415,7 +431,7 @@ export class VerSolicitudComponent {
               .subscribe({
                 next: (res: boolean) => {
                   if (res) {
-                    this.router.navigate([`/super/home`]);
+                    this.router.navigate([`/super/inicio`]);
                   }
                 },
               });

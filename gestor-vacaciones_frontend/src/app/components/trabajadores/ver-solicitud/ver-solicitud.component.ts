@@ -9,6 +9,7 @@ import { AprobarSolicitud } from 'src/app/interfaces/aprobar_solicitud.interface
 import Swal from 'sweetalert2';
 import { FestivosService } from 'src/app/services/festivos.service';
 import { DiasFeriados } from 'src/app/interfaces/dias_feriados.interface';
+import { StorageService } from 'src/app/storage.service';
 
 @Component({
   selector: 'app-ver-solicitud',
@@ -63,17 +64,25 @@ export class VerSolicitudComponent implements OnInit {
     private trabajadorService: TrabajadoresService,
     private activadedRoute: ActivatedRoute,
     private festivosService: FestivosService,
+    private storageService: StorageService
     ) {}
 
   ngOnInit(): void {
-    const params = this.activadedRoute.snapshot.params;
-    if (params) {
-      this.trabajadorService.getSolicitudById(params['id']).subscribe({
+    const id_solicitud = +this.storageService.getLocalStorageItem('id_solicitud')!
+
+    if (id_solicitud) {
+      this.trabajadorService.getSolicitudById(id_solicitud).subscribe({
         next: (res: Solicitud) => {
           this.solicitud = res;
           console.log(this.solicitud);
         },
         error: (err)=> {
+          Swal.fire({
+            icon:'error',
+            title:'Error',
+            text:'Hubo un error al obtener la solicitud',
+            confirmButtonColor:'#198754',
+          })
           console.log(err);  
         },
         complete: ()=>{
@@ -94,6 +103,12 @@ export class VerSolicitudComponent implements OnInit {
               }
             },
             error: (err)=> {
+              Swal.fire({
+                icon:'error',
+                title:'Error',
+                text:'Hubo un error al obtener la solicitud',
+                confirmButtonColor:'#198754',
+              })
               console.log(err);
               
             }

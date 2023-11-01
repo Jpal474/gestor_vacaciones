@@ -12,13 +12,15 @@ export class EmpleadoService {
     private empleadoRepository: Repository<Empleado>,
   ) {}
 
-  async getEmpleados(pageSize, pageNumber) {
+  async getEmpleados(pageSize, pageNumber, anio) {
     try {
       const all_empleados = await this.empleadoRepository
         .createQueryBuilder('empleado')
         .leftJoinAndSelect('empleado.usuario', 'usuario')
         .leftJoinAndSelect('usuario.rol', 'rol')
-        .leftJoinAndSelect('empleado.departamento', 'departamento') // Add this line
+        .leftJoinAndSelect('empleado.departamento', 'departamento')
+        .leftJoinAndSelect('empleado.saldo_vacacional', 'saldo_vacacional') // Add this line
+        .andWhere('saldo_vacacional.año = :anio', { anio })
         .getMany();
 
       if (!all_empleados) {

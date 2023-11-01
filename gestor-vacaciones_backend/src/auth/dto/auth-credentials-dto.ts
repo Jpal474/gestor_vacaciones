@@ -8,5 +8,5 @@ export class AuthCredentialDto {
 
   @IsNotEmpty()
   @IsString()
-  contraseña: string;
+  contrasenia: string;
 }

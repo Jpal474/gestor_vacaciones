@@ -103,11 +103,13 @@
     }
     .input-box {
         position: relative;
-        width: 30%;
+        width: 28%;
         font-size: small;
+        color: black;
     }
     .btn {
         margin-top: 25px;
+        font-size: small;
     }
     #fecha {
         width: 60%;
@@ -118,5 +120,8 @@
     .img-small {
         width: 10px;
         height: 10px;
+    }
+    .input-box input {
+        font-size: 0.7rem;
     }
 }

@@ -26,8 +26,8 @@ headers= new HttpHeaders({
     return this.httpClient.get<Empleado>(`${this.BASE_URL}/empleado/usuario/${id}`)
   }
   
-  getSolicitudes(id: string, size:number, page:number): Observable<{ solicitudes: Solicitud[]; pages: number }>{
-   return this.httpClient.get<{ solicitudes: Solicitud[]; pages: number }>(`${this.BASE_URL}/solicitud/empleados/${id}/${size}/${page}`)
+  getSolicitudes(id: string, size:number, page:number, opcion: number): Observable<{ solicitudes: Solicitud[]; pages: number }>{
+    return this.httpClient.get<{ solicitudes: Solicitud[]; pages: number }>(`${this.BASE_URL}/solicitud/empleados/${id}/${size}/${page}/${opcion}`)
   }
 
   getSolicitudById(id: number): Observable<Solicitud>{

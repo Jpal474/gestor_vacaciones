@@ -33,6 +33,7 @@ export class EmpleadoController {
 
   @Get('/:id')
   @ApiOperation({ summary: 'Obtener el Empleado por su ID' })
+  @ApiParam({ name: 'ID', description: 'ID del empleado a buscar' })
   @ApiResponse({
     status: 200,
     description: 'Regresa un objeto con los datos del empleado',
@@ -57,17 +58,32 @@ export class EmpleadoController {
   }
 
   @Get('/:size/:number')
+  @ApiOperation({ description: 'Obtener todos los empleados con paginación' })
+  @ApiParam({ name: 'Size', description: 'Número de registros por página' })
+  @ApiParam({ name: 'Number', description: 'Número de página' })
+  @ApiResponse({
+    status: 200,
+    description: 'Se han obtenido de forma éxitosa a los empleados',
+    type: Empleado,
+    isArray: true,
+  })
   getAllEmpleados(
     @Param('size') size: number,
     @Param('number') number: number,
   ): Promise<{ empleados: Empleado[]; pages: number }> {
-    return this.empleadoService.getEmpleados(size, number);
+    const anio = new Date().getFullYear();
+    return this.empleadoService.getEmpleados(size, number, anio);
   }
 
   @Put('/:id/:opcion')
   @ApiOperation({
     summary:
       'Actualiza el estado del empleado a DE VACACIONES al aceptar la solicitud de sus vacaciones',
+  })
+  @ApiParam({ name: 'ID', description: 'ID del Empleado a actualizar' })
+  @ApiParam({
+    name: 'Opcion',
+    description: 'Opción a elegir para cambiar el estado del empleado.',
   })
   @ApiResponse({
     status: 200,

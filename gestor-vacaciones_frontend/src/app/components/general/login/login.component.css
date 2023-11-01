@@ -34,7 +34,7 @@
 .form-login {
     position: relative;
     z-index: 1;
-    padding-bottom: 4.5rem;
+    padding-bottom: 1.5rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.25);
 }
 
@@ -169,7 +169,7 @@
 
 .login__forgot {
     display: block;
-    margin-top: 3rem;
+    margin-top: 1.5rem;
     text-align: center;
     color: rgba(255, 255, 255, 0.75);
     font-size: .75rem;
@@ -194,9 +194,9 @@
 
 @media screen and (max-height:500px) {
     .login-container {
-        height: 130vh;
+        height: 160vh;
     }
     .page {
-        height: 150vh;
+        height: 180vh;
     }
 }

@@ -102,6 +102,7 @@ export class UsuarioService {
     id: string,
   ): Promise<Usuario> {
     try {
+      console.log('contraseña', updateUsuarioDto.contraseña);
       const mail = await this.usuarioRepository.findOneBy({
         correo: updateUsuarioDto.correo,
       });

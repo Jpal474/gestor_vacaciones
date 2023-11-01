@@ -15,7 +15,6 @@ export class EmpresaController {
 
   @Get()
   @ApiOperation({ summary: 'Traer Datos Empresa' })
-  @ApiParam({ name: 'ID', description: 'ID de la Empresa' })
   @ApiResponse({
     status: 200,
     description: 'Regresa un objeto con los datos de la empresa obtenida',
