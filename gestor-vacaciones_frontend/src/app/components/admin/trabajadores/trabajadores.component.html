@@ -33,9 +33,22 @@
                         <td [ngStyle]="{'background-color': trabajador.estado === 'ACTIVO' ? 'green' : (trabajador.estado === 'DE VACACIONES' ? 'yellow' : 'red'), 'color': trabajador.estado === 'ACTIVO' ? 'white' : (trabajador.estado === 'DE VACACIONES' ? 'black' : 'white')}"
                             style="font-size: 0.9rem;">{{trabajador.estado}}</td>
                         <td>
-                            <a type="button" class="btn button text-white ms-2" [routerLink]="['/admin/editar_trabajador',trabajador.id]">Editar</a>
-                            <a type="button" class="btn button-red text-white ms-2" (click)="eliminarTrabajador(trabajador.usuario.id)">Eliminar</a>
-                            <a type="button" class="btn button-red text-white ms-2" id="estado" (click)="cambiarEstado(trabajador.id, trabajador.estado)">Cambiar Estado</a>
+                            <a type="button" class="btn button one text-white ms-2" [routerLink]="['/admin/editar_trabajador',trabajador.id]">
+                                <img class="img-button" src="../../../../assets/recursos/imagenes/superadmin/generales/lapiz.png">
+                                <span class="tooltip-text-one">Editar</span>
+                            </a>
+                            <a type="button" class="btn button-red one text-white ms-2" (click)="eliminarTrabajador(trabajador.usuario.id)">
+                                <img class="img-button" src="../../../../assets/recursos/imagenes/superadmin/generales/eliminar.png">
+                                <span class="tooltip-text-one">Eliminar</span>
+                            </a>
+                            <a type="button" class="btn button-red one text-white ms-2" id="estado" (click)="cambiarEstado(trabajador.id, trabajador.estado)">
+                                <img class="img-button" src="../../../../assets/recursos/imagenes/superadmin/generales/change-management.png">
+                                <span class="tooltip-text-one">Cambiar Estado</span>
+                            </a>
+                            <a type="button" class="btn btn-success one ms-2" id="boton_dias" (click)="actualizarDias(trabajador.id)">
+                                <img class="img-button" src="../../../../assets/recursos/imagenes/superadmin/generales/anadir.png">
+                                <span class="tooltip-text-one">Actualizar Días</span>
+                            </a>
 
                         </td>
                     </tr>

@@ -8,6 +8,11 @@
     color: white;
 }
 
+.img-button {
+    width: 20px;
+    height: 20px;
+}
+
 .th {
     background-color: #fadbb9;
     color: black;
@@ -21,6 +26,43 @@ td {
 .regresar {
     width: 30px;
     height: 30px;
+}
+
+.one {
+    width: 42%;
+    cursor: pointer;
+    position: relative;
+    display: inline-block;
+}
+
+.one:hover .tooltip-text-one {
+    visibility: visible;
+}
+
+.tooltip-text-one {
+    visibility: hidden;
+    background-color: #00aec1;
+    color: #fff;
+    text-align: center;
+    border-radius: 4px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+}
+
+.tooltip-text-one::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #000 transparent transparent transparent;
 }
 
 @media screen and (max-width: 750px) {
@@ -40,5 +82,8 @@ td {
     }
     #estado {
         margin-top: 2px;
+    }
+    .one {
+        width: 30%;
     }
 }
