@@ -57,7 +57,7 @@ export class TrabajadoresComponent implements OnInit{
           icon: 'success',
           title: 'Éxito',
           text: 'El Trabajador ha sido eliminado con éxito',
-          confirmButtonColor: ''
+          confirmButtonColor:'#198754'
         }),
         setTimeout(function(){
           window.location.reload();
@@ -73,7 +73,7 @@ export class TrabajadoresComponent implements OnInit{
             confirmButtonColor:'#198754'
           })
         }
-        else if('unauthorized'.includes(err)){
+        else if(err.includes('Unauthorized')){
           Swal.fire({
             icon: 'error',
             title: 'Error',
@@ -110,7 +110,7 @@ this.adminService.updateEmpleadoStatus(id!, opcion)
         icon: 'success',
         title: 'Éxito',
         text: 'El Estado del Trabajador ha sido cambiado con éxito',
-        confirmButtonColor: ''
+        confirmButtonColor:'#198754'
       }),
       setTimeout(function(){
         window.location.reload();
@@ -124,7 +124,7 @@ this.adminService.updateEmpleadoStatus(id!, opcion)
               icon: 'error',
               title: 'Error',
               text: 'Ha habido un error al completar la solicitud',
-              confirmButtonColor: ''
+              confirmButtonColor:'#198754'
             })
           }
           else if(err.includes('Unauthorized')){

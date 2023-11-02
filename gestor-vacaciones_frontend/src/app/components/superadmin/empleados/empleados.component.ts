@@ -41,6 +41,7 @@ export class EmpleadosComponent implements OnInit {
           this.paginasArray = Array.from({ length: this.paginas }, (_, index) => index + 1);
         }
       },
+      error: error => error
     });
   }
 
