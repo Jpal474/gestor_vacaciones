@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Empleado, EmpleadoEstado } from 'src/app/interfaces/empleados.interface';
+import { Mail } from 'src/app/interfaces/mail.interface';
 import { SaldoVacacional } from 'src/app/interfaces/saldo_vacacional.interface';
 import { AdminService } from 'src/app/services/admin.service';
 import Swal from 'sweetalert2';
@@ -18,6 +19,8 @@ export class TrabajadoresComponent implements OnInit{
   limite = 100;
   specialCharactersRegex = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
   anio = new Date().getFullYear();
+  mail = {} as Mail
+  destinatario = '';
 
 
   constructor(
@@ -189,13 +192,11 @@ async actualizarDias(id: string | undefined){
 
 async agregarDias(id: string | undefined, opcion: number){
   let texto = '';
+  let band = true;
   if(opcion === 1)
     texto = 'Ingrese Días Adicionales para su Empleado'
   else
   texto = 'Ingrese los Días de Vacaciones de su Empleado'
-
-  
-
 
   const { value: dias } = await Swal.fire({//ingresa el nombre del departamento
     title: texto,
@@ -212,36 +213,117 @@ async agregarDias(id: string | undefined, opcion: number){
     let i =0;
     this.trabajadores.forEach(trabajador => {
       if(trabajador.id && trabajador.id === id){
-        this.saldo.dias_disponibles = trabajador.saldo_vacacional?.[i]?.dias_disponibles!
-        this.saldo.dias_tomados = trabajador.saldo_vacacional?.[i]?.dias_tomados!
+        this.saldo.dias_disponibles = trabajador.saldo_vacacional?.[i]?.dias_disponibles!;
+        this.saldo.dias_tomados = trabajador.saldo_vacacional?.[i]?.dias_tomados!;
+        this.mail.destinatario = trabajador.usuario.correo;
       }
     });
 
-    if(opcion === 1)
-    this.saldo.dias_disponibles += parseInt(dias);
-    else if (opcion === 2)
-    this.saldo.dias_disponibles = parseInt(dias)
+    const { value: text } = await Swal.fire({
+      input: 'textarea',
+      inputLabel: 'Justificacion',
+      inputPlaceholder:
+        'Digite su justificación menor o igual a 500 caracteres aquí',
+      inputAttributes: {
+        'aria-label': 'Type your message here',
+      },
+      showCancelButton: true,
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#198754',
+  cancelButtonColor: '#d33',
+    });
 
-   this.adminService.updateSaldoVacacional(id!, this.anio, this.saldo)
-   .subscribe({
-    next: (res:SaldoVacacional)=> {
-      if (res){
-        Swal.fire({
-          icon: 'success',
-          title: 'Éxito',
-          text: 'El Saldo Vacacional ha sido actualizado',
-          confirmButtonColor: '#198754'
-        });
-      }
-      setTimeout(function(){
-        window.location.reload();
-     }, 2000);
-    },
-    error: error=> error,
-   })
+    if(opcion === 1 && text && text.length <= 500){
+      console.log('op = 1');
+      
+      this.saldo.dias_disponibles += parseInt(dias);
+    }
+    else if (opcion === 2 && text && text.length <= 500){
+      this.saldo.dias_disponibles = parseInt(dias)
+      console.log('op = 2');
+    }
+    else if (text && text.length > 500){
+      console.log('length');
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Su justificación debe ser menor o igual a 500 carácteres',
+        confirmButtonColor:'#198754',
+      });
+      band = false;
+    }
+    else if (!text){
+      console.log('text');
+
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Debe añadir una justificación',
+        confirmButtonColor:'#198754',
+      });
+      band = false;
+
+    }
+     console.log(band, 'band');
+     
+
+   if(band){
+     this.adminService.updateSaldoVacacional(id!, this.anio, this.saldo)
+     .subscribe({
+      next: (res:SaldoVacacional)=> {
+        if (res){
+          Swal.fire({
+            icon: 'success',
+            title: 'Éxito',
+            text: 'El Saldo Vacacional ha sido actualizado',
+            confirmButtonColor: '#198754'
+          });
+        }
+        if(opcion === 1)
+        this.enviarMail(text,parseInt(dias));
+        else
+        this.enviarMail(text);
+      },
+      error: error=> error,
+     })
+   }
   }
 }
 
+enviarMail(text:string, dias?:number){
+    if(dias && text){
+      this.mail.asunto = 'Adición de Días a su Saldo Vacacional';
+      this.mail.mensaje = `Se le han añadido ${dias} días a su saldo vacacional debido a: ${text}, revise su perfil e informe en caso de algún error`;
+    }
+    else if(text){
+      this.mail.asunto = 'Actualización de días en su Saldo Vacacional';
+      this.mail.mensaje = `Su Saldo Vacacional ha sido actualizado debido a ${text}, revise su perfil e informe en caso de algún problema`;
+    }
+
+  this.adminService.enviarMail(this.mail)
+    .subscribe({
+  next: (res: boolean)=> {
+    if(res){
+      const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+      });
+  
+      Toast.fire({
+        icon: 'success',
+        title: 'Enviando Notificación',
+      });
+      setTimeout(function(){
+        window.location.reload();
+     }, 2000);
+    }
+  },
+  error: error => error
+    })
+  }
 
 
 }

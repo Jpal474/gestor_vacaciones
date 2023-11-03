@@ -13,6 +13,7 @@ import { SaldoActualizado } from '../interfaces/actualizar_saldo-vacacional.inte
 import { SolicitudEditar } from '../interfaces/solicitud-editar.interface';
 import { EmailTrabajadores } from '../interfaces/email_trabajadores.interface';
 import { EmailObservacion } from '../interfaces/email_observacion.interface';
+import { Mail } from '../interfaces/mail.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -86,6 +87,10 @@ export class AdminService {
     return this.httpClient.post<boolean>(`${this.BASE_URL}/admin/email`, email)
   }
 
+  enviarMail(email : Mail): Observable<boolean>{
+    return this.httpClient.post<boolean>(`${this.BASE_URL}/superad/enviar_email`, email)
+  }
+  
   enviarMailRechazada(destinatario: string): Observable<boolean>{
     return this.httpClient.post<boolean>(`${this.BASE_URL}/admin/email/rechazar/${destinatario}`, {})
   }

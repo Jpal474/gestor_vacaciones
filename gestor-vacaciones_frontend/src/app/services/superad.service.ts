@@ -94,7 +94,7 @@ export class SuperadService {
   }
 
   enviarMail(email : Mail): Observable<boolean>{
-    return this.httpClient.post<boolean>(`${this.BASE_URL}/superad/eviar_email`, email)
+    return this.httpClient.post<boolean>(`${this.BASE_URL}/superad/enviar_email`, email)
   }
 
   createDepartamento(departamento: Departamento): Observable<Departamento>{
