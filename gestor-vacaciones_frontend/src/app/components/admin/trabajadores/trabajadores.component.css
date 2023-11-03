@@ -73,6 +73,12 @@ td {
         margin-bottom: 10px;
         font-size: small;
     }
+    .one {
+        width: 82%;
+    }
+    .btn {
+        margin-top: 5px;
+    }
 }
 
 @media screen and (max-width:2500px) and (min-width:751px) {

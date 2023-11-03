@@ -82,9 +82,11 @@ td {
         font-size: small;
         height: auto;
     }
+    .one {
+        width: 82%;
+    }
     .btn {
-        margin-bottom: 10px;
-        font-size: small;
+        margin-top: 5px;
     }
 }
 

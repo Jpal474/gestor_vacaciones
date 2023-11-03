@@ -54,6 +54,9 @@
         color: black;
         position: relative;
     }
+    full-calendar next {
+        width: 4%;
+    }
     .legend-container {
         display: flex;
         flex-direction: column;
@@ -83,10 +86,12 @@
         position: relative;
         left: 0;
     }
-}
-
-@media screen and (max-width: 1500px) and (min-width: 751px) {
-    full-calendar {
-        margin-left: 6.5rem;
+    .container .fc-prev-button,
+    .container .fc-next-button {
+        font-size: 12px;
+        width: 20px;
+        height: 20px;
+        padding: 0;
+        line-height: 20px;
     }
 }

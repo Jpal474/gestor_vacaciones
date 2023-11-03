@@ -35,6 +35,25 @@ full-calendar {
         margin-bottom: 20px;
         left: -5%
     }
+    full-calendar .fc-next-button,
+    full-calendar .fc-prev-button,
+    full-calendar .fc-dayGridMonth-button,
+    full-calendar .fc-timeGridDay-button,
+    full-calendar .fc-timeGridWeek-button {
+        width: 35px;
+        height: 50px;
+        font-size: small !important;
+    }
+    full-calendar .fc-timeGridWeek-button {
+        content: " ";
+    }
+    full-calendar .fc-icon {
+        width: 5px;
+        height: 5px;
+    }
+    full-calendar .fc-header-toolbar {
+        font-size: small !important;
+    }
     .legend-container {
         display: flex;
         flex-direction: column;

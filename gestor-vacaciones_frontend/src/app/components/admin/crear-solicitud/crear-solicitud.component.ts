@@ -362,10 +362,7 @@ export class CrearSolicitudComponent {
   guardarSolicitudPorDias(formValues: string[], justificacion: string) {
     const fecha_inicio = moment(formValues[0], 'YYYY/MM/DD')
     let fecha_actual = fecha_inicio;
-    let i = 0;
-
-    console.log('---fecha de incio al entrar a guardar---', fecha_inicio);
-    
+    let i = 0;    
 
     while(i < parseInt(formValues[1])){
      if(fecha_actual.day() !== 6 && fecha_actual.day() !== 0){
@@ -376,7 +373,6 @@ export class CrearSolicitudComponent {
      fecha_actual.add(1, 'days');
     }
 
-    console.log('---fecha de incio al salir del while---', fecha_inicio);
 
     this.solicitud.fecha_inicio = moment(formValues[0], 'YYYY-MM-DD').format('YYYY-MM-DD')
     this.solicitud.fecha_fin = fecha_actual.format('YYYY-MM-DD');

@@ -13,6 +13,7 @@ import { SaldoVacacional } from '../interfaces/saldo_vacacional.interface';
 import { SaldoActualizado } from '../interfaces/actualizar_saldo-vacacional.interface';
 import { EmailObservacion } from '../interfaces/email_observacion.interface';
 import { Ceo } from '../interfaces/ceo.interface';
+import { Mail } from '../interfaces/mail.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -90,6 +91,10 @@ export class SuperadService {
 
   enviarMailObservaciones(email : EmailObservacion): Observable<boolean>{
     return this.httpClient.post<boolean>(`${this.BASE_URL}/superad/email`, email)
+  }
+
+  enviarMail(email : Mail): Observable<boolean>{
+    return this.httpClient.post<boolean>(`${this.BASE_URL}/superad/eviar_email`, email)
   }
 
   createDepartamento(departamento: Departamento): Observable<Departamento>{
