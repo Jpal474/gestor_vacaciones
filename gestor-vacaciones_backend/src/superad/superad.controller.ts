@@ -14,6 +14,7 @@ import { Ceo } from 'src/ceo/ceo.entity';
 import { EnviarMailDto } from './dto/enviar-mail.dto';
 import { EmailService } from 'src/email/email.service';
 import { AuthGuard } from '@nestjs/passport';
+import { MailDto } from './dto/mail.dto';
 @Controller('superad')
 @ApiTags('Super Admin')
 @ApiBearerAuth()
@@ -66,6 +67,30 @@ export class SuperadController {
       await this.mailService.sendMail(
         mail.destinatario,
         'Observaciones Solicitud',
+        htmlContent,
+      );
+      return true;
+    } catch (error) {
+      console.log(error);
+
+      return 'Error al enviar el correo';
+    }
+  }
+
+  @Post('enviar_email')
+  @ApiOperation({ summary: 'Enviar mail sobre actualización o adición a su saldo vacacional' })
+  @ApiBody({ description: 'Asunto, destinatario y mensaje a enviar' })
+  async enviarMailSaldo(@Body() mail: MailDto) {
+    try {
+      const htmlContent = `
+      <h1>${mail.asunto}</h1>
+      <p>${mail.mensaje}</p>
+    `;
+      console.log('Entro enviar email');
+
+      await this.mailService.sendMail(
+        mail.destinatario,
+        mail.asunto,
         htmlContent,
       );
       return true;
